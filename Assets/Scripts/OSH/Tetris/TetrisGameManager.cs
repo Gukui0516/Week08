@@ -209,10 +209,10 @@ public class TetrisGameManager : MonoBehaviour
             LogSystem.PushLog(LogLevel.INFO, "Line_BombQueued", true);
         }
 
-        // 로그: 마일스톤 체크 (5줄 단위 - 중요 이정표)
-        if (totalLinesCleared % 5 == 0)
+        // 로그: 마일스톤 체크 (2줄 단위 - 중요 이정표)
+        if (totalLinesCleared % 2 == 0)
         {
-            LogSystem.PushLog(LogLevel.INFO, "Line_Milestone", $"{totalLinesCleared}_lines", true);
+            LogSystem.PushLog(LogLevel.INFO, "  ", $"{totalLinesCleared}_lines", true);
         }
 
     }

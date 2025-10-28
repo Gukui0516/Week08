@@ -60,7 +60,7 @@ public class BombC : MonoBehaviour
 
     private void HandleBombTrigger(GameObject bomb, Vector3 contactPoint)
     {
-        Debug.Log($"[BombCollisionDetector] {gameObject.name}이(가) 폭탄 {bomb.name}을(를) 감지! 폭발 요청 전송.");
+        LogSystem.DebugLog($"[BombCollisionDetector] {gameObject.name}이(가) 폭탄 {bomb.name}을(를) 감지! 폭발 요청 전송.");
 
         // VFX 생성 (접촉 지점)
         if (explosionVFX != null)
@@ -75,13 +75,13 @@ public class BombC : MonoBehaviour
                 var main = particleSystem.main;
                 if (main.simulationSpace == ParticleSystemSimulationSpace.Local)
                 {
-                    Debug.LogWarning($"[BombCollisionDetector] ParticleSystem이 Local 시뮬레이션 공간을 사용 중입니다. World로 변경합니다.");
+                    LogSystem.DebugLog($"[BombCollisionDetector] ParticleSystem이 Local 시뮬레이션 공간을 사용 중입니다. World로 변경합니다.");
                     var mainModule = particleSystem.main;
                     mainModule.simulationSpace = ParticleSystemSimulationSpace.World;
                 }
 
                 particleSystem.Play();
-                Debug.Log($"[BombCollisionDetector] ParticleSystem 재생: {contactPoint}");
+                LogSystem.DebugLog($"[BombCollisionDetector] ParticleSystem 재생: {contactPoint}");
             }
             else
             {
@@ -101,11 +101,11 @@ public class BombC : MonoBehaviour
 
                         ps.Play();
                     }
-                    Debug.Log($"[BombCollisionDetector] {particleSystems.Length}개의 ParticleSystem 재생: {contactPoint}");
+                    LogSystem.DebugLog($"[BombCollisionDetector] {particleSystems.Length}개의 ParticleSystem 재생: {contactPoint}");
                 }
                 else
                 {
-                    Debug.LogWarning($"[BombCollisionDetector] VFX 프리팹에 ParticleSystem 컴포넌트가 없습니다!");
+                    LogSystem.DebugLog($"[BombCollisionDetector] VFX 프리팹에 ParticleSystem 컴포넌트가 없습니다!");
                 }
             }
 
@@ -134,7 +134,7 @@ public class BombC : MonoBehaviour
         // 트리거된 Draggable 기록
         triggeredDraggables.Add(draggable);
 
-        Debug.Log($"[BombCollisionDetector] Draggable 감지: {draggable.name} | 총 트리거된 개수: {triggeredDraggables.Count}");
+        LogSystem.DebugLog($"[BombCollisionDetector] Draggable 감지: {draggable.name} | 총 트리거된 개수: {triggeredDraggables.Count}");
 
         // BombManager에 알림
         if (BombManager.Instance != null)
@@ -152,7 +152,7 @@ public class BombC : MonoBehaviour
     public void ResetDraggableCount()
     {
         triggeredDraggables.Clear();
-        Debug.Log($"[BombCollisionDetector] Draggable 카운트 초기화됨.");
+        LogSystem.DebugLog($"[BombCollisionDetector] Draggable 카운트 초기화됨.");
     }
 
     /// <summary>
@@ -160,7 +160,7 @@ public class BombC : MonoBehaviour
     /// </summary>
     public void Explode()
     {
-        Debug.Log($"[BombC] 폭탄 {gameObject.name} 폭발!");
+        LogSystem.DebugLog($"[BombC] 폭탄 {gameObject.name} 폭발!");
 
         // 핵심 로그: 폭탄 제거(던짐) 이벤트 (INFO 레벨)
         LogSystem.PushLog(LogLevel.INFO, "Bomb_Thrown", gameObject.name, useUnityDebug: true);
@@ -225,19 +225,19 @@ public class BombC : MonoBehaviour
         // 태그 존재 여부 확인
         if (!IsTagValid(bombTag))
         {
-            Debug.LogWarning($"[BombCollisionDetector] '{bombTag}' 태그가 Tag Manager에 등록되어 있지 않습니다.");
+            LogSystem.DebugLog($"[BombCollisionDetector] '{bombTag}' 태그가 Tag Manager에 등록되어 있지 않습니다.");
         }
 
         if (!IsTagValid(draggableTag))
         {
-            Debug.LogWarning($"[BombCollisionDetector] '{draggableTag}' 태그가 Tag Manager에 등록되어 있지 않습니다.");
+            LogSystem.DebugLog($"[BombCollisionDetector] '{draggableTag}' 태그가 Tag Manager에 등록되어 있지 않습니다.");
         }
 
         // Collider가 Trigger인지 확인
         Collider col = GetComponent<Collider>();
         if (col != null && !col.isTrigger)
         {
-            Debug.LogWarning($"[BombCollisionDetector] Collider의 'Is Trigger'를 활성화해야 합니다!");
+            LogSystem.DebugLog($"[BombCollisionDetector] Collider의 'Is Trigger'를 활성화해야 합니다!");
         }
     }
 

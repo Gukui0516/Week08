@@ -297,6 +297,7 @@ MonoBehaviour:
   debounceTime: 2
   startDelay: 1.5
   showDebugLogs: 1
+  useUnityDebugLog: 1
 --- !u!1 &114502392
 GameObject:
   m_ObjectHideFlags: 0

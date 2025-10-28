@@ -411,7 +411,7 @@ public class SpawnChecker : MonoBehaviour
         }
         else
         {
-            Debug.Log("통계는 플레이 모드에서만 확인 가능합니다.");
+            LogSystem.DebugLog("통계는 플레이 모드에서만 확인 가능합니다.");
         }
     }
 #endif
