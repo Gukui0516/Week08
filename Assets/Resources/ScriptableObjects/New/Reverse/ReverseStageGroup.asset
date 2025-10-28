@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73fd24f7fa0536e4aafcb7da25410d0a, type: 3}
+  m_Name: ReverseStageGroup
+  m_EditorClassIdentifier: 
+  _stages:
+  - {fileID: 11400000, guid: 4c3787c83a5a6614ca2ce20ea2004fa1, type: 2}
+  - {fileID: 11400000, guid: 08052bf3fe5f19d45ad64ac807e36ff7, type: 2}
+  - {fileID: 11400000, guid: 4382c21da5c8cd8449e5aad305e1a0ce, type: 2}
+  - {fileID: 11400000, guid: 2eb46fcdea436ea43bdf243a99a39ae7, type: 2}
+  - {fileID: 11400000, guid: 580ae4d1df21a7c4db36a41960b4ad58, type: 2}
+  - {fileID: 11400000, guid: 072e24fe24992124cadddc1029ea6937, type: 2}
+  - {fileID: 11400000, guid: 191f78622d79dc4429b787c67828a348, type: 2}

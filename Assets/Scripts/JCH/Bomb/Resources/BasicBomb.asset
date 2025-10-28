@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a647e6a7cecb5994682666bc4f182719, type: 3}
+  m_Name: BasicBomb
+  m_EditorClassIdentifier: 
+  _explosionForce: 500
+  _explosionRadius: 15
+  _upwardModifier: 2
+  _explosionLayerMask:
+    serializedVersion: 2
+    m_Bits: 3221225591
+  _vfxPrefab: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
+  _tickingColor: {r: 1, g: 0, b: 0, a: 0.99215686}
+  _cameraShakeIntensity: 2
