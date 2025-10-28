@@ -54,8 +54,8 @@ public static class LogSystem
         LogEntry entry = new LogEntry
         {
             Type = type,
-            RealtimeSeconds = Time.realtimeSinceStartup,
             Key = key,
+            RealtimeSeconds = Time.realtimeSinceStartup,
             Value = convertedValue,
             FilePath = filePath,
             MemberName = memberName,
@@ -69,6 +69,44 @@ public static class LogSystem
             LogConverter.ToUnityLog(entry);
         }
     }
+
+    /// <summary>
+    /// 디버그 전용 간편 로그 (키 생략 가능)
+    /// </summary>
+    /// <param name="message">로그 메시지</param>
+    /// <param name="key">로그 키 (null일 경우 호출 클래스명 자동 사용)</param>
+    /// <param name="context">Unity Object 컨텍스트 (옵션)</param>
+    /// <param name="filePath">호출 파일 경로</param>
+    /// <param name="memberName">호출 메서드명</param>
+    /// <param name="lineNumber">호출 라인 번호</param>
+    public static void DebugLog(
+        string message,
+        string key = null,
+        UnityEngine.Object context = null,
+        [CallerFilePath] string filePath = "",
+        [CallerMemberName] string memberName = "",
+        [CallerLineNumber] int lineNumber = 0)
+    {
+        string resolvedKey = key;
+
+        if (string.IsNullOrEmpty(resolvedKey))
+        {
+            // 호출 클래스명 자동 추출
+            string fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+            resolvedKey = string.IsNullOrEmpty(fileName) ? "Unknown" : fileName;
+        }
+
+        PushLog(
+            LogLevel.DEBUG,
+            resolvedKey,
+            message,
+            useUnityDebug: true,
+            filePath: filePath,
+            memberName: memberName,
+            lineNumber: lineNumber
+        );
+    }
+
 
     /// <summary>
     /// 버퍼의 로그를 즉시 파일에 저장

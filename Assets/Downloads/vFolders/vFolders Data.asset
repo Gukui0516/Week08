@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adb9c12a8c6c949f7af83a3d238359d0, type: 3}
+  m_Name: vFolders Data
+  m_EditorClassIdentifier: 
+  folderDatas_byGuid:
+    keys:
+    - 9c53962885c2c4f449125a979d6ad240
+    - b0ebbaff1252a1341990853b2acd9005
+    - e31184800029ec541a2230cee5932e70
+    - 1146ce6ff67cb9247900b7537906e74b
+    - 492fca072ca7d1e4b9aca27071903cbc
+    - 58097e2f65b51874e8341aa6a3c8f731
+    - e270e1661b89b1e4eb6e19542bc2746d
+    - bedc9029777f5aa48af43aea7a8df3a7
+    - f9370232dc5054b41b9b8fa9852adb6e
+    - 2a90a670d5c502f43a2ba8e59a12538b
+    - 36effbe35a7cca440a6de3dbe6794ba8
+    - 564bd93e8288dd14e890a6e611c9656a
+    - 68d92702cd2798245a3787bf9ae5c7c2
+    values:
+    - iconNameOrGuid: SceneAsset Icon
+      colorIndex: 3
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 8
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 7
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: PhysicsMaterial Icon
+      colorIndex: 0
+      isIconRecursive: 1
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 10
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 1
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 7
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 6
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 7
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 3
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 2
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 6
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 8
+      isIconRecursive: 0
+      isColorRecursive: 1
+  bookmarks:
+  - guid: e270e1661b89b1e4eb6e19542bc2746d
+  - guid: bedc9029777f5aa48af43aea7a8df3a7
+  - guid: 36effbe35a7cca440a6de3dbe6794ba8
+  - guid: 564bd93e8288dd14e890a6e611c9656a
+  - guid: f9370232dc5054b41b9b8fa9852adb6e
+  - guid: 2a90a670d5c502f43a2ba8e59a12538b
+  - guid: 3f7a79e0c61ee094492f4346eddaf44b
+  - guid: c924e614d5f70984483073b7aa58f325
+  - guid: cd39525dd7134a94b874dccdcea4f145
+  - guid: 8519a25a0bff40747817c28ae958fe63
