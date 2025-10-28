@@ -293,8 +293,8 @@ public class GhostController : MonoBehaviour
         }
         else if (showDebugInfo)
         {
-            Debug.LogWarning($"{gameObject.name}: 경로를 찾을 수 없습니다!");
-            Debug.LogWarning($"현재 위치: Grid({currentGridPosition.x}, {currentGridPosition.y}), 목표: Grid({targetGrid.x}, {targetGrid.y})");
+            //Debug.LogWarning($"{gameObject.name}: 경로를 찾을 수 없습니다!");
+            //Debug.LogWarning($"현재 위치: Grid({currentGridPosition.x}, {currentGridPosition.y}), 목표: Grid({targetGrid.x}, {targetGrid.y})");
         }
     }
 
@@ -322,8 +322,8 @@ public class GhostController : MonoBehaviour
         // 목표 격자가 벽인지 확인
         if (validatePathWalkability && !GridManager.Instance.IsWalkable(targetGridPosition.x, targetGridPosition.y))
         {
-            Debug.LogError($"{gameObject.name}: 벽으로 이동하려고 시도! Grid({targetGridPosition.x}, {targetGridPosition.y})");
-            Debug.LogError($"이동 중단! 경로 재계산 필요");
+            //Debug.LogError($"{gameObject.name}: 벽으로 이동하려고 시도! Grid({targetGridPosition.x}, {targetGridPosition.y})");
+            //Debug.LogError($"이동 중단! 경로 재계산 필요");
 
             // 벽으로 이동하려는 경우 즉시 경로 재계산
             isMovingToTarget = false;
@@ -333,7 +333,7 @@ public class GhostController : MonoBehaviour
 
         if (showDebugInfo)
         {
-            Debug.Log($"{gameObject.name}: 다음 목표 설정 - Grid({targetGridPosition.x}, {targetGridPosition.y})");
+            //Debug.Log($"{gameObject.name}: 다음 목표 설정 - Grid({targetGridPosition.x}, {targetGridPosition.y})");
         }
     }
 
@@ -381,7 +381,7 @@ public class GhostController : MonoBehaviour
 
             if (showDebugInfo)
             {
-                Debug.Log($"{gameObject.name}: 격자 도착 - Grid({currentGridPosition.x}, {currentGridPosition.y})");
+                //Debug.Log($"{gameObject.name}: 격자 도착 - Grid({currentGridPosition.x}, {currentGridPosition.y})");
             }
 
             return;
@@ -611,7 +611,7 @@ public class GhostController : MonoBehaviour
                 }
                 if (showDebugInfo)
                 {
-                    Debug.Log($"{gameObject.name}: 팩맨을 잡았습니다!");
+                    //Debug.Log($"{gameObject.name}: 팩맨을 잡았습니다!");
                 }
                 break;
 
@@ -620,7 +620,7 @@ public class GhostController : MonoBehaviour
                 ghostState.GetEaten();
                 if (showDebugInfo)
                 {
-                    Debug.Log($"{gameObject.name}: 먹혔습니다!");
+                    //Debug.Log($"{gameObject.name}: 먹혔습니다!");
                 }
                 break;
 

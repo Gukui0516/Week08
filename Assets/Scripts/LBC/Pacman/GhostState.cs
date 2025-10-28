@@ -106,7 +106,7 @@ public class GhostState : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"{gameObject.name}: GhostHome 태그를 가진 오브젝트를 찾을 수 없습니다. 현재 위치를 홈으로 설정합니다.");
+                //Debug.LogWarning($"{gameObject.name}: GhostHome 태그를 가진 오브젝트를 찾을 수 없습니다. 현재 위치를 홈으로 설정합니다.");
                 homePosition = transform;
             }
         }
@@ -205,7 +205,7 @@ public class GhostState : MonoBehaviour
 
         if (showDebugInfo)
         {
-            Debug.Log($"{gameObject.name}: 상태 변경 {previousState} → {currentState}");
+            //Debug.Log($"{gameObject.name}: 상태 변경 {previousState} → {currentState}");
         }
     }
 
@@ -322,7 +322,7 @@ public class GhostState : MonoBehaviour
 
         if (showDebugInfo)
         {
-            Debug.Log($"{gameObject.name}: 부활!");
+            //Debug.Log($"{gameObject.name}: 부활!");
         }
     }
 
