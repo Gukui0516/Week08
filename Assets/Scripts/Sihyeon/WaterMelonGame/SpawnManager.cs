@@ -60,7 +60,7 @@ public class SpawnManager : MonoBehaviour
 
     [Header("Debug Settings")]
     [Tooltip("디버그 로그를 출력합니다.")]
-    [SerializeField] private bool showDebugLogs = false;
+    [SerializeField] private bool showDebugLogs = false; // [참고] 이 변수는 DEBUG 로그에서 더 이상 사용되지 않습니다.
 
     [Tooltip("스폰 지점과 범위를 Gizmo로 표시합니다.")]
     [SerializeField] private bool showGizmos = true;
@@ -85,11 +85,15 @@ public class SpawnManager : MonoBehaviour
 
         if (spawnPoint == null)
         {
-            Debug.LogWarning("[SpawnManager] SpawnPoint가 설정되지 않았습니다. 매니저 위치를 사용합니다.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "MissingReference",
+                "[SpawnManager] SpawnPoint가 설정되지 않았습니다. 매니저 위치를 사용합니다.", useUnityDebug: true);
             spawnPoint = transform;
         }
 
-        Debug.Log("[SpawnManager] 스폰 매니저 초기화 완료");
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "SpawnManagerInit",
+            "[SpawnManager] 스폰 매니저 초기화 완료");
     }
 
     /// <summary>
@@ -123,7 +127,9 @@ public class SpawnManager : MonoBehaviour
     {
         if (objectPool == null)
         {
-            Debug.LogError("[SpawnManager] ObjectPool이 null입니다!");
+            // [변경] LogLevel.ERROR
+            LogSystem.PushLog(LogLevel.ERROR, "NullReference",
+                "[SpawnManager] ObjectPool이 null입니다!", useUnityDebug: true);
             return null;
         }
 
@@ -155,7 +161,9 @@ public class SpawnManager : MonoBehaviour
             if (SpawnCount >= stage.minCount && SpawnCount < stage.maxCount)
             {
                 currentStage = stage;
-                Debug.Log($"[SpawnManager] 현재 스폰 단계: {stage.minCount} ~ {stage.maxCount} (spawnCount: {SpawnCount})");
+                // [변경] DEBUG 로그 수정
+                LogSystem.PushLog(LogLevel.DEBUG, "SpawnStage",
+                    $"[SpawnManager] 현재 스폰 단계: {stage.minCount} ~ {stage.maxCount} (spawnCount: {SpawnCount})");
                 break;
             }
         }
@@ -165,7 +173,10 @@ public class SpawnManager : MonoBehaviour
         {
             if (previousStage != null)
             {
-                Debug.LogWarning($"[SpawnManager] 스폰 단계가 변경되었습니다! 이전: {previousStage.minCount} ~ {previousStage.maxCount}, 현재: {currentStage?.minCount ?? 0} ~ {currentStage?.maxCount ?? 0} (spawnCount: {SpawnCount})");
+                // [변경] LogLevel.WARNING
+                LogSystem.PushLog(LogLevel.WARNING, "SpawnStageChanged",
+                    $"[SpawnManager] 스폰 단계가 변경되었습니다! 이전: {previousStage.minCount} ~ {previousStage.maxCount}, 현재: {currentStage?.minCount ?? 0} ~ {currentStage?.maxCount ?? 0} (spawnCount: {SpawnCount})",
+                    useUnityDebug: true);
             }
             previousStage = currentStage;
         }
@@ -223,7 +234,9 @@ public class SpawnManager : MonoBehaviour
     {
         if (objectPool == null)
         {
-            Debug.LogError("[SpawnManager] ObjectPool이 null입니다!");
+            // [변경] LogLevel.ERROR
+            LogSystem.PushLog(LogLevel.ERROR, "NullReference",
+                "[SpawnManager] ObjectPool이 null입니다!", useUnityDebug: true);
             return null;
         }
 
@@ -243,10 +256,9 @@ public class SpawnManager : MonoBehaviour
                     spawnPos = candidatePos;
                     foundValidPosition = true;
 
-                    if (showDebugLogs)
-                    {
-                        Debug.Log($"[SpawnManager] 유효한 스폰 위치 찾음 (시도 {attempt + 1}회): {spawnPos}");
-                    }
+                    // [변경] DEBUG 로그 수정
+                    LogSystem.PushLog(LogLevel.DEBUG, "SpawnValidation",
+                        $"[SpawnManager] 유효한 스폰 위치 찾음 (시도 {attempt + 1}회): {spawnPos}");
                     break;
                 }
             }
@@ -255,10 +267,10 @@ public class SpawnManager : MonoBehaviour
             {
                 // 검증 실패 시에도 랜덤 위치에 생성
                 spawnPos = GetRandomSpawnPosition();
-                if (showDebugLogs)
-                {
-                    Debug.LogWarning($"[SpawnManager] {maxSpawnAttempts}회 시도 후에도 유효한 스폰 위치를 찾지 않았습니다. 랜덤 위치에 생성: {spawnPos}");
-                }
+
+                // [변경] LogLevel.WARNING
+                LogSystem.PushLog(LogLevel.WARNING, "SpawnValidationFailed",
+                    $"[SpawnManager] {maxSpawnAttempts}회 시도 후에도 유효한 스폰 위치를 찾지 않았습니다. 랜덤 위치에 생성: {spawnPos}", useUnityDebug: true);
             }
         }
         else
@@ -269,9 +281,12 @@ public class SpawnManager : MonoBehaviour
 
         GameObject fruit = objectPool.GetFruit(fruitType, spawnPos);
 
-        // 스폰된 과일에 면역 설정 (처음 생성 시에만 적용)
         if (fruit != null)
         {
+            // [추가] c. 과일 스폰 이벤트 로그
+            LogSystem.PushLog(LogLevel.INFO, "FruitSpawned", fruitType.ToString());
+
+            // 스폰된 과일에 면역 설정 (처음 생성 시에만 적용)
             FruitMergeData fruitData = fruit.GetComponent<FruitMergeData>();
             if (fruitData != null)
             {
@@ -279,16 +294,18 @@ public class SpawnManager : MonoBehaviour
             }
         }
 
+
         if (fruit != null)
         {
-            if (showDebugLogs)
-            {
-                Debug.Log($"[SpawnManager] {fruitType} 생성 완료 at {spawnPos}");
-            }
+            // [변경] DEBUG 로그 수정
+            LogSystem.PushLog(LogLevel.DEBUG, "SpawnSuccess",
+                $"[SpawnManager] {fruitType} 생성 완료 at {spawnPos}");
         }
         else
         {
-            Debug.LogWarning($"[SpawnManager] {fruitType} 생성 실패!");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "SpawnFailed",
+                $"[SpawnManager] {fruitType} 생성 실패!", useUnityDebug: true);
         }
 
         return fruit;
@@ -301,7 +318,9 @@ public class SpawnManager : MonoBehaviour
     {
         if (objectPool == null)
         {
-            Debug.LogWarning("[SpawnManager] ObjectPool이 null입니다. 기본 반경(0.5f) 사용.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "NullReference",
+                "[SpawnManager] ObjectPool이 null입니다. 기본 반경(0.5f) 사용.", useUnityDebug: true);
             return 0.5f;
         }
 
@@ -309,7 +328,9 @@ public class SpawnManager : MonoBehaviour
 
         if (prefab == null)
         {
-            Debug.LogWarning($"[SpawnManager] {type} 프리팹을 찾을 수 없습니다. 기본 반경(0.5f) 사용.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "MissingPrefab",
+                $"[SpawnManager] {type} 프리팹을 찾을 수 없습니다. 기본 반경(0.5f) 사용.", useUnityDebug: true);
             return 0.5f;
         }
 
@@ -322,10 +343,9 @@ public class SpawnManager : MonoBehaviour
                                        prefab.transform.localScale.z);
             float actualRadius = sphereCollider.radius * maxScale;
 
-            if (showDebugLogs)
-            {
-                Debug.Log($"[SpawnManager] {type} 반경: {actualRadius:F2}");
-            }
+            // [변경] DEBUG 로그 수정
+            LogSystem.PushLog(LogLevel.DEBUG, "RadiusCheck",
+                $"[SpawnManager] {type} 반경: {actualRadius:F2}");
 
             return actualRadius;
         }
@@ -338,15 +358,16 @@ public class SpawnManager : MonoBehaviour
                                      collider.bounds.extents.y,
                                      collider.bounds.extents.z);
 
-            if (showDebugLogs)
-            {
-                Debug.Log($"[SpawnManager] {type} 반경 (Bounds): {radius:F2}");
-            }
+            // [변경] DEBUG 로그 수정
+            LogSystem.PushLog(LogLevel.DEBUG, "RadiusCheck",
+                $"[SpawnManager] {type} 반경 (Bounds): {radius:F2}");
 
             return radius;
         }
 
-        Debug.LogWarning($"[SpawnManager] {type} 프리팹에 Collider가 없습니다. 기본 반경(0.5f) 사용.");
+        // [변경] LogLevel.WARNING
+        LogSystem.PushLog(LogLevel.WARNING, "MissingComponent",
+            $"[SpawnManager] {type} 프리팹에 Collider가 없습니다. 기본 반경(0.5f) 사용.", useUnityDebug: true);
         return 0.5f;
     }
 
@@ -372,10 +393,9 @@ public class SpawnManager : MonoBehaviour
 
             if (distanceXZ < minDistance)
             {
-                if (showDebugLogs)
-                {
-                    Debug.Log($"[SpawnManager] 스폰 위치 검증 실패: {fruit.CurrentFruitType}와 거리 {distanceXZ:F2} (최소 {minDistance:F2} 필요)");
-                }
+                // [변경] DEBUG 로그 수정
+                LogSystem.PushLog(LogLevel.DEBUG, "SpawnValidation",
+                    $"[SpawnManager] 스폰 위치 검증 실패: {fruit.CurrentFruitType}와 거리 {distanceXZ:F2} (최소 {minDistance:F2} 필요)");
                 return false;
             }
         }
@@ -461,7 +481,9 @@ public class SpawnManager : MonoBehaviour
     {
         if (count > lastLoggedMilestone && count % 5 == 0)
         {
-            Debug.Log($"[SpawnManager] SpawnCount 마일스톤 도달: {count}개 (5의 배수)");
+            // [변경] DEBUG 로그 수정
+            LogSystem.PushLog(LogLevel.DEBUG, "SpawnMilestone",
+                $"[SpawnManager] SpawnCount 마일스톤 도달: {count}개 (5의 배수)");
             lastLoggedMilestone = count;
         }
     }
