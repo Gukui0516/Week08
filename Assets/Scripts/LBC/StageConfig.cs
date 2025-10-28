@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 스테이지별 설정을 관리하는 스크립트입니다.
@@ -95,7 +95,7 @@ public class StageConfig : MonoBehaviour
         if (enableDebugLog)
         {
             //Debug.Log($"<color=green>[StageConfig]</color> 스테이지 설정 초기화 완료\n" +
-                      $"모드: {goalBombMode} | 수동 목표: {manualGoalBombCount}");
+                      //$"모드: {goalBombMode} | 수동 목표: {manualGoalBombCount}");
         }
     }
 
@@ -265,7 +265,7 @@ public class StageConfig : MonoBehaviour
         if (enableDebugLog && isClear)
         {
             //Debug.Log($"<color=green>[StageConfig]</color> 클리어 조건 만족!\n" +
-                      $"목표: {goalCount} | 터진 폭탄: {explodedCount} | 남은 폭탄: {remainingCount}");
+                      //$"목표: {goalCount} | 터진 폭탄: {explodedCount} | 남은 폭탄: {remainingCount}");
         }
 
         return isClear;
@@ -281,11 +281,11 @@ public class StageConfig : MonoBehaviour
         int remainingCount = GetRemainingBombCount();
 
         //Debug.Log($"<color=green>[StageConfig]</color> 폭탄 현황\n" +
-                  $"목표: {goalCount}\n" +
-                  $"생성: {spawnedCount}\n" +
-                  $"터짐: {explodedCount}\n" +
-                  $"남음: {remainingCount}\n" +
-                  $"클리어 가능: {IsClearConditionMet()}");
+                  //$"목표: {goalCount}\n" +
+                  //$"생성: {spawnedCount}\n" +
+                  //$"터짐: {explodedCount}\n" +
+                  //$"남음: {remainingCount}\n" +
+                  //$"클리어 가능: {IsClearConditionMet()}");
     }
 
     private void OnValidate()
