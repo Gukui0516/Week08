@@ -6,64 +6,64 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Resources/Scenes/Old/Title.unity
+    path: Assets/Scenes/Old/Title.unity
     guid: e8fa1d1d244712148bb20143b99386a1
   - enabled: 1
-    path: Assets/Resources/Scenes/JCH/TutorialPlus.unity
+    path: Assets/Scenes/JCH/TutorialPlus.unity
     guid: 22ea7ce4443c5164e9b8ac2af4842d0e
   - enabled: 1
-    path: Assets/Resources/Scenes/Sihyeon/STAGE.unity
+    path: Assets/Scenes/Sihyeon/STAGE.unity
     guid: 32d72dfc0a377204c959c773f18d026d
   - enabled: 1
-    path: Assets/Resources/Scenes/Sihyeon/WaterMelon3D.unity
+    path: Assets/Scenes/Sihyeon/WaterMelon3D.unity
     guid: 7df707152b803de4bb0ac9023c2e0b9b
   - enabled: 1
-    path: Assets/Resources/Scenes/OSH/TetrisMap.unity
+    path: Assets/Scenes/OSH/TetrisMap.unity
     guid: da1b9f6783733c0429b2defbac566eae
   - enabled: 1
-    path: Assets/Resources/Scenes/JCH/JCH_Deassembly.unity
+    path: Assets/Scenes/JCH/JCH_Deassembly.unity
     guid: 6ee4b70fa2ba34b42a69aaff7647a4f0
   - enabled: 1
-    path: Assets/Resources/Scenes/Old/JML/JMObservatory.unity
+    path: Assets/Scenes/Old/JML/JMObservatory.unity
     guid: 8871ec25d86ff014f920371075652e31
   - enabled: 1
-    path: Assets/Resources/Scenes/Old/JML/JMKey.unity
+    path: Assets/Scenes/Old/JML/JMKey.unity
     guid: 51e12b8a8051ba440a091e60cfb70ae1
   - enabled: 1
-    path: Assets/Resources/Scenes/Old/Sphinx.unity
+    path: Assets/Scenes/Old/Sphinx.unity
     guid: 123974046093c9740ac46ac91d4b6285
   - enabled: 1
-    path: Assets/Resources/Scenes/Old/Freedom.unity
+    path: Assets/Scenes/Old/Freedom.unity
     guid: 141ca50bee2799c4fb0a360c28b4b8c9
   - enabled: 1
-    path: Assets/Resources/Scenes/OSH/ReverseStage.unity
+    path: Assets/Scenes/OSH/ReverseStage.unity
     guid: fe4a177ba2fbe004587059a9d093ec78
   - enabled: 1
-    path: Assets/Resources/Scenes/LBC/Reverse/Reverse Coloseum.unity
+    path: Assets/Scenes/LBC/Reverse/Reverse Coloseum.unity
     guid: 409a279db0904b54fb7e1959d2c88ab4
   - enabled: 1
-    path: Assets/Resources/Scenes/LBC/Reverse/Reverse DokripMoon.unity
+    path: Assets/Scenes/LBC/Reverse/Reverse DokripMoon.unity
     guid: e0de25c64bfc9d643a5843bf32d5b726
   - enabled: 1
-    path: Assets/Resources/Scenes/LBC/Reverse/Reverse Freedom.unity
+    path: Assets/Scenes/LBC/Reverse/Reverse Freedom.unity
     guid: 2939dd4f5df2230428a9b2c10207a1b3
   - enabled: 1
-    path: Assets/Resources/Scenes/LBC/Reverse/Reverse London.unity
+    path: Assets/Scenes/LBC/Reverse/Reverse London.unity
     guid: 7aaf81a51117be14a971f8a740450339
   - enabled: 1
-    path: Assets/Resources/Scenes/LBC/Reverse/Reverse Observatory.unity
+    path: Assets/Scenes/LBC/Reverse/Reverse Observatory.unity
     guid: 59591c125b13ecb49a3fdc4df4fce441
   - enabled: 1
-    path: Assets/Resources/Scenes/LBC/Reverse/Reverse Sphinx.unity
+    path: Assets/Scenes/LBC/Reverse/Reverse Sphinx.unity
     guid: 4f94e49402a4c174f89ac96d7d0d4f0b
   - enabled: 1
-    path: Assets/Resources/Scenes/LBC/RushHour/RushHour 3.unity
+    path: Assets/Scenes/LBC/RushHour/RushHour 3.unity
     guid: eec1daea6f35eff4d9f8f4ed66e2bb04
   - enabled: 1
-    path: Assets/Resources/Scenes/LBC/RushHour/RushHour 4.unity
+    path: Assets/Scenes/LBC/RushHour/RushHour 4.unity
     guid: 260514e7f3b3e7b46a69a48eaa94606a
   - enabled: 1
-    path: Assets/Resources/Scenes/LBC/RushHour/RushHour 5.unity
+    path: Assets/Scenes/LBC/RushHour/RushHour 5.unity
     guid: 65d69b787ac0c8c4c80c153677f10ba5
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
