@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Sirenix.OdinInspector;
@@ -68,14 +68,14 @@ public class TetrisGameManager : MonoBehaviour
     {
         if (blockSpawner == null)
         {
-            Debug.LogError("[GameManager] TetrisBlockSpawner 참조가 없습니다!");
+            LogSystem.PushLog(LogLevel.ERROR, "GameManager_MissingReference", "TetrisBlockSpawner", true);
             enabled = false;
             return;
         }
 
         if (lineChecker == null)
         {
-            Debug.LogError("[GameManager] TetrisLineChecker 참조가 없습니다!");
+            LogSystem.PushLog(LogLevel.ERROR, "GameManager_MissingReference", "TetrisLineChecker", true);
             enabled = false;
             return;
         }
@@ -90,10 +90,9 @@ public class TetrisGameManager : MonoBehaviour
         if (lineChecker != null)
         {
             lineChecker.onLineRemoved.AddListener(OnLineRemoved);
-
             if (showDebugLogs)
             {
-                Debug.Log("[GameManager] 라인 제거 이벤트 등록 완료");
+                LogSystem.DebugLog("[GameManager] 라인 제거 이벤트 등록 완료");
             }
         }
     }
@@ -117,6 +116,25 @@ public class TetrisGameManager : MonoBehaviour
     {
         // 폭탄 블록 탐색
         Collider[] colliders = Physics.OverlapBox(new Vector3(0, height, 0), new Vector3(5.5f, 0.5f, 5.5f));
+
+        int bombCount = 0;
+        int explodedCount = 0;
+
+        // 폭탄 개수 세기
+        foreach (var collider in colliders)
+        {
+            if (collider.CompareTag("Bomb"))
+                bombCount++;
+        }
+
+        // 로그: 폭탄 라인 정보
+        if (bombCount > 0)
+        {
+            LogSystem.PushLog(LogLevel.INFO, "BombLine_Height", height);
+            LogSystem.PushLog(LogLevel.INFO, "BombLine_BombCount", bombCount);
+        }
+
+        // 각 폭탄 폭발 처리
         foreach (var collider in colliders)
         {
             if (collider.CompareTag("Bomb"))
@@ -124,21 +142,35 @@ public class TetrisGameManager : MonoBehaviour
                 var bomb = collider.GetComponent<BombC>();
                 if (bomb != null)
                 {
+                    explodedCount++;
+
+                    // 핵심 로그: 폭탄 제거(라인) 이벤트 (INFO 레벨)
+                    LogSystem.PushLog(LogLevel.INFO, "Bomb_LineCleared", collider.gameObject.name, useUnityDebug: true);
+
+                    // 로그: 개별 폭탄 폭발
+                    LogSystem.PushLog(LogLevel.WARNING, "Bomb_ExplodeMethod", "LineClear");
+                    LogSystem.PushLog(LogLevel.WARNING, "Bomb_ExplodePosition", collider.transform.position);
+                    LogSystem.PushLog(LogLevel.DEBUG, "Bomb_ExplodeIndex", explodedCount);
+
                     bomb.Explode();
                     BombManager.Instance.NotifyBombExploded(bomb.gameObject);
 
-                    //// 목표 폭탄 개수 감소
-                    //ClearManager clearManager = Object.FindAnyObjectByType<ClearManager>();
-                    //if (clearManager != null)
-                    //{
-                    //    clearManager.DecreaseGoalBombCount();
-                    //}
                 }
                 else
                 {
-                    Debug.LogWarning($"[GameManager] 폭탄 블록 {collider.name}에 BombC 컴포넌트가 없습니다.");
+                    // 로그: 에러 - BombC 컴포넌트 없음
+                    LogSystem.PushLog(LogLevel.ERROR, "Bomb_MissingComponent", collider.name, true);
                 }
             }
+        }
+
+        // 로그: 통합 결과
+        if (explodedCount > 0)
+        {
+            LogSystem.PushLog(LogLevel.WARNING, "BombLine_TotalExploded", explodedCount, true);
+
+            int remainingBombs = blockSpawner.GetSpawnedBombBlocks().Count - explodedCount;
+            LogSystem.PushLog(LogLevel.INFO, "BombLine_RemainingBombs", remainingBombs);
         }
     }
 
@@ -149,14 +181,22 @@ public class TetrisGameManager : MonoBehaviour
     {
         totalLinesCleared++;
 
+        // 로그: 라인 제거 기본 정보
+        LogSystem.PushLog(LogLevel.INFO, "Line_Height", height);
+        LogSystem.PushLog(LogLevel.INFO, "Line_TotalCount", totalLinesCleared);
+        LogSystem.PushLog(LogLevel.INFO, "Line_IsBombLine", isBombLine);
+
         if (showDebugLogs)
         {
-            Debug.Log($"[GameManager] 라인 제거! 총 {totalLinesCleared}줄 | 높이: {height}");
+            LogSystem.DebugLog($"[GameManager] 라인 제거! 총 {totalLinesCleared}줄 | 높이: {height}");
         }
 
         // 폭탄 블록 폭발 처리
         if (isBombLine)
         {
+            // 로그: 폭탄 라인 트리거 (중요 이벤트 - Unity 콘솔 출력)
+            LogSystem.PushLog(LogLevel.WARNING, "Line_BombTrigger", "BombLineCleared", true);
+
             TriggerBombExplosions(height);
         }
 
@@ -164,18 +204,16 @@ public class TetrisGameManager : MonoBehaviour
         if (spawnBombOnLineClear)
         {
             blockSpawner.QueueBombBlock();
+
+            // 로그: 폭탄 블록 큐 추가
+            LogSystem.PushLog(LogLevel.INFO, "Line_BombQueued", true);
         }
 
-        // 설정한 라인 수 이상 지우면 일반 블록 스폰 중지
-        // if (totalLinesCleared >= linesToStopNormalSpawn)
-        // {
-        //     blockSpawner.DisableSpawning();
-
-        //     if (showDebugLogs)
-        //     {
-        //         Debug.Log($"[GameManager] ⚠️ {linesToStopNormalSpawn}줄 달성! 일반 블록 생성 중지");
-        //     }
-        // }
+        // 로그: 마일스톤 체크 (2줄 단위 - 중요 이정표)
+        if (totalLinesCleared % 2 == 0)
+        {
+            LogSystem.PushLog(LogLevel.INFO, "  ", $"{totalLinesCleared}_lines", true);
+        }
 
     }
 
@@ -193,7 +231,7 @@ public class TetrisGameManager : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log("[GameManager] 게임 리셋!");
+            LogSystem.DebugLog("[GameManager] 게임 리셋!");
         }
     }
 

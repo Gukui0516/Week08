@@ -141,8 +141,8 @@ public class TetrisLineChecker : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log($"[LineChecker] ===== 높이 {yHeight} 레이캐스트 시작 =====");
-            Debug.Log($"[LineChecker] 총 {hits.Length}개의 hit 발견");
+            LogSystem.DebugLog($"[LineChecker] ===== 높이 {yHeight} 레이캐스트 시작 =====");
+            LogSystem.DebugLog($"[LineChecker] 총 {hits.Length}개의 hit 발견");
         }
 
         // 이 라인에 있는 오브젝트들을 저장 (일반 블록 + 폭탄 모두 포함)
@@ -157,7 +157,7 @@ public class TetrisLineChecker : MonoBehaviour
         {
             if (showDebugLogs)
             {
-                Debug.Log($"[LineChecker] Hit: {hit.collider.gameObject.name}, Tag: '{hit.collider.tag}', X위치: {hit.point.x:F2}, Parent: {(hit.collider.transform.parent != null ? hit.collider.transform.parent.name : "없음")}");
+                LogSystem.DebugLog($"[LineChecker] Hit: {hit.collider.gameObject.name}, Tag: '{hit.collider.tag}', X위치: {hit.point.x:F2}, Parent: {(hit.collider.transform.parent != null ? hit.collider.transform.parent.name : "없음")}");
             }
 
             // "Cube" 태그인지 확인 (일반 테트리스 블록)
@@ -209,7 +209,7 @@ public class TetrisLineChecker : MonoBehaviour
         {
             int bombCount = bombsInLine.Count;
             int normalCount = objectsInLine.Count - (bombCount * bombBlockSize);
-            Debug.Log($"[LineChecker] 높이 {yHeight}에서 감지: 총 {objectsInLine.Count}개 카운트 (일반: {normalCount}개, 폭탄: {bombCount}개 x {bombBlockSize}칸)");
+            LogSystem.DebugLog($"[LineChecker] 높이 {yHeight}에서 감지: 총 {objectsInLine.Count}개 카운트 (일반: {normalCount}개, 폭탄: {bombCount}개 x {bombBlockSize}칸)");
         }
 
         // 오브젝트가 정확히 10개인지 확인 (일반 블록 + 폭탄 합쳐서)
@@ -221,7 +221,7 @@ public class TetrisLineChecker : MonoBehaviour
         {
             if (showDebugLogs)
             {
-                Debug.Log($"[LineChecker] 높이 {yHeight} - 블록들이 아직 움직이는 중");
+                LogSystem.DebugLog($"[LineChecker] 높이 {yHeight} - 블록들이 아직 움직이는 중");
             }
             return;
         }
@@ -232,7 +232,7 @@ public class TetrisLineChecker : MonoBehaviour
         if (showDebugLogs)
         {
             string lineType = isBombLine ? "폭탄 포함" : "일반";
-            Debug.Log($"[LineChecker] ✓ 라인 완성! ({lineType}) 높이: {yHeight}");
+            LogSystem.DebugLog($"[LineChecker] ✓ 라인 완성! ({lineType}) 높이: {yHeight}");
         }
 
         // 조건을 모두 만족하면 라인 제거 시작
@@ -284,7 +284,7 @@ public class TetrisLineChecker : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"[LineChecker] 폭탄 블록 {bomb.name}에 Explode 메서드가 없습니다.");
+            LogSystem.DebugLog($"[LineChecker] 폭탄 블록 {bomb.name}에 Explode 메서드가 없습니다.");
         }
     }
 
@@ -314,7 +314,7 @@ public class TetrisLineChecker : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log($"[LineChecker] 라인 제거 시작 - 높이: {height}, 오브젝트 수: {objects.Count}");
+            LogSystem.DebugLog($"[LineChecker] 라인 제거 시작 - 높이: {height}, 오브젝트 수: {objects.Count}");
         }
 
         // 1단계: 폭탄 블록 제거 (단일 오브젝트이므로 바로 파괴)
@@ -324,7 +324,7 @@ public class TetrisLineChecker : MonoBehaviour
             {
                 if (showDebugLogs)
                 {
-                    Debug.Log($"[LineChecker] 💣 폭탄 블록 제거: {bomb.name}");
+                    LogSystem.DebugLog($"[LineChecker] 💣 폭탄 블록 제거: {bomb.name}");
                 }
 
                 // 폭탄 터지는 로직 호출
@@ -401,6 +401,9 @@ public class TetrisLineChecker : MonoBehaviour
         Physics.SyncTransforms();
 
         // 이벤트 발생
+
+        // 핵심 로그: 라인 제거 이벤트 (INFO 레벨)
+        LogSystem.PushLog(LogLevel.INFO, "Line_Removed", height, useUnityDebug: true);
         onLineRemoved?.Invoke(height, isBombLine);
 
         // 처리 완료
@@ -460,7 +463,7 @@ public class TetrisLineChecker : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log($"[LineChecker] 블록 분리: {block.name} -> {connectedGroups.Count}개 조각");
+            LogSystem.DebugLog($"[LineChecker] 블록 분리: {block.name} -> {connectedGroups.Count}개 조각");
         }
 
         Rigidbody originalRb = block.GetComponent<Rigidbody>();
@@ -501,7 +504,7 @@ public class TetrisLineChecker : MonoBehaviour
                 {
                     cube.tag = "Cube";
                     if (showDebugLogs)
-                        Debug.LogWarning($"[LineChecker] 큐브 태그 복구: {cube.name}");
+                        LogSystem.DebugLog($"[LineChecker] 큐브 태그 복구: {cube.name}");
                 }
 
                 // Collider 확인
@@ -509,13 +512,13 @@ public class TetrisLineChecker : MonoBehaviour
                 if (cubeCollider == null)
                 {
                     if (showDebugLogs)
-                        Debug.LogWarning($"[LineChecker] 큐브에 Collider 없음: {cube.name}");
+                        LogSystem.DebugLog($"[LineChecker] 큐브에 Collider 없음: {cube.name}");
                 }
                 else if (!cubeCollider.enabled)
                 {
                     cubeCollider.enabled = true;
                     if (showDebugLogs)
-                        Debug.LogWarning($"[LineChecker] 큐브 Collider 활성화: {cube.name}");
+                        LogSystem.DebugLog($"[LineChecker] 큐브 Collider 활성화: {cube.name}");
                 }
             }
 
