@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using Sirenix.OdinInspector;
+using System.Runtime.InteropServices;
+using System;
 
 /// <summary>
 /// 충돌 시 Contact Normal 방향으로 직렬화된 임펄스를 상대 Rigidbody에 전달하는 컴포넌트
@@ -181,7 +183,7 @@ public class CollisionImpulseApplicator : MonoBehaviour
     private void Log(string message, bool forcely = false)
     {
         if (_isDebugLogging || forcely)
-            Debug.Log($"<color=magenta>[{GetType().Name}]</color> {message}", this);
+            LogSystem.DebugLog(message,null, this);
     }
 
     /// <summary>경고 로그 출력</summary>
@@ -189,14 +191,14 @@ public class CollisionImpulseApplicator : MonoBehaviour
     private void LogWarning(string message, bool forcely = false)
     {
         if (_isDebugLogging || forcely)
-            Debug.LogWarning($"<color=magenta>[{GetType().Name}]</color> {message}", this);
+            LogSystem.PushLog(LogLevel.WARNING, GetType().Name, message, true);
     }
 
     /// <summary>에러 로그 출력 - 항상 강제 출력</summary>
     /// <param name="message">에러 메시지</param>
     private void LogError(string message)
     {
-        Debug.LogError($"<color=magenta>[{GetType().Name}]</color> {message}", this);
+        LogSystem.PushLog(LogLevel.ERROR, GetType().Name, message, true);
     }
     #endregion
 }

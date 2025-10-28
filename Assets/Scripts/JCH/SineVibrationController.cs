@@ -286,13 +286,13 @@ public class SineVibrationController : MonoBehaviour
     }
     #endregion
 
-    #region Private Methods - Debug Logging
+    #region Private Methods - Logging
     /// <summary>일반 로그 출력</summary>
     /// <param name="message">로그 메시지</param>
     private void Log(string message, bool forcely = false)
     {
         if (_isDebugLogging || forcely)
-            Debug.Log($"<color=cyan>[{GetType().Name}]</color> {message}", this);
+            LogSystem.DebugLog(message, null, this);
     }
 
     /// <summary>경고 로그 출력</summary>
@@ -300,14 +300,14 @@ public class SineVibrationController : MonoBehaviour
     private void LogWarning(string message, bool forcely = false)
     {
         if (_isDebugLogging || forcely)
-            Debug.LogWarning($"<color=cyan>[{GetType().Name}]</color> {message}", this);
+            LogSystem.PushLog(LogLevel.WARNING, GetType().Name, message, true);
     }
 
     /// <summary>에러 로그 출력 - 항상 강제 출력</summary>
     /// <param name="message">에러 메시지</param>
     private void LogError(string message)
     {
-        Debug.LogError($"<color=cyan>[{GetType().Name}]</color> {message}", this);
+        LogSystem.PushLog(LogLevel.ERROR, GetType().Name, message, true);
     }
     #endregion
 

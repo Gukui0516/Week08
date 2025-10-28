@@ -173,28 +173,28 @@ public class JointBreakNotifier : MonoBehaviour
     }
     #endregion
 
-    #region Private Methods - Logging
+    #region Private Methods - Debug Logging
     /// <summary>일반 로그 출력</summary>
     /// <param name="message">로그 메시지</param>
     private void Log(string message, bool forcely = false)
     {
-        if (IsDebugLogging || forcely)
-            LogSystem.PushLog(LogLevel.DEBUG, "JointBreakNotifier", message, true);
+        if (_isDebugLogging || forcely)
+            LogSystem.DebugLog(message, null, this);
     }
 
     /// <summary>경고 로그 출력</summary>
     /// <param name="message">경고 메시지</param>
     private void LogWarning(string message, bool forcely = false)
     {
-        if (IsDebugLogging || forcely)
-            LogSystem.PushLog(LogLevel.WARNING, "JointBreakNotifier", message, true);
+        if (_isDebugLogging || forcely)
+            LogSystem.PushLog(LogLevel.WARNING, GetType().Name, message, true);
     }
 
-    /// <summary>에러 로그 출력</summary>
+    /// <summary>에러 로그 출력 - 항상 강제 출력</summary>
     /// <param name="message">에러 메시지</param>
     private void LogError(string message)
     {
-        LogSystem.PushLog(LogLevel.ERROR, "JointBreakNotifier", message, true);
+        LogSystem.PushLog(LogLevel.ERROR, GetType().Name, message, true);
     }
     #endregion
 }
