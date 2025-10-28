@@ -42,7 +42,7 @@ public class FruitMergeData : MonoBehaviour
 
     [Header("Debug")]
     [Tooltip("디버그 로그를 출력합니다.")]
-    [SerializeField] private bool showDebugLogs = false;
+    [SerializeField] private bool showDebugLogs = false; // [참고] 이 변수는 DEBUG 로그에서 더 이상 사용되지 않습니다.
 
     // 합치기 진행 중인지 여부 (중복 방지용)
     private bool isMerging = false;
@@ -92,10 +92,9 @@ public class FruitMergeData : MonoBehaviour
     {
         isMerging = value;
 
-        if (showDebugLogs)
-        {
-            Debug.Log($"[FruitMergeData] {gameObject.name} 합치기 상태 변경: {value}");
-        }
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "MergeState",
+            $"[FruitMergeData] {gameObject.name} 합치기 상태 변경: {value}");
     }
 
     /// <summary>
@@ -104,11 +103,10 @@ public class FruitMergeData : MonoBehaviour
     public void SetMergeImmunity(float duration)
     {
         immunityEndTime = Time.time + duration;
-        
-        if (showDebugLogs)
-        {
-            Debug.Log($"[FruitMergeData] {gameObject.name} 병합 면역 설정: {duration}초 동안 무시");
-        }
+
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "MergeImmunity",
+            $"[FruitMergeData] {gameObject.name} 병합 면역 설정: {duration}초 동안 무시");
     }
 
     private void Awake()
@@ -130,10 +128,9 @@ public class FruitMergeData : MonoBehaviour
             rb.interpolation = RigidbodyInterpolation.Interpolate;
             rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
-            if (showDebugLogs)
-            {
-                Debug.Log($"[FruitMergeData] {gameObject.name} Rigidbody 초기화 완료 (mass: {rb.mass}, 3D 모드)");
-            }
+            // [변경] DEBUG 로그 수정
+            LogSystem.PushLog(LogLevel.DEBUG, "PhysicsInit",
+                $"[FruitMergeData] {gameObject.name} Rigidbody 초기화 완료 (mass: {rb.mass}, 3D 모드)");
         }
     }
 
@@ -164,11 +161,9 @@ public class FruitMergeData : MonoBehaviour
 
         gameObject.SetActive(true);
 
-        if (showDebugLogs)
-        {
-            // [수정됨] 디버그 로그에서 면역 시간 제거
-            Debug.Log($"[FruitMergeData] {gameObject.name} 활성화됨 at {position}");
-        }
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "FruitActivate",
+            $"[FruitMergeData] {gameObject.name} 활성화됨 at {position}");
     }
 
     /// <summary>
@@ -178,10 +173,9 @@ public class FruitMergeData : MonoBehaviour
     {
         gameObject.SetActive(false);
 
-        if (showDebugLogs)
-        {
-            Debug.Log($"[FruitMergeData] {gameObject.name} 비활성화됨");
-        }
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "FruitDeactivate",
+            $"[FruitMergeData] {gameObject.name} 비활성화됨");
     }
 
 #if UNITY_EDITOR
