@@ -166,6 +166,7 @@ public class JointBreakNotifier : MonoBehaviour
         _lastValidJointCount = 0;
 
         Log($"전체 Joint 파괴 완료 - 파괴된 개수: {destroyedCount}", true);
+        LogSystem.PushLog(LogLevel.INFO, "JointBreakNotifier", gameObject.name);
         // 일관성 있게 OnJointBreakEvent 호출
         NotifyJointBreak(0, _initialJointCount);
         OnAllJointsDestroyedEvent?.Invoke();
@@ -178,7 +179,7 @@ public class JointBreakNotifier : MonoBehaviour
     private void Log(string message, bool forcely = false)
     {
         if (IsDebugLogging || forcely)
-            Debug.Log($"<color=orange>[{GetType().Name}]</color> {message}", this);
+            LogSystem.PushLog(LogLevel.DEBUG, "JointBreakNotifier", message, true);
     }
 
     /// <summary>경고 로그 출력</summary>
@@ -186,14 +187,14 @@ public class JointBreakNotifier : MonoBehaviour
     private void LogWarning(string message, bool forcely = false)
     {
         if (IsDebugLogging || forcely)
-            Debug.LogWarning($"<color=orange>[{GetType().Name}]</color> {message}", this);
+            LogSystem.PushLog(LogLevel.WARNING, "JointBreakNotifier", message, true);
     }
 
     /// <summary>에러 로그 출력</summary>
     /// <param name="message">에러 메시지</param>
     private void LogError(string message)
     {
-        Debug.LogError($"<color=orange>[{GetType().Name}]</color> {message}", this);
+        LogSystem.PushLog(LogLevel.ERROR, "JointBreakNotifier", message, true);
     }
     #endregion
 }

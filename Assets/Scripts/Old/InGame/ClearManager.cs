@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.IO;
 using TMPro;
 using UnityEngine;
@@ -442,6 +442,8 @@ public class ClearManager : MonoBehaviour
 
         // 중도 포기 코드 값 10000
         ClearStarChange(10000);
+
+        LogSystem.PushLog(LogLevel.INFO, "StageExit",1);
     }
 
     /// <summary>

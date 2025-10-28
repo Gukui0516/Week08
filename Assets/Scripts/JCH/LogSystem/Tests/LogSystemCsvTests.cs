@@ -1,4 +1,4 @@
-
+﻿
 #if UNITY_EDITOR
 // LogSystemCsvTests.cs
 using NUnit.Framework;
@@ -151,7 +151,7 @@ public class LogSystemCsvTests
     {
         // Given: 로그 기록
         _runtime.ClearBufferForTest();
-        LogSystem.PushLog(LogLevel.DEBUG, "Test", 1);
+        LogSystem.PushLog(LogLevel.INFO, "Test", 1);
         LogSystem.FlushLogs();
 
         // When: 데이터 행 읽기

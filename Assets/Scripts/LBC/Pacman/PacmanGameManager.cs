@@ -116,7 +116,7 @@ public class PacmanGameManager : SingletonObject<PacmanGameManager>
 
         OnScoreChanged?.Invoke(currentScore);
 
-        Debug.Log("팩맨 게임 시작!");
+        //Debug.Log("팩맨 게임 시작!");
     }
 
     /// <summary>
@@ -127,7 +127,7 @@ public class PacmanGameManager : SingletonObject<PacmanGameManager>
         Coin[] coins = FindObjectsByType<Coin>(FindObjectsSortMode.None);
         totalCoins = coins.Length;
 
-        Debug.Log($"전체 코인 개수: {totalCoins}");
+        //Debug.Log($"전체 코인 개수: {totalCoins}");
     }
 
     /// <summary>
@@ -142,7 +142,7 @@ public class PacmanGameManager : SingletonObject<PacmanGameManager>
         currentScore += score;
         OnScoreChanged?.Invoke(currentScore);
 
-        Debug.Log($"점수 추가: +{score} (현재 점수: {currentScore})");
+        //Debug.Log($"점수 추가: +{score} (현재 점수: {currentScore})");
     }
 
     /// <summary>
@@ -156,7 +156,7 @@ public class PacmanGameManager : SingletonObject<PacmanGameManager>
 
         coinsCollected++;
 
-        Debug.Log($"코인 수집: {coinsCollected}/{totalCoins}");
+        //Debug.Log($"코인 수집: {coinsCollected}/{totalCoins}");
 
         // 모든 코인을 수집하면 게임 클리어
         if (coinsCollected >= totalCoins)
@@ -178,7 +178,7 @@ public class PacmanGameManager : SingletonObject<PacmanGameManager>
         if (isPowerModeActive)
         {
             powerModeTimer = powerModeDuration;
-            Debug.Log("파워 모드 타이머 리셋!");
+            //Debug.Log("파워 모드 타이머 리셋!");
             return;
         }
 
@@ -188,7 +188,7 @@ public class PacmanGameManager : SingletonObject<PacmanGameManager>
 
         OnPowerModeStarted?.Invoke();
 
-        Debug.Log($"파워 모드 시작! ({powerModeDuration}초)");
+        //Debug.Log($"파워 모드 시작! ({powerModeDuration}초)");
     }
 
     /// <summary>
@@ -205,7 +205,7 @@ public class PacmanGameManager : SingletonObject<PacmanGameManager>
 
         OnPowerModeEnded?.Invoke();
 
-        Debug.Log("파워 모드 종료!");
+        //Debug.Log("파워 모드 종료!");
     }
 
     /// <summary>
@@ -229,7 +229,7 @@ public class PacmanGameManager : SingletonObject<PacmanGameManager>
 
         AddScore(score);
 
-        Debug.Log($"고스트 처치! +{score}점 (연속 {ghostsEatenInPowerMode}마리)");
+        //Debug.Log($"고스트 처치! +{score}점 (연속 {ghostsEatenInPowerMode}마리)");
     }
 
     /// <summary>
@@ -255,7 +255,7 @@ public class PacmanGameManager : SingletonObject<PacmanGameManager>
 
         OnGameCleared?.Invoke();
 
-        Debug.Log($"게임 클리어! 최종 점수: {currentScore}");
+        //Debug.Log($"게임 클리어! 최종 점수: {currentScore}");
 
         // 추가 처리 (UI 표시, 다음 레벨 로드 등)
     }
@@ -272,7 +272,7 @@ public class PacmanGameManager : SingletonObject<PacmanGameManager>
 
         OnGameOverEvent?.Invoke();
 
-        Debug.Log($"게임오버! 최종 점수: {currentScore}");
+        //Debug.Log($"게임오버! 최종 점수: {currentScore}");
 
         // 자동 재시작
         if (autoRestartOnGameOver)

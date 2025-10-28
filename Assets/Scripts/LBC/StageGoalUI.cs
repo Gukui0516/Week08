@@ -62,7 +62,7 @@ public class StageGoalUI : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        Debug.Log("StageGoalUI Awake");
+        //Debug.Log("StageGoalUI Awake");
 
         rectTransform = GetComponent<RectTransform>();
 
@@ -94,11 +94,11 @@ public class StageGoalUI : MonoBehaviour
     /// <param name="goalTextContent">표시할 목표 텍스트 내용</param>
     public void ShowGoal()
     {
-        Debug.Log("StageGoalUI ShowGoalUI");
+        //Debug.Log("StageGoalUI ShowGoalUI");
 
         if (isAnimating)
         {
-            Debug.LogWarning("[StageGoalUI] 이미 애니메이션이 진행 중입니다.");
+            //Debug.LogWarning("[StageGoalUI] 이미 애니메이션이 진행 중입니다.");
             return;
         }
 
@@ -136,7 +136,7 @@ public class StageGoalUI : MonoBehaviour
     /// </summary>
     private IEnumerator GoalAnimationSequence()
     {
-        Debug.Log("StageGoalUI GoalAnimationSequence");
+        //Debug.Log("StageGoalUI GoalAnimationSequence");
 
         isAnimating = true;
 
