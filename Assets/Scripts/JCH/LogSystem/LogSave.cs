@@ -52,11 +52,19 @@ public class LogSave : ILogSaver
 
             for (int i = 0; i < count; i++)
             {
+                // DEBUG 레벨은 파일 저장 제외
+                if (entries[i].Type == LogLevel.DEBUG)
+                    continue;
+
                 string csvLine = EntryToCsvLine(entries[i]);
                 sb.AppendLine(csvLine);
             }
 
-            await File.AppendAllTextAsync(_sessionFilePath, sb.ToString(), System.Text.Encoding.UTF8);
+            // 저장할 내용이 있을 때만 파일 쓰기
+            if (sb.Length > 0)
+            {
+                await File.AppendAllTextAsync(_sessionFilePath, sb.ToString(), System.Text.Encoding.UTF8);
+            }
         }
         catch (Exception ex)
         {
