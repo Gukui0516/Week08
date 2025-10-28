@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.IO;
 using TMPro;
 using UnityEngine;
@@ -73,7 +73,9 @@ public class ClearManager : MonoBehaviour
         else
         {
             // StageConfig가 없으면 기존 방식 사용 (하위 호환성)
-            Debug.LogWarning("[ClearManager] StageConfig를 찾을 수 없습니다. 기존 방식으로 폭탄 개수를 계산합니다.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "MissingManager",
+                "[ClearManager] StageConfig를 찾을 수 없습니다. 기존 방식으로 폭탄 개수를 계산합니다.", useUnityDebug: true);
             _goalBombCount = BombManager.Instance.GetTotalBombCount();
         }
 
@@ -121,7 +123,8 @@ public class ClearManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("StageConfig 할당 안됨");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "MissingManager", "StageConfig 할당 안됨", useUnityDebug: true);
         }
     }
 
@@ -143,10 +146,11 @@ public class ClearManager : MonoBehaviour
             int explodedCount = StageConfig.Instance.GetExplodedBombCount();
             int remainingCount = StageConfig.Instance.GetRemainingBombCount();
 
-            // 디버그 로그
-            Debug.Log($"<color=cyan>[ClearManager]</color> 폭탄 개수 업데이트\n" +
-                      $"목표: {goalCount} | 생성: {spawnedCount} | 터짐: {explodedCount} | 남음: {remainingCount}\n" +
-                      $"클리어 조건 - 터짐>={goalCount}: {explodedCount >= goalCount}, 남음<=0: {remainingCount <= 0}, 퇴장X: {!_isExitClicked}");
+            // [변경] DEBUG 로그 수정
+            string bombInfo = $"<color=cyan>[ClearManager]</color> 폭탄 개수 업데이트\n" +
+                              $"목표: {goalCount} | 생성: {spawnedCount} | 터짐: {explodedCount} | 남음: {remainingCount}\n" +
+                              $"클리어 조건 - 터짐>={goalCount}: {explodedCount >= goalCount}, 남음<=0: {remainingCount <= 0}, 퇴장X: {!_isExitClicked}";
+            LogSystem.PushLog(LogLevel.DEBUG, "BombCountUpdate", bombInfo);
 
             // 클리어 조건 체크
             // 1. 목표 개수만큼 폭탄이 터졌음
@@ -154,7 +158,9 @@ public class ClearManager : MonoBehaviour
             // 3. 중도 퇴장 버튼을 누르지 않음
             if (explodedCount >= goalCount && remainingCount <= 0 && !_isExitClicked)
             {
-                Debug.Log("<color=green>[ClearManager]</color> 클리어 조건 만족! ClearChecker 호출");
+                // [변경] DEBUG 로그 수정
+                LogSystem.PushLog(LogLevel.DEBUG, "ClearCheck",
+                    "<color=green>[ClearManager]</color> 클리어 조건 만족! ClearChecker 호출");
                 ClearChecker();
             }
         }
@@ -163,12 +169,16 @@ public class ClearManager : MonoBehaviour
             // 하위 호환성: StageConfig가 없을 때
             int explodedCount = BombManager.Instance.GetExplodedBombCount();
 
-            Debug.Log($"<color=cyan>[ClearManager]</color> 폭탄 개수 업데이트 (하위 호환 모드)\n" +
-                      $"목표: {_goalBombCount} | 터짐: {explodedCount} | 남음: {currentActiveBombCount}");
+            // [변경] DEBUG 로그 수정
+            string bombInfo = $"<color=cyan>[ClearManager]</color> 폭탄 개수 업데이트 (하위 호환 모드)\n" +
+                              $"목표: {_goalBombCount} | 터짐: {explodedCount} | 남음: {currentActiveBombCount}";
+            LogSystem.PushLog(LogLevel.DEBUG, "BombCountUpdate", bombInfo);
 
             if (explodedCount >= _goalBombCount && currentActiveBombCount <= 0 && !_isExitClicked)
             {
-                Debug.Log("<color=green>[ClearManager]</color> 클리어 조건 만족! ClearChecker 호출");
+                // [변경] DEBUG 로그 수정
+                LogSystem.PushLog(LogLevel.DEBUG, "ClearCheck",
+                    "<color=green>[ClearManager]</color> 클리어 조건 만족! ClearChecker 호출");
                 ClearChecker();
             }
         }
@@ -218,8 +228,8 @@ public class ClearManager : MonoBehaviour
             {
                 var target = _starPanel.transform.GetChild(i);
                 target.GetComponent<Image>().sprite = _emptyStar;
-                _clearStarCount = 0;
             }
+            _clearStarCount = 0;
         }
     }
 
@@ -228,9 +238,22 @@ public class ClearManager : MonoBehaviour
     /// </summary>
     void ClearChecker()
     {
+        // [추가] e. 게임 클리어 시 Draggable 객체 로깅
+        if (WatermelonGameManager.Instance != null)
+        {
+            WatermelonGameManager.Instance.LogDraggableObjects("GameClear");
+        }
+        else
+        {
+            // [추가] e. 오류 로그
+            LogSystem.PushLog(LogLevel.WARNING, "MissingManager",
+                "[ClearManager] GameManager가 없어 GameClear 로깅 실패", useUnityDebug: true);
+        }
+
         if (_countDownCoroutine != null)
         {
-            Debug.Log("카운트다운 코루틴 진행 중");
+            // [변경] DEBUG 로그 수정
+            LogSystem.PushLog(LogLevel.DEBUG, "ClearCheck", "카운트다운 코루틴 진행 중");
             return;
         }
 
@@ -322,7 +345,8 @@ public class ClearManager : MonoBehaviour
     {
         if (_snapshotCamera == null || _mainCamera == null)
         {
-            Debug.LogError("SnapShotCamera or MainCamera 미설정");
+            // [변경] LogLevel.ERROR
+            LogSystem.PushLog(LogLevel.ERROR, "MissingReference", "SnapShotCamera or MainCamera 미설정", useUnityDebug: true);
             return;
         }
 
@@ -373,7 +397,8 @@ public class ClearManager : MonoBehaviour
         byte[] bytes = screenTex.EncodeToPNG();
         File.WriteAllBytes(_snapShotPath, bytes);
 
-        Debug.Log($"스냅샷 저장 완료: {_snapShotPath}");
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "Snapshot", $"스냅샷 저장 완료: {_snapShotPath}");
 
         // 메모리 정리
         Destroy(screenTex);
@@ -389,7 +414,8 @@ public class ClearManager : MonoBehaviour
     {
         // 스냅샷 로드
         _snapShotPath = _snapShotPath.Replace("\\", "/");
-        Debug.Log("클리어 패널 활성화");
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "ClearPanel", "클리어 패널 활성화");
         if (!string.IsNullOrEmpty(_snapShotPath))
         {
 #if UNITY_EDITOR
@@ -411,7 +437,8 @@ public class ClearManager : MonoBehaviour
                 new Vector2(0.5f, 0.5f)
             );
         }
-        Debug.Log("클리어 패널 활성화 직전");
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "ClearPanel", "클리어 패널 활성화 직전");
         _clearPanel.SetActive(true);
 
         // 별 개수 그리기
@@ -443,7 +470,8 @@ public class ClearManager : MonoBehaviour
         // 중도 포기 코드 값 10000
         ClearStarChange(10000);
 
-        LogSystem.PushLog(LogLevel.INFO, "StageExit",1);
+        // [유지] 사용자가 추가한 로그
+        LogSystem.PushLog(LogLevel.INFO, "StageExit", 1);
     }
 
     /// <summary>
@@ -467,7 +495,8 @@ public class ClearManager : MonoBehaviour
     private void NextBtn()
     {
         string previousScene = StageManager.Instance.PreviousSceneName;
-        Debug.Log($"[ClearManager] 이전 씬으로 이동: {previousScene}");
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "SceneChange", $"[ClearManager] 이전 씬으로 이동: {previousScene}");
         SceneManager.LoadScene(previousScene);
     }
 
@@ -497,7 +526,8 @@ public class ClearManager : MonoBehaviour
         yield return new WaitForSeconds(_waitClimax);
 
         string previousScene = StageManager.Instance.PreviousSceneName;
-        Debug.Log($"[ClearManager] 이전 씬으로 이동: {previousScene}");
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "SceneChange", $"[ClearManager] 이전 씬으로 이동: {previousScene}");
         SceneManager.LoadScene(previousScene);
     }
 
@@ -511,11 +541,13 @@ public class ClearManager : MonoBehaviour
             _goalBombCount--;
             UpdateBombCountUI();
 
-            Debug.Log($"[ClearManager] 목표 폭탄 개수 감소: {_goalBombCount}개 남음");
+            // [변경] DEBUG 로그 수정
+            LogSystem.PushLog(LogLevel.DEBUG, "GoalUpdate", $"[ClearManager] 목표 폭탄 개수 감소: {_goalBombCount}개 남음");
         }
         else
         {
-            Debug.LogWarning("[ClearManager] 목표 폭탄 개수가 이미 0입니다.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "GoalUpdate", "[ClearManager] 목표 폭탄 개수가 이미 0입니다.", useUnityDebug: true);
         }
     }
 
@@ -525,12 +557,15 @@ public class ClearManager : MonoBehaviour
     /// </summary>
     private void ShowStageGoal()
     {
-        Debug.Log("ClaerManager ShowStageGoal");
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "StageGoal", "ClaerManager ShowStageGoal");
 
         // StageGoalUI가 할당되지 않은 경우
         if (_stageGoalUI == null)
         {
-            Debug.LogWarning("[ClearManager] StageGoalUI가 할당되지 않았습니다. Inspector에서 할당해주세요.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "MissingReference",
+                "[ClearManager] StageGoalUI가 할당되지 않았습니다. Inspector에서 할당해주세요.", useUnityDebug: true);
             return;
         }
 
