@@ -162,6 +162,20 @@ public class BombC : MonoBehaviour
     {
         Debug.Log($"[BombC] 폭탄 {gameObject.name} 폭발!");
 
+        // 로그 1: 폭발 방식 (WARNING, Unity 콘솔 출력)
+        LogSystem.PushLog(LogLevel.WARNING, "Bomb_ExplodeMethod", "PlayerThrow", useUnityDebug: true);
+
+        // 로그 2: 폭발 위치 (WARNING)
+        LogSystem.PushLog(LogLevel.WARNING, "Bomb_ExplodePosition", transform.position);
+
+        // 로그 3: 폭발 속도 (DEBUG)
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            float velocity = rb.linearVelocity.magnitude;
+            LogSystem.PushLog(LogLevel.DEBUG, "Bomb_ExplodeVelocity", velocity);
+        }
+
         // 폭발 VFX 생성
         if (explosionVFX != null)
         {
@@ -178,15 +192,28 @@ public class BombC : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(transform.position, 20.0f); // 폭발 반경 20.0
         foreach (var collider in colliders)
         {
-            Rigidbody rb = collider.GetComponent<Rigidbody>();
-            if (rb != null)
+            Rigidbody rbTarget = collider.GetComponent<Rigidbody>();
+            if (rbTarget != null)
             {
-                rb.AddExplosionForce(1000.0f, transform.position, 5.0f, 1.0f, ForceMode.Impulse);
+                rbTarget.AddExplosionForce(1000.0f, transform.position, 5.0f, 1.0f, ForceMode.Impulse);
             }
         }
 
         // 폭탄 오브젝트 제거 -> 따로 처리함
         //Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// 폭탄이 다른 오브젝트와 충돌할 때 호출되는 메서드입니다.
+    /// </summary>
+    private void OnCollisionEnter(Collision collision)
+    {
+        // 로그 4: 충돌 힘 (DEBUG)
+        if (collision.impulse.magnitude > 0.01f)  // 미세한 충돌 제외
+        {
+            float impactForce = collision.impulse.magnitude;
+            LogSystem.PushLog(LogLevel.DEBUG, "Bomb_ImpactForce", impactForce);
+        }
     }
 
 #if UNITY_EDITOR

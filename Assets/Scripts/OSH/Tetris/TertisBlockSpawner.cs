@@ -77,7 +77,7 @@ public class TetrisBlockSpawner : MonoBehaviour
         // 첫 블록 자동 소환
         if (showDebugLogs)
         {
-            Debug.Log("[BlockSpawner] 초기화 완료, 첫 블록 생성 예약");
+            LogSystem.DebugLog("[BlockSpawner] 초기화 완료, 첫 블록 생성 예약");
         }
 
         Invoke(nameof(SpawnFirstBlock), initialSpawnDelay);
@@ -91,7 +91,7 @@ public class TetrisBlockSpawner : MonoBehaviour
     {
         if (blockPrefabs == null || blockPrefabs.Length != 7)
         {
-            Debug.LogError("[BlockSpawner] 블록 프리팹이 7개가 아닙니다!");
+            LogSystem.PushLog(LogLevel.ERROR, "BlockSpawner_ValidationError", "Block7PrefabsRequired", true);
             enabled = false;
             return;
         }
@@ -100,7 +100,7 @@ public class TetrisBlockSpawner : MonoBehaviour
         {
             if (blockPrefabs[i] == null)
             {
-                Debug.LogError($"[BlockSpawner] 블록 프리팹 {i}번이 없습니다!");
+                LogSystem.PushLog(LogLevel.ERROR, "BlockSpawner_ValidationError", $"BlockPrefab{i}Missing", true);
                 enabled = false;
                 return;
             }
@@ -108,14 +108,14 @@ public class TetrisBlockSpawner : MonoBehaviour
 
         if (spawnPoint == null)
         {
-            Debug.LogError("[BlockSpawner] Spawn Point가 없습니다!");
+            LogSystem.PushLog(LogLevel.ERROR, "BlockSpawner_ValidationError", "SpawnPointMissing", true);
             enabled = false;
             return;
         }
 
         if (previewPoints == null || previewPoints.Length != 4)
         {
-            Debug.LogError("[BlockSpawner] Preview Points가 4개가 아닙니다!");
+            LogSystem.PushLog(LogLevel.ERROR, "BlockSpawner_ValidationError", "Preview4PointsRequired", true);
             enabled = false;
             return;
         }
@@ -124,7 +124,7 @@ public class TetrisBlockSpawner : MonoBehaviour
         {
             if (previewPoints[i] == null)
             {
-                Debug.LogError($"[BlockSpawner] Preview Point {i}번이 없습니다!");
+                LogSystem.PushLog(LogLevel.ERROR, "BlockSpawner_ValidationError", $"PreviewPoint{i}Missing", true);
                 enabled = false;
                 return;
             }
@@ -163,9 +163,12 @@ public class TetrisBlockSpawner : MonoBehaviour
             CreateNewBag();
             ShuffleBag();
 
+            // 로그: 7-Bag 새 주머니 생성
+            LogSystem.PushLog(LogLevel.DEBUG, "Bag_NewShuffled", "7BlocksReady");
+
             if (showDebugLogs)
             {
-                Debug.Log("[BlockSpawner] 새로운 Bag 생성 및 셔플 완료");
+                LogSystem.DebugLog("[BlockSpawner] 새로운 Bag 생성 및 셔플 완료");
             }
         }
 
@@ -196,7 +199,7 @@ public class TetrisBlockSpawner : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log($"[BlockSpawner] 큐 초기화 완료: {blockQueue.Count}개 블록 대기 중");
+            LogSystem.DebugLog($"[BlockSpawner] 큐 초기화 완료: {blockQueue.Count}개 블록 대기 중");
         }
     }
 
@@ -227,13 +230,15 @@ public class TetrisBlockSpawner : MonoBehaviour
     {
         if (bombBlockPrefab == null)
         {
-            Debug.LogWarning("[BlockSpawner] 폭탄 블록 프리팹이 없습니다!");
+            // 로그: 에러 - 프리팹 없음
+            LogSystem.PushLog(LogLevel.ERROR, "Bomb_SpawnError", "MissingPrefab", true);
             return;
         }
 
         if (bombSpawnPoint == null)
         {
-            Debug.LogWarning("[BlockSpawner] 폭탄 스폰 포인트가 없습니다!");
+            // 로그: 에러 - 스폰 포인트 없음
+            LogSystem.PushLog(LogLevel.ERROR, "Bomb_SpawnError", "MissingSpawnPoint", true);
             return;
         }
 
@@ -245,9 +250,14 @@ public class TetrisBlockSpawner : MonoBehaviour
 
         spawnedBombBlocks.Add(bombBlock);
 
+        // 로그: 폭탄 블록 생성 (중요 이벤트 - Unity 콘솔 출력)
+        LogSystem.PushLog(LogLevel.WARNING, "Bomb_Spawned", spawnedBombBlocks.Count, true);
+        LogSystem.PushLog(LogLevel.WARNING, "Bomb_Position", bombSpawnPoint.position);
+        LogSystem.PushLog(LogLevel.DEBUG, "Bomb_TriggerReason", "Manual");
+
         if (showDebugLogs)
         {
-            Debug.Log($"[BlockSpawner] 💣 폭탄 블록 생성! (총 {spawnedBombBlocks.Count}개)");
+            LogSystem.DebugLog($"[BlockSpawner] 폭탄 블록 생성! (총 {spawnedBombBlocks.Count}개)");
         }
     }
 
@@ -258,7 +268,8 @@ public class TetrisBlockSpawner : MonoBehaviour
     {
         if (bombBlockPrefab == null || bombSpawnPoint == null)
         {
-            Debug.LogWarning("[BlockSpawner] 폭탄 블록 프리팹 또는 스폰 포인트가 설정되지 않았습니다!");
+            // 로그: 에러 - 설정 누락
+            LogSystem.PushLog(LogLevel.ERROR, "Bomb_SpawnError", "MissingPrefabOrPoint", true);
             return;
         }
 
@@ -284,9 +295,13 @@ public class TetrisBlockSpawner : MonoBehaviour
 
             spawnedBombBlocks.Add(bombBlock);
 
+            // 로그: 폭탄 블록 생성 (중요 이벤트 - Unity 콘솔 출력)
+            LogSystem.PushLog(LogLevel.WARNING, "Bomb_Spawned", spawnedBombBlocks.Count, true);
+            LogSystem.PushLog(LogLevel.WARNING, "Bomb_Position", bombSpawnPoint.position);
+            LogSystem.PushLog(LogLevel.DEBUG, "Bomb_TriggerReason", "LineCleared");
             if (showDebugLogs)
             {
-                Debug.Log($"[BlockSpawner] 💣 폭탄 블록 생성! (총 {spawnedBombBlocks.Count}개)");
+                LogSystem.DebugLog($"[BlockSpawner] 폭탄 블록 생성! (총 {spawnedBombBlocks.Count}개)");
             }
 
             yield return new WaitForSeconds(bombSpawnInterval);
@@ -308,7 +323,7 @@ public class TetrisBlockSpawner : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log("[BlockSpawner] 일반 블록 생성 활성화");
+            LogSystem.DebugLog("[BlockSpawner] 일반 블록 생성 활성화");
         }
     }
 
@@ -318,10 +333,9 @@ public class TetrisBlockSpawner : MonoBehaviour
     public void DisableSpawning()
     {
         canSpawn = false;
-
         if (showDebugLogs)
         {
-            Debug.Log("[BlockSpawner] 일반 블록 생성 비활성화");
+            LogSystem.DebugLog("[BlockSpawner] 일반 블록 생성 비활성화");
         }
     }
 
@@ -332,7 +346,7 @@ public class TetrisBlockSpawner : MonoBehaviour
     {
         if (showDebugLogs)
         {
-            Debug.Log("[BlockSpawner] 🎮 첫 블록 생성!");
+            LogSystem.DebugLog("[BlockSpawner] 첫 블록 생성!");
         }
 
         SpawnBlock();
@@ -346,9 +360,11 @@ public class TetrisBlockSpawner : MonoBehaviour
         // 생성 불가 상태면 중단
         if (!canSpawn)
         {
+            // 로그: 생성 중지 상태
+            LogSystem.PushLog(LogLevel.DEBUG, "Spawn_Disabled", "SpawnBlocked");
             if (showDebugLogs)
             {
-                Debug.Log("[BlockSpawner] 생성 중지 상태 - 블록 생성 취소");
+                LogSystem.DebugLog("[BlockSpawner] 생성 중지 상태 - 블록 생성 취소");
             }
             return;
         }
@@ -366,9 +382,13 @@ public class TetrisBlockSpawner : MonoBehaviour
         }
         if (hasBlock)
         {
+            // 로그: 스폰 실패 (중요 - Unity 콘솔 출력)
+            LogSystem.PushLog(LogLevel.WARNING, "Spawn_Failed", "AreaBlocked", true);
+            LogSystem.PushLog(LogLevel.WARNING, "Spawn_FailPosition", spawnPoint.position);
+
             if (showDebugLogs)
             {
-                Debug.Log("[BlockSpawner] 스폰 구역에 블록이 있어 생성 취소");
+                LogSystem.DebugLog("[BlockSpawner] 스폰 구역에 블록이 있어 생성 취소");
             }
             return;
         }
@@ -376,7 +396,8 @@ public class TetrisBlockSpawner : MonoBehaviour
         // 큐가 비어있으면 중단
         if (blockQueue.Count == 0)
         {
-            Debug.LogWarning("[BlockSpawner] 블록 큐가 비어있습니다!");
+            // 로그: 에러 - 큐 비어있음
+            LogSystem.PushLog(LogLevel.ERROR, "Spawn_EmptyQueue", "BlockQueueEmpty", true);
             return;
         }
 
@@ -390,9 +411,18 @@ public class TetrisBlockSpawner : MonoBehaviour
             spawnPoint.rotation
         );
 
+        // 블록 타입 추출
+        string blockType = ExtractBlockType(spawnedBlock.name);
+
+        // 로그: 블록 생성 성공
+        LogSystem.PushLog(LogLevel.INFO, "Block_Type", blockType);
+        LogSystem.PushLog(LogLevel.INFO, "Block_Position", spawnPoint.position);
+        LogSystem.PushLog(LogLevel.INFO, "Block_QueueCount", blockQueue.Count);
+        LogSystem.PushLog(LogLevel.DEBUG, "Block_BagProgress", $"{bagIndex}/7");
+
         if (showDebugLogs)
         {
-            Debug.Log($"[BlockSpawner] ✓ 블록 생성: {spawnedBlock.name}");
+            LogSystem.DebugLog($"[BlockSpawner] 블록 생성: {spawnedBlock.name}");
         }
 
         // 큐에 새 블록 추가
@@ -409,9 +439,8 @@ public class TetrisBlockSpawner : MonoBehaviour
     {
         if (showDebugLogs)
         {
-            Debug.Log("[BlockSpawner] 트리거 기반 블록 생성 요청");
+            LogSystem.DebugLog("[BlockSpawner] 트리거 기반 블록 생성 요청");
         }
-
         SpawnBlock();
     }
 
@@ -494,6 +523,29 @@ public class TetrisBlockSpawner : MonoBehaviour
         return canSpawn;
     }
 
+    /// <summary>
+    /// 블록 이름에서 타입 추출 (예: "TetrisBlock_I(Clone)" → "I")
+    /// </summary>
+    private string ExtractBlockType(string blockName)
+    {
+        if (string.IsNullOrEmpty(blockName))
+            return "Unknown";
+
+        // "_"로 분리
+        if (blockName.Contains("_"))
+        {
+            string[] parts = blockName.Split('_');
+            if (parts.Length > 1)
+            {
+                // "(Clone)" 제거
+                return parts[1].Replace("(Clone)", "").Trim();
+            }
+        }
+
+        // 분리 실패 시 원본 반환
+        return blockName.Replace("(Clone)", "").Trim();
+    }
+
     #endregion
 
     #region Cleanup
@@ -531,7 +583,7 @@ public class TetrisBlockSpawner : MonoBehaviour
     {
         if (Application.isPlaying)
         {
-            Debug.Log(GetQueueInfo());
+            LogSystem.DebugLog(GetQueueInfo());
         }
     }
 
