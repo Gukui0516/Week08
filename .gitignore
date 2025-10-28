@@ -110,3 +110,5 @@ InitTestScene*.unity*
 # 2. 해당 이름 패턴의 폴더 안에 있는 .asset 및 .meta 파일 제외
 [Aa]ssets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/*.asset
 [Aa]ssets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/*.meta
+/Assets/Downloads/vHierarchy/vHierarchy Data.asset
+/Assets/Downloads/vHierarchy/vHierarchy Palette.asset
