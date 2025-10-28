@@ -80,7 +80,7 @@ public class DominoImageGenerator : MonoBehaviour
     {
         if (sourceImage == null)
         {
-            Debug.LogError("소스 이미지를 설정해주세요!");
+            //Debug.LogError("소스 이미지를 설정해주세요!");
             return;
         }
 
@@ -103,7 +103,7 @@ public class DominoImageGenerator : MonoBehaviour
             GenerateDominoesAll(parent.transform);
         }
 
-        Debug.Log($"도미노 이미지 생성 완료! 총 {spawnedDominoes.Count}개의 도미노, {pusherDominoes.Count}개의 푸셔");
+        //Debug.Log($"도미노 이미지 생성 완료! 총 {spawnedDominoes.Count}개의 도미노, {pusherDominoes.Count}개의 푸셔");
     }
 
     [ContextMenu("도미노 삭제")]
@@ -148,12 +148,12 @@ public class DominoImageGenerator : MonoBehaviour
                     firstPusher.transform.position + Vector3.up * dominoScale.y * 0.8f,
                     ForceMode.Impulse
                 );
-                Debug.Log("도미노 효과 시작!");
+                //Debug.Log("도미노 효과 시작!");
             }
         }
         else
         {
-            Debug.LogWarning("시작 푸셔를 찾을 수 없습니다!");
+            //Debug.LogWarning("시작 푸셔를 찾을 수 없습니다!");
         }
     }
 

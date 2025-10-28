@@ -107,7 +107,7 @@ public class GridManager : SingletonObject<GridManager>
         // 모든 셀을 스캔하여 벽인지 통로인지 판단
         ScanGrid();
 
-        Debug.Log($"GridManager 초기화 완료: {gridWidth}x{gridHeight} 그리드, 중심: {gridCenter}");
+        //Debug.Log($"GridManager 초기화 완료: {gridWidth}x{gridHeight} 그리드, 중심: {gridCenter}");
     }
 
     /// <summary>
@@ -158,12 +158,12 @@ public class GridManager : SingletonObject<GridManager>
                 // 디버그 정보 출력 (옵션)
                 if (showScanDebugInfo && hasWall)
                 {
-                    Debug.Log($"벽 감지: Grid({x}, {z}) at {worldPos}");
+                    //Debug.Log($"벽 감지: Grid({x}, {z}) at {worldPos}");
                 }
             }
         }
 
-        Debug.Log($"그리드 스캔 완료 - 통로: {walkableCount}개, 벽: {wallCount}개");
+        //Debug.Log($"그리드 스캔 완료 - 통로: {walkableCount}개, 벽: {wallCount}개");
     }
 
     /// <summary>
@@ -173,7 +173,7 @@ public class GridManager : SingletonObject<GridManager>
     public void RescanGrid()
     {
         ScanGrid();
-        Debug.Log("그리드 재스캔 완료");
+        //Debug.Log("그리드 재스캔 완료");
     }
 
     /// <summary>
@@ -253,13 +253,13 @@ public class GridManager : SingletonObject<GridManager>
             {
                 if (showPathfindingDebug)
                 {
-                    Debug.Log($"목표점 보정: Grid({targetGrid.x}, {targetGrid.y}) -> Grid({nearestWalkable.x}, {nearestWalkable.y})");
+                    //Debug.Log($"목표점 보정: Grid({targetGrid.x}, {targetGrid.y}) -> Grid({nearestWalkable.x}, {nearestWalkable.y})");
                 }
                 targetGrid = nearestWalkable;
             }
             else if (showPathfindingDebug)
             {
-                Debug.LogWarning($"경로 찾기 실패: 목표점 근처에 통로가 없습니다. Grid({targetGrid.x}, {targetGrid.y}) at {targetPos}");
+                //Debug.LogWarning($"경로 찾기 실패: 목표점 근처에 통로가 없습니다. Grid({targetGrid.x}, {targetGrid.y}) at {targetPos}");
             }
         }
 
@@ -272,13 +272,13 @@ public class GridManager : SingletonObject<GridManager>
             {
                 if (showPathfindingDebug)
                 {
-                    Debug.Log($"시작점 보정: Grid({startGrid.x}, {startGrid.y}) -> Grid({nearestWalkable.x}, {nearestWalkable.y})");
+                    //Debug.Log($"시작점 보정: Grid({startGrid.x}, {startGrid.y}) -> Grid({nearestWalkable.x}, {nearestWalkable.y})");
                 }
                 startGrid = nearestWalkable;
             }
             else if (showPathfindingDebug)
             {
-                Debug.LogWarning($"경로 찾기 실패: 시작점 근처에 통로가 없습니다. Grid({startGrid.x}, {startGrid.y}) at {startPos}");
+                //Debug.LogWarning($"경로 찾기 실패: 시작점 근처에 통로가 없습니다. Grid({startGrid.x}, {startGrid.y}) at {startPos}");
             }
         }
 
@@ -295,8 +295,8 @@ public class GridManager : SingletonObject<GridManager>
 
             if (showPathfindingDebug)
             {
-                Debug.LogWarning($"경로 찾기 실패: Grid({startGrid.x}, {startGrid.y}) -> Grid({targetGrid.x}, {targetGrid.y})");
-                Debug.LogWarning($"경로 찾기 통계 - 총: {totalPathRequests}, 성공: {successfulPaths}, 실패: {failedPaths}");
+                //Debug.LogWarning($"경로 찾기 실패: Grid({startGrid.x}, {startGrid.y}) -> Grid({targetGrid.x}, {targetGrid.y})");
+                //Debug.LogWarning($"경로 찾기 통계 - 총: {totalPathRequests}, 성공: {successfulPaths}, 실패: {failedPaths}");
             }
         }
 
@@ -473,7 +473,7 @@ public class GridManager : SingletonObject<GridManager>
         // 최대 반복 횟수 초과 경고
         if (iterations >= maxIterations && showPathfindingDebug)
         {
-            Debug.LogWarning($"A* 알고리즘이 최대 반복 횟수({maxIterations})에 도달했습니다.");
+            //Debug.LogWarning($"A* 알고리즘이 최대 반복 횟수({maxIterations})에 도달했습니다.");
         }
 
         // 경로를 찾지 못한 경우 빈 리스트 반환
@@ -720,10 +720,10 @@ public class GridManager : SingletonObject<GridManager>
     public void PrintPathfindingStats()
     {
         float successRate = totalPathRequests > 0 ? (successfulPaths / (float)totalPathRequests) * 100f : 0f;
-        Debug.Log($"=== 경로 찾기 통계 ===");
-        Debug.Log($"총 요청: {totalPathRequests}");
-        Debug.Log($"성공: {successfulPaths} ({successRate:F1}%)");
-        Debug.Log($"실패: {failedPaths}");
+        //Debug.Log($"=== 경로 찾기 통계 ===");
+        //Debug.Log($"총 요청: {totalPathRequests}");
+        //Debug.Log($"성공: {successfulPaths} ({successRate:F1}%)");
+        //Debug.Log($"실패: {failedPaths}");
     }
 
     /// <summary>

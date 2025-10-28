@@ -34,7 +34,7 @@ public class Coin : MonoBehaviour
         coinCollider = GetComponent<Collider>();
         if (!coinCollider.isTrigger)
         {
-            Debug.LogWarning($"{gameObject.name}의 Collider가 Trigger로 설정되지 않았습니다. 자동으로 Trigger로 변경합니다.");
+            //Debug.LogWarning($"{gameObject.name}의 Collider가 Trigger로 설정되지 않았습니다. 자동으로 Trigger로 변경합니다.");
             coinCollider.isTrigger = true;
         }
     }
@@ -81,7 +81,7 @@ public class Coin : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("PacmanGameManager를 찾을 수 없어 점수를 추가할 수 없습니다.");
+            //Debug.LogWarning("PacmanGameManager를 찾을 수 없어 점수를 추가할 수 없습니다.");
         }
 
         // 수집 효과 재생
