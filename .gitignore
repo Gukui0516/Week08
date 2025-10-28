@@ -98,23 +98,15 @@ InitTestScene*.unity*
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 .vscode
-# --- vHierarchy / vInspector / vFolders: "설정/환경"만 제외 ---
 
-# ProjectSettings / UserSettings 쪽 플러그인 전용 설정
-ProjectSettings/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*.asset
-ProjectSettings/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*.json
-UserSettings/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*
-# (일부 플러그인은 .yaml, .txt, .xml, .prefs 로 저장)
-ProjectSettings/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*.(yaml|yml|txt|xml|prefs)
 
-# Assets 내부에 생성되는 전용 설정(스크립터블오브젝트/리소스 등)
-Assets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/**/*(Setting|Settings|Preference|Prefs|Config)*.asset
-Assets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/**/*(Setting|Settings|Preference|Prefs|Config)*.json
-Assets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/**/*(Setting|Settings|Preference|Prefs|Config)*.(yaml|yml|txt|xml|prefs)
+# vHierarchy/vInspector 등의 Assets 내 개인 설정 파일(.asset) 및 .meta 파일만 제외
+# C# 스크립트(.cs)는 포함
 
-# 위 파일들의 .meta 도 같이 제외
-Assets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/**/*(Setting|Settings|Preference|Prefs|Config)*.asset.meta
-Assets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/**/*(Setting|Settings|Preference|Prefs|Config)*.json.meta
-Assets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/**/*(Setting|Settings|Preference|Prefs|Config)*.(yaml|yml|txt|xml|prefs).meta
-ProjectSettings/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*.meta
-UserSettings/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*.meta
+# 1. 파일 이름 자체가 해당 패턴을 가질 경우 (.asset 및 .meta)
+[Aa]ssets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*.asset
+[Aa]ssets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*.meta
+
+# 2. 해당 이름 패턴의 폴더 안에 있는 .asset 및 .meta 파일 제외
+[Aa]ssets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/*.asset
+[Aa]ssets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/*.meta
