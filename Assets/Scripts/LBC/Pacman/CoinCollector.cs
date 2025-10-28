@@ -137,7 +137,7 @@ public class CoinCollector : MonoBehaviour
         // 디버그 정보 출력
         if (showDebugInfo)
         {
-            Debug.Log($"코인 수집! (이번 프레임: {coinsCollectedThisFrame})");
+            //Debug.Log($"코인 수집! (이번 프레임: {coinsCollectedThisFrame})");
         }
     }
 
@@ -163,7 +163,7 @@ public class CoinCollector : MonoBehaviour
         // 디버그 정보 출력
         if (showDebugInfo)
         {
-            Debug.Log("파워 펠렛 수집! 파워 모드 활성화!");
+            //Debug.Log("파워 펠렛 수집! 파워 모드 활성화!");
         }
     }
 
@@ -183,7 +183,7 @@ public class CoinCollector : MonoBehaviour
 
         if (showDebugInfo)
         {
-            Debug.Log($"자석 효과 활성화! (지속: {(duration > 0 ? duration + "초" : "무한")})");
+            //Debug.Log($"자석 효과 활성화! (지속: {(duration > 0 ? duration + "초" : "무한")})");
         }
     }
 
@@ -196,7 +196,7 @@ public class CoinCollector : MonoBehaviour
 
         if (showDebugInfo)
         {
-            Debug.Log("자석 효과 비활성화!");
+            //Debug.Log("자석 효과 비활성화!");
         }
     }
 

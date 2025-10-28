@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 스테이지별 설정을 관리하는 스크립트입니다.
@@ -49,7 +49,7 @@ public class StageConfig : MonoBehaviour
     [Tooltip("Manual 모드일 때 목표로 삼을 폭탄 개수입니다.")]
     [SerializeField] private int manualGoalBombCount = 5;
 
-    [Header("Debug Settings")]
+    [Header("//Debug Settings")]
     [Tooltip("스테이지 설정 관련 로그를 출력합니다.")]
     [SerializeField] private bool enableDebugLog = true;
 
@@ -94,8 +94,8 @@ public class StageConfig : MonoBehaviour
 
         if (enableDebugLog)
         {
-            Debug.Log($"<color=green>[StageConfig]</color> 스테이지 설정 초기화 완료\n" +
-                      $"모드: {goalBombMode} | 수동 목표: {manualGoalBombCount}");
+            //Debug.Log($"<color=green>[StageConfig]</color> 스테이지 설정 초기화 완료\n" +
+                      //$"모드: {goalBombMode} | 수동 목표: {manualGoalBombCount}");
         }
     }
 
@@ -121,7 +121,7 @@ public class StageConfig : MonoBehaviour
     {
         if (BombManager.Instance == null)
         {
-            Debug.LogWarning("[StageConfig] BombManager를 찾을 수 없습니다.");
+            //Debug.LogWarning("[StageConfig] BombManager를 찾을 수 없습니다.");
             return 0;
         }
 
@@ -147,7 +147,7 @@ public class StageConfig : MonoBehaviour
 
         if (enableDebugLog)
         {
-            Debug.Log($"<color=green>[StageConfig]</color> 목표 폭탄 개수: {goalCount} (모드: {goalBombMode})");
+            //Debug.Log($"<color=green>[StageConfig]</color> 목표 폭탄 개수: {goalCount} (모드: {goalBombMode})");
         }
 
         return goalCount;
@@ -264,8 +264,8 @@ public class StageConfig : MonoBehaviour
 
         if (enableDebugLog && isClear)
         {
-            Debug.Log($"<color=green>[StageConfig]</color> 클리어 조건 만족!\n" +
-                      $"목표: {goalCount} | 터진 폭탄: {explodedCount} | 남은 폭탄: {remainingCount}");
+            //Debug.Log($"<color=green>[StageConfig]</color> 클리어 조건 만족!\n" +
+                      //$"목표: {goalCount} | 터진 폭탄: {explodedCount} | 남은 폭탄: {remainingCount}");
         }
 
         return isClear;
@@ -280,12 +280,12 @@ public class StageConfig : MonoBehaviour
         int explodedCount = GetExplodedBombCount();
         int remainingCount = GetRemainingBombCount();
 
-        Debug.Log($"<color=green>[StageConfig]</color> 폭탄 현황\n" +
-                  $"목표: {goalCount}\n" +
-                  $"생성: {spawnedCount}\n" +
-                  $"터짐: {explodedCount}\n" +
-                  $"남음: {remainingCount}\n" +
-                  $"클리어 가능: {IsClearConditionMet()}");
+        //Debug.Log($"<color=green>[StageConfig]</color> 폭탄 현황\n" +
+                  //$"목표: {goalCount}\n" +
+                  //$"생성: {spawnedCount}\n" +
+                  //$"터짐: {explodedCount}\n" +
+                  //$"남음: {remainingCount}\n" +
+                  //$"클리어 가능: {IsClearConditionMet()}");
     }
 
     private void OnValidate()
@@ -293,7 +293,7 @@ public class StageConfig : MonoBehaviour
         // Manual 모드일 때 목표 개수가 0 이하면 경고
         if (goalBombMode == GoalBombMode.Manual && manualGoalBombCount <= 0)
         {
-            Debug.LogWarning("[StageConfig] Manual 모드에서 목표 폭탄 개수는 1 이상이어야 합니다.");
+            //Debug.LogWarning("[StageConfig] Manual 모드에서 목표 폭탄 개수는 1 이상이어야 합니다.");
         }
     }
 #endif

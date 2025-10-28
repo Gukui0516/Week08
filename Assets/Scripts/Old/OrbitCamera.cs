@@ -65,8 +65,13 @@ public class OrbitCamera : MonoBehaviour
             // --- 1. 마우스 궤도 회전 (우클릭) ---
             if (Input.GetMouseButton(1))
             {
-                x += Input.GetAxis("Mouse X") * xSpeed;
-                y -= Input.GetAxis("Mouse Y") * ySpeed;
+                float deltaX = Input.GetAxis("Mouse X") * xSpeed;
+                float deltaY = Input.GetAxis("Mouse Y") * ySpeed;
+
+                x += deltaX;
+                y -= deltaY;
+
+                LogSystem.PushLog(LogLevel.INFO, "CameraRotate", new Vector2(deltaX, -deltaY));
             }
 
             // --- 2. 휠 버튼 패닝 (카메라 이동) ---
@@ -78,40 +83,68 @@ public class OrbitCamera : MonoBehaviour
                 // 현재 카메라의 right와 up 벡터를 기준으로 이동
                 targetOffset += transform.right * panX;
                 targetOffset += transform.up * panY;
+
+                LogSystem.PushLog(LogLevel.INFO, "CameraPanning", new Vector2(panX, panY));
             }
 
             // --- 3. 키보드 궤도 회전 (WASD) ---
+            float keyDeltaX = 0f;
+            float keyDeltaY = 0f;
+
             if (Input.GetKey(KeyCode.W))
             {
-                y += keyOrbitSpeed * Time.deltaTime;
+                float delta = keyOrbitSpeed * Time.deltaTime;
+                y += delta;
+                keyDeltaY += delta;
             }
             if (Input.GetKey(KeyCode.S))
             {
-                y -= keyOrbitSpeed * Time.deltaTime;
+                float delta = keyOrbitSpeed * Time.deltaTime;
+                y -= delta;
+                keyDeltaY -= delta;
             }
             if (Input.GetKey(KeyCode.A))
             {
-                x += keyOrbitSpeed * Time.deltaTime;
+                float delta = keyOrbitSpeed * Time.deltaTime;
+                x += delta;
+                keyDeltaX += delta;
             }
             if (Input.GetKey(KeyCode.D))
             {
-                x -= keyOrbitSpeed * Time.deltaTime;
+                float delta = keyOrbitSpeed * Time.deltaTime;
+                x -= delta;
+                keyDeltaX -= delta;
+            }
+
+            if (keyDeltaX != 0f || keyDeltaY != 0f)
+            {
+                LogSystem.PushLog(LogLevel.INFO, "CameraRotate", new Vector2(keyDeltaX, keyDeltaY));
             }
 
             // --- 4. 줌 (휠 & QE) ---
             if (!CursorManager.Instance.isGrabbed || (CursorManager.Instance.isGrabbed && Input.GetMouseButton(1)))
             {
                 float scroll = Input.GetAxis("Mouse ScrollWheel");
-                distance -= scroll * zoomSpeed;
+
+                if (scroll != 0f)
+                {
+                    float zoomDelta = -scroll * zoomSpeed;
+                    distance += zoomDelta;
+                    LogSystem.PushLog(LogLevel.INFO, "CameraZoom", zoomDelta);
+                }
             }
 
             if (Input.GetKey(KeyCode.Q))
             {
-                distance += keyZoomSpeed * Time.deltaTime;
+                float zoomDelta = keyZoomSpeed * Time.deltaTime;
+                distance += zoomDelta;
+                LogSystem.PushLog(LogLevel.INFO, "CameraZoom", zoomDelta);
             }
             if (Input.GetKey(KeyCode.E))
             {
-                distance -= keyZoomSpeed * Time.deltaTime;
+                float zoomDelta = -keyZoomSpeed * Time.deltaTime;
+                distance += zoomDelta;
+                LogSystem.PushLog(LogLevel.INFO, "CameraZoom", zoomDelta);
             }
 
             // --- 5. 값 제한 (Clamping) ---

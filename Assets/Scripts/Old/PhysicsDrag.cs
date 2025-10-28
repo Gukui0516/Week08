@@ -90,6 +90,7 @@ public class PhysicsDrag : SingletonObject<PhysicsDrag>
             if (scrollInput != 0)
             {
                 distanceChangeVelocity += scrollInput * scrollAcceleration;
+                LogSystem.PushLog(LogLevel.INFO, "InputPushPull",grabJoint.gameObject.name);
             }
 
             // // 2. 현재 속도를 감속(Damping)시킵니다. (서서히 멈춤)

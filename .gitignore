@@ -112,3 +112,7 @@ InitTestScene*.unity*
 [Aa]ssets/**/[Vv]*(Hierarchy|Inspector|Folder|Folders)*/*.meta
 /Assets/Downloads/vHierarchy/vHierarchy Data.asset
 /Assets/Downloads/vHierarchy/vHierarchy Palette.asset
+/Assets/Downloads/vHierarchy/vHierarchy Data.asset.meta
+/Assets/Downloads/vHierarchy/vHierarchy Palette.asset.meta
+/Assets/Downloads/vHierarchy/vHierarchy Data.asset.meta
+/Assets/Downloads/vHierarchy/vHierarchy Palette.asset.meta
