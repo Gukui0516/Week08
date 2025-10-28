@@ -1986,11 +1986,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_Name
-      value: NextStage
+      value: NextStage9
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_TagString
-      value: Bomb
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_LocalScale.x
@@ -2051,48 +2051,20 @@ PrefabInstance:
     - target: {fileID: 6471872046216945031, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b6e0e2ed543cafc4ab59c2ec038da923, type: 2}
+      objectReference: {fileID: 2100000, guid: 213dad5568950964e94e2db4ad88ffea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1708494593}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 272577877}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
 --- !u!4 &272577875 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
   m_PrefabInstance: {fileID: 272577874}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &272577876 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-  m_PrefabInstance: {fileID: 272577874}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &272577877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 272577876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fa128f3e33f564288032d80cfea9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombTag: Bomb
-  draggableTag: Draggable
-  onBombCollision:
-    m_PersistentCalls:
-      m_Calls: []
-  explosionVFX: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
-  vfxLifetime: 3
-  draggableDestroyDelay: 0.5
 --- !u!1 &288757128
 GameObject:
   m_ObjectHideFlags: 0
@@ -2348,11 +2320,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_Name
-      value: NextStage
+      value: NextStage0
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_TagString
-      value: Bomb
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_LocalScale.x
@@ -2413,48 +2385,20 @@ PrefabInstance:
     - target: {fileID: 6471872046216945031, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b6e0e2ed543cafc4ab59c2ec038da923, type: 2}
+      objectReference: {fileID: 2100000, guid: 213dad5568950964e94e2db4ad88ffea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1270122746}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 369111521}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
 --- !u!4 &369111519 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
   m_PrefabInstance: {fileID: 369111518}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &369111520 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-  m_PrefabInstance: {fileID: 369111518}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &369111521
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 369111520}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fa128f3e33f564288032d80cfea9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombTag: Bomb
-  draggableTag: Draggable
-  onBombCollision:
-    m_PersistentCalls:
-      m_Calls: []
-  explosionVFX: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
-  vfxLifetime: 3
-  draggableDestroyDelay: 0.5
 --- !u!1 &377256615
 GameObject:
   m_ObjectHideFlags: 0
@@ -2591,11 +2535,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_Name
-      value: NextStage
+      value: NextStage7
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_TagString
-      value: Bomb
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_LocalScale.x
@@ -2656,48 +2600,20 @@ PrefabInstance:
     - target: {fileID: 6471872046216945031, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b6e0e2ed543cafc4ab59c2ec038da923, type: 2}
+      objectReference: {fileID: 2100000, guid: 213dad5568950964e94e2db4ad88ffea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 175960599}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 412194522}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
 --- !u!4 &412194520 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
   m_PrefabInstance: {fileID: 412194519}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &412194521 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-  m_PrefabInstance: {fileID: 412194519}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &412194522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 412194521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fa128f3e33f564288032d80cfea9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombTag: Bomb
-  draggableTag: Draggable
-  onBombCollision:
-    m_PersistentCalls:
-      m_Calls: []
-  explosionVFX: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
-  vfxLifetime: 3
-  draggableDestroyDelay: 0.5
 --- !u!1 &435268411
 GameObject:
   m_ObjectHideFlags: 0
@@ -5066,11 +4982,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_Name
-      value: NextStage
+      value: NextStage4
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_TagString
-      value: Bomb
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_LocalScale.x
@@ -5131,48 +5047,20 @@ PrefabInstance:
     - target: {fileID: 6471872046216945031, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b6e0e2ed543cafc4ab59c2ec038da923, type: 2}
+      objectReference: {fileID: 2100000, guid: 213dad5568950964e94e2db4ad88ffea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 912902097}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 792811130}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
 --- !u!4 &792811128 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
   m_PrefabInstance: {fileID: 792811127}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &792811129 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-  m_PrefabInstance: {fileID: 792811127}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &792811130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 792811129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fa128f3e33f564288032d80cfea9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombTag: Bomb
-  draggableTag: Draggable
-  onBombCollision:
-    m_PersistentCalls:
-      m_Calls: []
-  explosionVFX: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
-  vfxLifetime: 3
-  draggableDestroyDelay: 0.5
 --- !u!1001 &818182818
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5705,11 +5593,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_Name
-      value: NextStage
+      value: NextStage1
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_TagString
-      value: Bomb
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_LocalScale.x
@@ -5770,48 +5658,20 @@ PrefabInstance:
     - target: {fileID: 6471872046216945031, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b6e0e2ed543cafc4ab59c2ec038da923, type: 2}
+      objectReference: {fileID: 2100000, guid: 213dad5568950964e94e2db4ad88ffea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 857447950}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 861350704}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
 --- !u!4 &861350702 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
   m_PrefabInstance: {fileID: 861350701}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &861350703 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-  m_PrefabInstance: {fileID: 861350701}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &861350704
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 861350703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fa128f3e33f564288032d80cfea9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombTag: Bomb
-  draggableTag: Draggable
-  onBombCollision:
-    m_PersistentCalls:
-      m_Calls: []
-  explosionVFX: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
-  vfxLifetime: 3
-  draggableDestroyDelay: 0.5
 --- !u!1 &865906472
 GameObject:
   m_ObjectHideFlags: 0
@@ -6471,11 +6331,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_Name
-      value: NextStage
+      value: NextStage3
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_TagString
-      value: Bomb
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_LocalScale.x
@@ -6536,48 +6396,20 @@ PrefabInstance:
     - target: {fileID: 6471872046216945031, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b6e0e2ed543cafc4ab59c2ec038da923, type: 2}
+      objectReference: {fileID: 2100000, guid: 213dad5568950964e94e2db4ad88ffea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1533574986}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1005734505}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
 --- !u!4 &1005734503 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
   m_PrefabInstance: {fileID: 1005734502}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1005734504 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-  m_PrefabInstance: {fileID: 1005734502}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1005734505
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1005734504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fa128f3e33f564288032d80cfea9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombTag: Bomb
-  draggableTag: Draggable
-  onBombCollision:
-    m_PersistentCalls:
-      m_Calls: []
-  explosionVFX: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
-  vfxLifetime: 3
-  draggableDestroyDelay: 0.5
 --- !u!1 &1046723573
 GameObject:
   m_ObjectHideFlags: 0
@@ -6743,11 +6575,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_Name
-      value: NextStage
+      value: NextStage5
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_TagString
-      value: Bomb
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_LocalScale.x
@@ -6808,48 +6640,20 @@ PrefabInstance:
     - target: {fileID: 6471872046216945031, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b6e0e2ed543cafc4ab59c2ec038da923, type: 2}
+      objectReference: {fileID: 2100000, guid: 213dad5568950964e94e2db4ad88ffea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 575934156}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1060653628}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
 --- !u!4 &1060653626 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
   m_PrefabInstance: {fileID: 1060653625}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1060653627 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-  m_PrefabInstance: {fileID: 1060653625}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1060653628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060653627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fa128f3e33f564288032d80cfea9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombTag: Bomb
-  draggableTag: Draggable
-  onBombCollision:
-    m_PersistentCalls:
-      m_Calls: []
-  explosionVFX: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
-  vfxLifetime: 3
-  draggableDestroyDelay: 0.5
 --- !u!1 &1066927330
 GameObject:
   m_ObjectHideFlags: 0
@@ -8305,7 +8109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1296363615
 Transform:
   m_ObjectHideFlags: 0
@@ -8348,7 +8152,10 @@ MonoBehaviour:
   reverseStageSceneName: ReverseStage
   delayBeforeLoadScene: 1
   bombTag: Bomb
+  explodeAllAtOnce: 1
+  delayBetweenExplosions: 0.1
   autoFindChildColliders: 0
+  useUnityDebugLog: 1
 --- !u!1001 &1313065310
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8363,7 +8170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_Name
-      value: NextStage
+      value: NextStage2
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_IsActive
@@ -8371,7 +8178,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_TagString
-      value: Bomb
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_LocalScale.x
@@ -8432,48 +8239,20 @@ PrefabInstance:
     - target: {fileID: 6471872046216945031, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b6e0e2ed543cafc4ab59c2ec038da923, type: 2}
+      objectReference: {fileID: 2100000, guid: 213dad5568950964e94e2db4ad88ffea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 826010808}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1313065313}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
 --- !u!4 &1313065311 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
   m_PrefabInstance: {fileID: 1313065310}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1313065312 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-  m_PrefabInstance: {fileID: 1313065310}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1313065313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1313065312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fa128f3e33f564288032d80cfea9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombTag: Bomb
-  draggableTag: Draggable
-  onBombCollision:
-    m_PersistentCalls:
-      m_Calls: []
-  explosionVFX: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
-  vfxLifetime: 3
-  draggableDestroyDelay: 0.5
 --- !u!1 &1392923472
 GameObject:
   m_ObjectHideFlags: 0
@@ -8597,11 +8376,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_Name
-      value: NextStage
+      value: NextStage6
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_TagString
-      value: Bomb
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_LocalScale.x
@@ -8662,48 +8441,20 @@ PrefabInstance:
     - target: {fileID: 6471872046216945031, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b6e0e2ed543cafc4ab59c2ec038da923, type: 2}
+      objectReference: {fileID: 2100000, guid: 213dad5568950964e94e2db4ad88ffea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1806709043}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1447325705}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
 --- !u!4 &1447325703 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
   m_PrefabInstance: {fileID: 1447325702}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1447325704 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-  m_PrefabInstance: {fileID: 1447325702}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1447325705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447325704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fa128f3e33f564288032d80cfea9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombTag: Bomb
-  draggableTag: Draggable
-  onBombCollision:
-    m_PersistentCalls:
-      m_Calls: []
-  explosionVFX: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
-  vfxLifetime: 3
-  draggableDestroyDelay: 0.5
 --- !u!1 &1464143855
 GameObject:
   m_ObjectHideFlags: 0
@@ -10537,11 +10288,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_Name
-      value: NextStage
+      value: NextStage8
       objectReference: {fileID: 0}
     - target: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_TagString
-      value: Bomb
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: m_LocalScale.x
@@ -10602,48 +10353,20 @@ PrefabInstance:
     - target: {fileID: 6471872046216945031, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b6e0e2ed543cafc4ab59c2ec038da923, type: 2}
+      objectReference: {fileID: 2100000, guid: 213dad5568950964e94e2db4ad88ffea, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1926028454}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1774140110}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
 --- !u!4 &1774140108 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789240120291492577, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
   m_PrefabInstance: {fileID: 1774140107}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1774140109 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2745187867334907740, guid: dcb353cfd224e1840a0c29113b88bdd5, type: 3}
-  m_PrefabInstance: {fileID: 1774140107}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1774140110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1774140109}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fa128f3e33f564288032d80cfea9c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombTag: Bomb
-  draggableTag: Draggable
-  onBombCollision:
-    m_PersistentCalls:
-      m_Calls: []
-  explosionVFX: {fileID: 417761080263594737, guid: 75fb28b0e13410546ab129e154dd95c6, type: 3}
-  vfxLifetime: 3
-  draggableDestroyDelay: 0.5
 --- !u!1001 &1774861402
 PrefabInstance:
   m_ObjectHideFlags: 0
