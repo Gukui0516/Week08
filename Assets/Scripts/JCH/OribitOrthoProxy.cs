@@ -113,23 +113,23 @@ public class OrbitOrthoProxy : MonoBehaviour
     /// <param name="message">로그 메시지</param>
     private void Log(string message, bool forcely = false)
     {
-        if (IsDebugLogging || forcely)
-            Debug.Log($"<color=magenta>[{GetType().Name}]</color> {message}", this);
+        if (_isDebugLogging || forcely)
+            LogSystem.DebugLog(message, null, this);
     }
 
     /// <summary>경고 로그 출력</summary>
     /// <param name="message">경고 메시지</param>
     private void LogWarning(string message, bool forcely = false)
     {
-        if (IsDebugLogging || forcely)
-            Debug.LogWarning($"<color=magenta>[{GetType().Name}]</color> {message}", this);
+        if (_isDebugLogging || forcely)
+            LogSystem.PushLog(LogLevel.WARNING, GetType().Name, message, true);
     }
 
-    /// <summary>에러 로그 출력</summary>
+    /// <summary>에러 로그 출력 - 항상 강제 출력</summary>
     /// <param name="message">에러 메시지</param>
     private void LogError(string message)
     {
-        Debug.LogError($"<color=magenta>[{GetType().Name}]</color> {message}", this);
+        LogSystem.PushLog(LogLevel.ERROR, GetType().Name, message, true);
     }
     #endregion
 
