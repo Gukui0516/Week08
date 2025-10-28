@@ -166,7 +166,7 @@ public class JointBreakNotifier : MonoBehaviour
         _lastValidJointCount = 0;
 
         Log($"전체 Joint 파괴 완료 - 파괴된 개수: {destroyedCount}", true);
-        LogSystem.PushLog(LogLevel.INFO, "JointBreakNotifier", gameObject.name);
+        LogSystem.PushLog(LogLevel.INFO, "JointBreakNotifier", gameObject.name, true);
         // 일관성 있게 OnJointBreakEvent 호출
         NotifyJointBreak(0, _initialJointCount);
         OnAllJointsDestroyedEvent?.Invoke();
