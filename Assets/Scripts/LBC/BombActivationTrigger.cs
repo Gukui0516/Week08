@@ -33,13 +33,13 @@ public class BombActivationTrigger : MonoBehaviour
 
         if (bombRb == null)
         {
-            Debug.LogWarning($"{other.gameObject.name}: Rigidbody 컴포넌트가 없습니다.");
+            //Debug.LogWarning($"{other.gameObject.name}: Rigidbody 컴포넌트가 없습니다.");
             return;
         }
 
         if (showDebugInfo)
         {
-            Debug.Log($"{other.gameObject.name}: 활성화 전 - Gravity: {bombRb.useGravity}, Constraints: {bombRb.constraints}");
+            //Debug.Log($"{other.gameObject.name}: 활성화 전 - Gravity: {bombRb.useGravity}, Constraints: {bombRb.constraints}");
         }
 
         // 중력 활성화
@@ -50,7 +50,7 @@ public class BombActivationTrigger : MonoBehaviour
 
         if (showDebugInfo)
         {
-            Debug.Log($"{other.gameObject.name}: 활성화 완료 - Gravity: {bombRb.useGravity}, Constraints: {bombRb.constraints}");
+            //Debug.Log($"{other.gameObject.name}: 활성화 완료 - Gravity: {bombRb.useGravity}, Constraints: {bombRb.constraints}");
         }
     }
 }
