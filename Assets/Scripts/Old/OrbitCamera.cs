@@ -102,16 +102,20 @@ public class OrbitCamera : MonoBehaviour
             if (!CursorManager.Instance.isGrabbed || (CursorManager.Instance.isGrabbed && Input.GetMouseButton(1)))
             {
                 float scroll = Input.GetAxis("Mouse ScrollWheel");
+
                 distance -= scroll * zoomSpeed;
+                LogSystem.PushLog(LogLevel.INFO, "CameraZoom", -scroll * zoomSpeed);
             }
 
             if (Input.GetKey(KeyCode.Q))
             {
                 distance += keyZoomSpeed * Time.deltaTime;
+                LogSystem.PushLog(LogLevel.INFO, "CameraZoom", keyZoomSpeed * Time.deltaTime);
             }
             if (Input.GetKey(KeyCode.E))
             {
                 distance -= keyZoomSpeed * Time.deltaTime;
+                LogSystem.PushLog(LogLevel.INFO, "CameraZoom", -keyZoomSpeed * Time.deltaTime);
             }
 
             // --- 5. 값 제한 (Clamping) ---
