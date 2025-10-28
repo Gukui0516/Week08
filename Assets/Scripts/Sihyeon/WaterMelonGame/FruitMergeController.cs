@@ -235,13 +235,13 @@ public class FruitMergeController : MonoBehaviour
 
             // 로그 기록
             string mergeInfo = $"To: {nextType}, Level: {(int)nextType}, TypeCount: {typeCount}, TotalCount: {totalCount}";
-            LogSystem.PushLog(LogLevel.INFO, "FruitMerged", mergeInfo);
+            LogSystem.PushLog(LogLevel.INFO, "FruitMerged", mergeInfo, useUnityDebug: true);
         }
         else
         {
             // 매니저가 없는 경우 (폴백)
             string mergeInfo = $"To: {fruitData.NextFruitType}, Level: {(int)fruitData.NextFruitType}";
-            LogSystem.PushLog(LogLevel.INFO, "FruitMerged", mergeInfo);
+            LogSystem.PushLog(LogLevel.INFO, "FruitMerged", mergeInfo, useUnityDebug: true);
         }
 
         // 병합 중간 SpawnCount 로그 (새 과일 생성 후)
@@ -454,7 +454,7 @@ public class FruitMergeController : MonoBehaviour
     {
         // [변경] DEBUG 로그 수정
         LogSystem.PushLog(LogLevel.DEBUG, "MergeDebug",
-            $"[FruitMergeController] {message}");
+            $"[FruitMergeController] {message}",true);
     }
 
 #if UNITY_EDITOR
