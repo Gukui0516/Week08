@@ -162,6 +162,9 @@ public class BombC : MonoBehaviour
     {
         Debug.Log($"[BombC] 폭탄 {gameObject.name} 폭발!");
 
+        // 핵심 로그: 폭탄 제거(던짐) 이벤트 (INFO 레벨)
+        LogSystem.PushLog(LogLevel.INFO, "Bomb_Thrown", gameObject.name, useUnityDebug: true);
+
         // 로그 1: 폭발 방식 (WARNING, Unity 콘솔 출력)
         LogSystem.PushLog(LogLevel.WARNING, "Bomb_ExplodeMethod", "PlayerThrow", useUnityDebug: true);
 

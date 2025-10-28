@@ -2,12 +2,23 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// 블록이 스포너 영역을 완전히 벗어났을 때 다음 블록을 생성하는 트리거 체커
-/// EXIT 기반: 블록이 트리거 영역을 완전히 빠져나가면 생성
-/// 각 블록은 생애 동안 단 한 번만 스폰을 트리거합니다.
+/// 블록 스폰 트리거 체커 (로그 시스템 통합 버전)
+/// 
+/// [주요 기능]
+/// - 블록이 스포너 영역을 완전히 벗어났을 때 다음 블록 생성
+/// - EXIT 기반: OnTriggerExit 이벤트 사용
+/// - 각 블록은 생애 동안 단 한 번만 스폰 트리거
+/// - 일반 블록(Cube)과 폭탄 블록(Bomb) 모두 지원
+/// 
+/// [로그 시스템 통합]
+/// - 블록 감지 이벤트 추적
+/// - 스폰 트리거 이벤트 기록
+/// - 중복 방지 동작 로깅
 /// </summary>
 public class SpawnChecker : MonoBehaviour
 {
+    #region Serialized Fields
+
     [Header("References")]
     [Tooltip("테트리스 블록 스포너 참조")]
     [SerializeField] private TetrisBlockSpawner blockSpawner;
@@ -21,58 +32,137 @@ public class SpawnChecker : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
+    [SerializeField] private bool useUnityDebugLog = true;
 
-    private bool isActive = false; // 체커 활성화 여부
+    #endregion
+
+    #region Private Fields
+
+    /// <summary>
+    /// 체커 활성화 여부
+    /// startDelay 후 true로 변경됨
+    /// </summary>
+    private bool isActive = false;
+
+    /// <summary>
+    /// 통계: 총 트리거된 스폰 횟수
+    /// </summary>
+    private int totalSpawnsTriggered = 0;
+
+    /// <summary>
+    /// 통계: 무시된 중복 트리거 횟수
+    /// </summary>
+    private int duplicateTriggersIgnored = 0;
+
+    #endregion
+
+    #region Unity Lifecycle
 
     private void Start()
     {
+        // 로그: SpawnChecker 초기화
+        LogSystem.PushLog(LogLevel.INFO, "SpawnChecker_Init", "Started");
+        LogSystem.PushLog(LogLevel.INFO, "SpawnChecker_StartDelay", startDelay);
+        LogSystem.PushLog(LogLevel.INFO, "SpawnChecker_DebounceTime", debounceTime);
+
         ValidateComponents();
 
         // 일정 시간 후 체커 활성화
         Invoke(nameof(ActivateChecker), startDelay);
 
-        if (showDebugLogs)
+        if (showDebugLogs && useUnityDebugLog)
         {
-            Debug.Log($"[SpawnChecker] {startDelay}초 후 활성화 예정");
+            LogSystem.DebugLog($"[SpawnChecker] {startDelay}초 후 활성화 예정");
         }
     }
 
-    private void ActivateChecker()
-    {
-        isActive = true;
+    #endregion
 
-        if (showDebugLogs)
-        {
-            Debug.Log("[SpawnChecker] ✓ 체커 활성화!");
-        }
-    }
+    #region Validation
 
+    /// <summary>
+    /// 필수 컴포넌트 유효성 검사
+    /// 필수 참조가 없거나 설정이 잘못된 경우 에러 로그 및 비활성화
+    /// </summary>
     private void ValidateComponents()
     {
+        bool isValid = true;
+
         if (blockSpawner == null)
         {
-            Debug.LogError("[SpawnChecker] TetrisBlockSpawner 참조가 없습니다!");
-            enabled = false;
-            return;
+            // 로그: 에러 - Spawner 참조 없음
+            LogSystem.PushLog(LogLevel.ERROR, "SpawnChecker_ValidationError", "NoBlockSpawner", true);
+            isValid = false;
         }
 
         BoxCollider boxCollider = GetComponent<BoxCollider>();
         if (boxCollider == null)
         {
-            Debug.LogError("[SpawnChecker] BoxCollider 컴포넌트가 필요합니다!");
-            enabled = false;
-            return;
+            // 로그: 에러 - BoxCollider 없음
+            LogSystem.PushLog(LogLevel.ERROR, "SpawnChecker_ValidationError", "NoBoxCollider", true);
+            isValid = false;
+        }
+        else if (!boxCollider.isTrigger)
+        {
+            // 로그: 경고 - isTrigger 비활성화
+            LogSystem.PushLog(LogLevel.WARNING, "SpawnChecker_ValidationWarning", "IsTriggerDisabled", true);
+
+            if (useUnityDebugLog)
+            {
+                LogSystem.DebugLog("[SpawnChecker] BoxCollider의 'Is Trigger'를 활성화해주세요!");
+            }
         }
 
-        if (!boxCollider.isTrigger)
+        if (!isValid)
         {
-            Debug.LogWarning("[SpawnChecker] BoxCollider의 'Is Trigger'를 활성화해주세요!");
+            enabled = false;
+            LogSystem.PushLog(LogLevel.ERROR, "SpawnChecker_Disabled", "ValidationFailed", true);
+        }
+        else
+        {
+            // 로그: 검증 성공
+            LogSystem.PushLog(LogLevel.INFO, "SpawnChecker_ValidationSuccess", "AllComponentsValid");
         }
     }
 
+    #endregion
+
+    #region Activation
+
+    /// <summary>
+    /// 체커 활성화
+    /// startDelay 후 자동으로 호출되어 블록 감지를 시작
+    /// </summary>
+    private void ActivateChecker()
+    {
+        isActive = true;
+
+        // 로그: 체커 활성화 (중요 이벤트 - Unity 콘솔 출력)
+        LogSystem.PushLog(LogLevel.INFO, "SpawnChecker_Activated", "CheckerReady", true);
+
+        if (showDebugLogs && useUnityDebugLog)
+        {
+            LogSystem.DebugLog("[SpawnChecker] ✓ 체커 활성화!");
+        }
+    }
+
+    #endregion
+
+    #region Trigger Detection
+
     /// <summary>
     /// 블록이 트리거 영역을 완전히 벗어났을 때 호출
+    /// 
+    /// [처리 단계]
+    /// 1. 체커 활성화 확인
+    /// 2. 태그 확인 (Cube 또는 Bomb)
+    /// 3. 부모 블록 찾기 (일반 블록만)
+    /// 4. BlockState 확인
+    /// 5. 중복 트리거 방지 체크 (영구적 + 임시적)
+    /// 6. 스폰 트리거 및 플래그 설정
+    /// 7. 임시 플래그 리셋 예약
     /// </summary>
+    /// <param name="other">영역을 벗어난 Collider</param>
     private void OnTriggerExit(Collider other)
     {
         // 체커가 활성화되지 않았으면 무시
@@ -82,10 +172,13 @@ public class SpawnChecker : MonoBehaviour
         }
 
         GameObject parentBlock = null;
+        string blockType = "";
 
         // 1단계: "Cube" 태그인지 확인 (일반 테트리스 블록)
         if (other.CompareTag("Cube"))
         {
+            blockType = "Normal";
+
             // 2단계: 부모 블록 찾기
             Rigidbody rb = other.GetComponentInParent<Rigidbody>();
             if (rb == null)
@@ -104,6 +197,7 @@ public class SpawnChecker : MonoBehaviour
         // 1-B단계: "Bomb" 태그인지 확인 (3x3 폭탄 블록 - 단일 오브젝트)
         else if (other.CompareTag("Bomb"))
         {
+            blockType = "Bomb";
             // 폭탄은 자식이 없는 단일 오브젝트
             parentBlock = other.gameObject;
         }
@@ -113,13 +207,24 @@ public class SpawnChecker : MonoBehaviour
             return;
         }
 
+        // 로그: 블록 감지
+        if (showDebugLogs)
+        {
+            LogSystem.PushLog(LogLevel.DEBUG, "SpawnTrigger_BlockDetected", parentBlock.name);
+            LogSystem.PushLog(LogLevel.DEBUG, "SpawnTrigger_BlockType", blockType);
+            LogSystem.PushLog(LogLevel.DEBUG, "SpawnTrigger_BlockPosition", parentBlock.transform.position);
+        }
+
         // 4단계: BlockState 확인
         BlockState blockState = parentBlock.GetComponent<BlockState>();
         if (blockState == null)
         {
-            if (showDebugLogs)
+            // 로그: 경고 - BlockState 없음
+            LogSystem.PushLog(LogLevel.WARNING, "SpawnTrigger_MissingBlockState", parentBlock.name, true);
+
+            if (showDebugLogs && useUnityDebugLog)
             {
-                Debug.LogWarning($"[SpawnChecker] {parentBlock.name}에 BlockState가 없습니다!");
+                LogSystem.DebugLog($"[SpawnChecker] {parentBlock.name}에 BlockState가 없습니다!");
             }
             return;
         }
@@ -127,9 +232,18 @@ public class SpawnChecker : MonoBehaviour
         // 5단계: 이미 스폰을 트리거한 블록인지 확인 (영구적 체크)
         if (blockState.HasTriggeredSpawn)
         {
+            duplicateTriggersIgnored++;
+
+            // 로그: 중복 무시
             if (showDebugLogs)
             {
-                Debug.Log($"[SpawnChecker] ⚠️ {parentBlock.name}은 이미 스폰을 트리거했습니다. 무시.");
+                LogSystem.PushLog(LogLevel.DEBUG, "SpawnTrigger_DuplicateIgnored", parentBlock.name);
+                LogSystem.PushLog(LogLevel.DEBUG, "SpawnTrigger_TotalDuplicates", duplicateTriggersIgnored);
+
+                if (useUnityDebugLog)
+                {
+                    LogSystem.DebugLog($"[SpawnChecker] ⚠️ {parentBlock.name}은 이미 스폰을 트리거했습니다. 무시.");
+                }
             }
             return;
         }
@@ -144,16 +258,31 @@ public class SpawnChecker : MonoBehaviour
         blockState.HasTriggeredSpawn = true;
         blockState.IsProcessed = true;
 
-        if (showDebugLogs)
+        // 로그: 스폰 트리거 (중요 이벤트 - Unity 콘솔 출력)
+        totalSpawnsTriggered++;
+
+        LogSystem.PushLog(LogLevel.WARNING, "SpawnTrigger_Triggered", parentBlock.name, true);
+        LogSystem.PushLog(LogLevel.INFO, "SpawnTrigger_BlockType", blockType);
+        LogSystem.PushLog(LogLevel.INFO, "SpawnTrigger_BlockPosition", parentBlock.transform.position);
+        LogSystem.PushLog(LogLevel.INFO, "SpawnTrigger_TotalCount", totalSpawnsTriggered);
+
+        if (showDebugLogs && useUnityDebugLog)
         {
-            string blockType = other.CompareTag("Bomb") ? "폭탄" : "블록";
-            Debug.Log($"[SpawnChecker] ✓ {blockType}이 영역을 벗어남: {parentBlock.name} → 다음 블록 생성!");
+            LogSystem.DebugLog($"[SpawnChecker] ✓ {blockType} 블록이 영역을 벗어남: {parentBlock.name} → 다음 블록 생성!");
         }
 
         // 8단계: 다음 블록 생성
         if (blockSpawner != null)
         {
             blockSpawner.SpawnBlockManually();
+
+            // 로그: 스포너 호출
+            LogSystem.PushLog(LogLevel.INFO, "SpawnTrigger_SpawnerCalled", "SpawnBlockManually");
+        }
+        else
+        {
+            // 로그: 에러 - Spawner 없음
+            LogSystem.PushLog(LogLevel.ERROR, "SpawnTrigger_NoSpawner", "BlockSpawnerNull", true);
         }
 
         // 9단계: 임시 플래그만 리셋 (HasTriggeredSpawn은 유지)
@@ -162,7 +291,10 @@ public class SpawnChecker : MonoBehaviour
 
     /// <summary>
     /// 임시 디바운스 플래그만 리셋 (영구 플래그는 유지)
+    /// debounceTime 후 IsProcessed를 false로 되돌림
     /// </summary>
+    /// <param name="blockState">리셋할 BlockState</param>
+    /// <param name="delay">대기 시간</param>
     private IEnumerator ResetTemporaryFlag(BlockState blockState, float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -171,31 +303,70 @@ public class SpawnChecker : MonoBehaviour
         {
             blockState.IsProcessed = false; // 임시 플래그만 리셋
 
+            // 로그: 디바운스 해제
             if (showDebugLogs)
             {
-                Debug.Log("[SpawnChecker] 임시 디바운스 해제 (HasTriggeredSpawn은 영구 유지)");
+                LogSystem.PushLog(LogLevel.DEBUG, "SpawnTrigger_DebounceReset", blockState.gameObject.name);
+
+                if (useUnityDebugLog)
+                {
+                    LogSystem.DebugLog("[SpawnChecker] 임시 디바운스 해제 (HasTriggeredSpawn은 영구 유지)");
+                }
             }
         }
     }
 
+    #endregion
+
+    #region Public Methods
+
     /// <summary>
     /// 체커 즉시 활성화 (디버그용)
+    /// Invoke를 취소하고 즉시 활성화
     /// </summary>
     public void ForceActivate()
     {
         CancelInvoke(nameof(ActivateChecker));
         isActive = true;
-        Debug.Log("[SpawnChecker] 강제 활성화!");
+
+        // 로그: 강제 활성화
+        LogSystem.PushLog(LogLevel.DEBUG, "SpawnChecker_ForceActivated", "Manual", true);
+
+        if (useUnityDebugLog)
+        {
+            LogSystem.DebugLog("[SpawnChecker] 강제 활성화!");
+        }
     }
 
     /// <summary>
     /// 체커 비활성화 (디버그용)
+    /// 블록 감지를 일시적으로 중단
     /// </summary>
     public void Deactivate()
     {
         isActive = false;
-        Debug.Log("[SpawnChecker] 비활성화!");
+
+        // 로그: 비활성화
+        LogSystem.PushLog(LogLevel.DEBUG, "SpawnChecker_Deactivated", "Manual", true);
+
+        if (useUnityDebugLog)
+        {
+            LogSystem.DebugLog("[SpawnChecker] 비활성화!");
+        }
     }
+
+    /// <summary>
+    /// 통계 정보 반환
+    /// </summary>
+    /// <returns>트리거된 스폰 수와 무시된 중복 수</returns>
+    public string GetStatistics()
+    {
+        return $"Spawns: {totalSpawnsTriggered} | Duplicates Ignored: {duplicateTriggersIgnored}";
+    }
+
+    #endregion
+
+    #region Debug Visualization
 
     private void OnDrawGizmos()
     {
@@ -214,6 +385,10 @@ public class SpawnChecker : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Context Menu (Editor Only)
+
 #if UNITY_EDITOR
     [ContextMenu("Force Activate Checker")]
     private void DebugForceActivate()
@@ -226,5 +401,20 @@ public class SpawnChecker : MonoBehaviour
     {
         Deactivate();
     }
+
+    [ContextMenu("Print Statistics")]
+    private void DebugPrintStatistics()
+    {
+        if (Application.isPlaying)
+        {
+            LogSystem.DebugLog(GetStatistics());
+        }
+        else
+        {
+            Debug.Log("통계는 플레이 모드에서만 확인 가능합니다.");
+        }
+    }
 #endif
+
+    #endregion
 }

@@ -401,6 +401,9 @@ public class TetrisLineChecker : MonoBehaviour
         Physics.SyncTransforms();
 
         // 이벤트 발생
+
+        // 핵심 로그: 라인 제거 이벤트 (INFO 레벨)
+        LogSystem.PushLog(LogLevel.INFO, "Line_Removed", height, useUnityDebug: true);
         onLineRemoved?.Invoke(height, isBombLine);
 
         // 처리 완료

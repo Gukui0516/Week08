@@ -1,4 +1,4 @@
-﻿using Sirenix.OdinInspector;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -162,9 +162,6 @@ public class TetrisBlockSpawner : MonoBehaviour
         {
             CreateNewBag();
             ShuffleBag();
-
-            // 로그: 7-Bag 새 주머니 생성
-            LogSystem.PushLog(LogLevel.DEBUG, "Bag_NewShuffled", "7BlocksReady");
 
             if (showDebugLogs)
             {
@@ -415,6 +412,9 @@ public class TetrisBlockSpawner : MonoBehaviour
         string blockType = ExtractBlockType(spawnedBlock.name);
 
         // 로그: 블록 생성 성공
+        // 핵심 로그: 블록 생성 이벤트 (INFO 레벨)
+        LogSystem.PushLog(LogLevel.INFO, "Block_Spawned", blockType, useUnityDebug: true);
+
         LogSystem.PushLog(LogLevel.INFO, "Block_Type", blockType);
         LogSystem.PushLog(LogLevel.INFO, "Block_Position", spawnPoint.position);
         LogSystem.PushLog(LogLevel.INFO, "Block_QueueCount", blockQueue.Count);

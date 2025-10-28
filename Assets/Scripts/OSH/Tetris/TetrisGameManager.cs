@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Sirenix.OdinInspector;
@@ -143,6 +143,9 @@ public class TetrisGameManager : MonoBehaviour
                 if (bomb != null)
                 {
                     explodedCount++;
+
+                    // 핵심 로그: 폭탄 제거(라인) 이벤트 (INFO 레벨)
+                    LogSystem.PushLog(LogLevel.INFO, "Bomb_LineCleared", collider.gameObject.name, useUnityDebug: true);
 
                     // 로그: 개별 폭탄 폭발
                     LogSystem.PushLog(LogLevel.WARNING, "Bomb_ExplodeMethod", "LineClear");
