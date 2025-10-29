@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fc10894df3b3c742a44a1a61aacb4bd, type: 3}
-  m_Name: KeyBoard
+  m_Name: Rings
   m_EditorClassIdentifier: 
-  _stageImage: {fileID: 21300000, guid: 0988e7d40f4b1384199180e046a767ce, type: 3}
-  _stageName: "\uD0A4\uBCF4\uB4DC"
-  _sceneName: JCH_Deassembly
+  _stageImage: {fileID: 21300000, guid: 8b94e735ca20ea448af2657b39ed02d2, type: 3}
+  _stageName: "\uB9C1 1"
+  _sceneName: JCH_Rings
   _clearStar: 0
   _isTried: 0
-  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/JCH_Deassembly.png
-  _scenePath: Assets/Resources/Scenes/JCH/JCH_Deassembly.unity
+  _stageImagePath: 
+  _scenePath: Assets/Scenes/JCH/JCH_Rings.unity

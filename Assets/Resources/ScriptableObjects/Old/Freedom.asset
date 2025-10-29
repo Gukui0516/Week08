@@ -17,5 +17,5 @@ MonoBehaviour:
   _sceneName: Freedom
   _clearStar: 0
   _isTried: 0
-  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week06/StageImages/Freedom.png
+  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/Freedom.png
   _scenePath: Assets/Scenes/Freedom.unity
