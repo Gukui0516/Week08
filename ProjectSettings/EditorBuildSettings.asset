@@ -15,26 +15,29 @@ EditorBuildSettings:
     path: Assets/Scenes/Sihyeon/STAGE.unity
     guid: 32d72dfc0a377204c959c773f18d026d
   - enabled: 1
-    path: Assets/Scenes/Sihyeon/WaterMelon3D.unity
-    guid: 7df707152b803de4bb0ac9023c2e0b9b
-  - enabled: 1
-    path: Assets/Scenes/OSH/TetrisMap.unity
-    guid: da1b9f6783733c0429b2defbac566eae
-  - enabled: 1
     path: Assets/Scenes/JCH/JCH_Deassembly.unity
     guid: 6ee4b70fa2ba34b42a69aaff7647a4f0
   - enabled: 1
     path: Assets/Scenes/Old/JML/JMObservatory.unity
     guid: 8871ec25d86ff014f920371075652e31
   - enabled: 1
-    path: Assets/Scenes/Old/JML/JMKey.unity
-    guid: 51e12b8a8051ba440a091e60cfb70ae1
-  - enabled: 1
     path: Assets/Scenes/Old/Sphinx.unity
     guid: 123974046093c9740ac46ac91d4b6285
   - enabled: 1
     path: Assets/Scenes/Old/Freedom.unity
     guid: 141ca50bee2799c4fb0a360c28b4b8c9
+  - enabled: 1
+    path: Assets/Scenes/Sihyeon/NewW08/Seesaw.unity
+    guid: a19bc6f13b55c4349978970bbdc330fc
+  - enabled: 1
+    path: Assets/Scenes/JCH/JCH_Rings.unity
+    guid: 3f63097fca53cf14594d676d9b2ce7c0
+  - enabled: 1
+    path: Assets/Scenes/LBC/Soma Cube.unity
+    guid: 2ec824f9cccc7ce4896a31372d9e75d4
+  - enabled: 1
+    path: Assets/Scenes/JCH/JCH_ChainRing.unity
+    guid: 5274fc9cf48fb0e43a2ceec54e3e2d57
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
