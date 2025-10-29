@@ -5642,7 +5642,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f5154c03ea25daa4bb4189a91c2396bb, type: 2}
+  - {fileID: 2100000, guid: 8b31252d71fae85499e8b27b7fdb3da9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5773,7 +5773,7 @@ GameObject:
   - component: {fileID: 8737667828081971010}
   m_Layer: 0
   m_Name: Pin (2)
-  m_TagString: Bomb
+  m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6802,7 +6802,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f5154c03ea25daa4bb4189a91c2396bb, type: 2}
+  - {fileID: 2100000, guid: 8b31252d71fae85499e8b27b7fdb3da9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19875,7 +19875,7 @@ GameObject:
   - component: {fileID: 7490127033590737045}
   m_Layer: 0
   m_Name: Pin
-  m_TagString: Bomb
+  m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
