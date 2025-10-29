@@ -49,7 +49,7 @@ public class WatermelonObjectPool : MonoBehaviour
 
     [Header("Debug")]
     [Tooltip("풀링 관련 디버그 로그를 출력합니다.")]
-    [SerializeField] private bool showDebugLogs = false;
+    [SerializeField] private bool showDebugLogs = false; // [참고] 이 변수는 DEBUG 로그에서 더 이상 사용되지 않습니다.
 
     // 싱글톤 인스턴스
     private static WatermelonObjectPool instance;
@@ -96,7 +96,9 @@ public class WatermelonObjectPool : MonoBehaviour
             return fruitPrefabs[type];
         }
 
-        Debug.LogWarning($"[WatermelonObjectPool] {type} 프리팹을 찾을 수 없습니다. Dictionary가 초기화되지 않았거나 해당 키가 없습니다.");
+        // [변경] LogLevel.WARNING
+        LogSystem.PushLog(LogLevel.WARNING, "MissingPrefab",
+            $"[WatermelonObjectPool] {type} 프리팹을 찾을 수 없습니다. Dictionary가 초기화되지 않았거나 해당 키가 없습니다.", useUnityDebug: true);
         return null;
     }
 
@@ -105,7 +107,9 @@ public class WatermelonObjectPool : MonoBehaviour
         // 싱글톤 설정
         if (instance != null && instance != this)
         {
-            Debug.LogWarning($"[WatermelonObjectPool] 중복된 인스턴스 감지! {gameObject.name}를 파괴합니다.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "SingletonDuplicate",
+                $"[WatermelonObjectPool] 중복된 인스턴스 감지! {gameObject.name}를 파괴합니다.", useUnityDebug: true);
             Destroy(gameObject);
             return;
         }
@@ -163,14 +167,18 @@ public class WatermelonObjectPool : MonoBehaviour
             // 프리팹 검증
             if (prefab == null)
             {
-                Debug.LogError($"[WatermelonObjectPool] {type} 프리팹이 할당되지 않았습니다!");
+                // [변경] LogLevel.ERROR
+                LogSystem.PushLog(LogLevel.ERROR, "MissingPrefab",
+                    $"[WatermelonObjectPool] {type} 프리팹이 할당되지 않았습니다!", useUnityDebug: true);
                 continue;
             }
 
             // FruitMergeData 컴포넌트 확인
             if (prefab.GetComponent<FruitMergeData>() == null)
             {
-                Debug.LogError($"[WatermelonObjectPool] {type} 프리팹에 FruitMergeData 컴포넌트가 없습니다!");
+                // [변경] LogLevel.ERROR
+                LogSystem.PushLog(LogLevel.ERROR, "MissingComponent",
+                    $"[WatermelonObjectPool] {type} 프리팹에 FruitMergeData 컴포넌트가 없습니다!", useUnityDebug: true);
                 continue;
             }
 
@@ -184,13 +192,14 @@ public class WatermelonObjectPool : MonoBehaviour
                 CreateNewFruit(type);
             }
 
-            if (showDebugLogs)
-            {
-                Debug.Log($"[WatermelonObjectPool] {type} 풀 초기화 완료: {initialPoolSizePerType}개 생성");
-            }
+            // [변경] DEBUG 로그 수정
+            LogSystem.PushLog(LogLevel.DEBUG, "PoolInit",
+                $"[WatermelonObjectPool] {type} 풀 초기화 완료: {initialPoolSizePerType}개 생성");
         }
 
-        Debug.Log($"[WatermelonObjectPool] 전체 풀 초기화 완료: 총 {fruitPrefabs.Count}종류, 각 {initialPoolSizePerType}개씩 생성");
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "PoolInit",
+            $"[WatermelonObjectPool] 전체 풀 초기화 완료: 총 {fruitPrefabs.Count}종류, 각 {initialPoolSizePerType}개씩 생성");
     }
 
     /// <summary>
@@ -200,7 +209,9 @@ public class WatermelonObjectPool : MonoBehaviour
     {
         if (!fruitPrefabs.ContainsKey(type) || fruitPrefabs[type] == null)
         {
-            Debug.LogError($"[WatermelonObjectPool] {type} 프리팹을 찾을 수 없습니다!");
+            // [변경] LogLevel.ERROR
+            LogSystem.PushLog(LogLevel.ERROR, "MissingPrefab",
+                $"[WatermelonObjectPool] {type} 프리팹을 찾을 수 없습니다!", useUnityDebug: true);
             return null;
         }
 
@@ -223,7 +234,9 @@ public class WatermelonObjectPool : MonoBehaviour
     {
         if (!availableFruits.ContainsKey(type))
         {
-            Debug.LogError($"[WatermelonObjectPool] {type} 풀이 초기화되지 않았습니다!");
+            // [변경] LogLevel.ERROR
+            LogSystem.PushLog(LogLevel.ERROR, "PoolNotReady",
+                $"[WatermelonObjectPool] {type} 풀이 초기화되지 않았습니다!", useUnityDebug: true);
             return null;
         }
 
@@ -239,20 +252,23 @@ public class WatermelonObjectPool : MonoBehaviour
         {
             fruitObj = CreateNewFruit(type);
 
-            if (showDebugLogs)
-            {
-                Debug.Log($"[WatermelonObjectPool] {type} 풀 확장: 새 과일 생성 (현재 크기: {GetTotalPoolSize(type)})");
-            }
+            // [변경] DEBUG 로그 수정
+            LogSystem.PushLog(LogLevel.DEBUG, "PoolExpand",
+                $"[WatermelonObjectPool] {type} 풀 확장: 새 과일 생성 (현재 크기: {GetTotalPoolSize(type)})");
         }
         else
         {
-            Debug.LogWarning($"[WatermelonObjectPool] {type} 풀에 사용 가능한 과일이 없습니다!");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "PoolEmpty",
+                $"[WatermelonObjectPool] {type} 풀에 사용 가능한 과일이 없습니다!", useUnityDebug: true);
             return null;
         }
 
         if (fruitObj == null)
         {
-            Debug.LogError($"[WatermelonObjectPool] {type} 과일 생성에 실패했습니다!");
+            // [변경] LogLevel.ERROR
+            LogSystem.PushLog(LogLevel.ERROR, "PoolGetFailed",
+                $"[WatermelonObjectPool] {type} 과일 생성에 실패했습니다!", useUnityDebug: true);
             return null;
         }
 
@@ -271,17 +287,18 @@ public class WatermelonObjectPool : MonoBehaviour
             fruitObj.transform.position = position;
             fruitObj.SetActive(true);
 
-            Debug.LogWarning($"[WatermelonObjectPool] {fruitObj.name}에 FruitMergeData 컴포넌트가 없습니다!");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "MissingComponent",
+                $"[WatermelonObjectPool] {fruitObj.name}에 FruitMergeData 컴포넌트가 없습니다!", useUnityDebug: true);
         }
 
         // 활성 풀에 추가
         activeFruits[type].Add(fruitObj);
 
-        if (showDebugLogs)
-        {
-            Debug.Log($"[WatermelonObjectPool] {type} 가져오기: {fruitObj.name} (위치: {position}) | " +
-                     $"활성: {GetActiveFruitCount(type)}, 대기: {GetAvailableFruitCount(type)}");
-        }
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "PoolGet",
+            $"[WatermelonObjectPool] {type} 가져오기: {fruitObj.name} (위치: {position}) | " +
+            $"활성: {GetActiveFruitCount(type)}, 대기: {GetAvailableFruitCount(type)}");
 
         return fruitObj;
     }
@@ -294,7 +311,9 @@ public class WatermelonObjectPool : MonoBehaviour
     {
         if (fruitObj == null)
         {
-            Debug.LogWarning("[WatermelonObjectPool] null 과일을 반환하려고 했습니다.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "NullReference",
+                "[WatermelonObjectPool] null 과일을 반환하려고 했습니다.", useUnityDebug: true);
             return;
         }
 
@@ -302,7 +321,9 @@ public class WatermelonObjectPool : MonoBehaviour
         FruitMergeData fruitData = fruitObj.GetComponent<FruitMergeData>();
         if (fruitData == null)
         {
-            Debug.LogWarning($"[WatermelonObjectPool] {fruitObj.name}에 FruitMergeData 컴포넌트가 없습니다!");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "MissingComponent",
+                $"[WatermelonObjectPool] {fruitObj.name}에 FruitMergeData 컴포넌트가 없습니다!", useUnityDebug: true);
             Destroy(fruitObj);
             return;
         }
@@ -311,7 +332,9 @@ public class WatermelonObjectPool : MonoBehaviour
 
         if (!activeFruits.ContainsKey(type) || !activeFruits[type].Contains(fruitObj))
         {
-            Debug.LogWarning($"[WatermelonObjectPool] {fruitObj.name}은(는) {type} 활성 풀에 없습니다.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "PoolMismatch",
+                $"[WatermelonObjectPool] {fruitObj.name}은(는) {type} 활성 풀에 없습니다.", useUnityDebug: true);
             return;
         }
 
@@ -323,11 +346,10 @@ public class WatermelonObjectPool : MonoBehaviour
         activeFruits[type].Remove(fruitObj);
         availableFruits[type].Enqueue(fruitObj);
 
-        if (showDebugLogs)
-        {
-            Debug.Log($"[WatermelonObjectPool] {type} 반환: {fruitObj.name} | " +
-                     $"활성: {GetActiveFruitCount(type)}, 대기: {GetAvailableFruitCount(type)}");
-        }
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "PoolReturn",
+            $"[WatermelonObjectPool] {type} 반환: {fruitObj.name} | " +
+            $"활성: {GetActiveFruitCount(type)}, 대기: {GetAvailableFruitCount(type)}");
     }
 
     /// <summary>
@@ -337,7 +359,9 @@ public class WatermelonObjectPool : MonoBehaviour
     {
         if (!activeFruits.ContainsKey(type))
         {
-            Debug.LogWarning($"[WatermelonObjectPool] {type} 풀이 존재하지 않습니다.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "PoolNotReady",
+                $"[WatermelonObjectPool] {type} 풀이 존재하지 않습니다.", useUnityDebug: true);
             return;
         }
 
@@ -349,10 +373,9 @@ public class WatermelonObjectPool : MonoBehaviour
             ReturnFruit(fruit);
         }
 
-        if (showDebugLogs)
-        {
-            Debug.Log($"[WatermelonObjectPool] {type} 모든 과일 반환 완료: {fruitsToReturn.Count}개");
-        }
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "PoolReturnAll",
+            $"[WatermelonObjectPool] {type} 모든 과일 반환 완료: {fruitsToReturn.Count}개");
     }
 
     /// <summary>
@@ -370,7 +393,9 @@ public class WatermelonObjectPool : MonoBehaviour
             totalReturned += count;
         }
 
-        Debug.Log($"[WatermelonObjectPool] 모든 과일 반환 완료: 총 {totalReturned}개");
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "PoolReturnAll",
+            $"[WatermelonObjectPool] 모든 과일 반환 완료: 총 {totalReturned}개");
     }
 
     /// <summary>
@@ -397,7 +422,9 @@ public class WatermelonObjectPool : MonoBehaviour
         availableFruits.Clear();
         activeFruits.Clear();
 
-        Debug.Log("[WatermelonObjectPool] 풀 초기화 완료");
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "PoolClear",
+            "[WatermelonObjectPool] 풀 초기화 완료");
     }
 
     /// <summary>
@@ -410,7 +437,9 @@ public class WatermelonObjectPool : MonoBehaviour
     {
         if (fruitObj == null)
         {
-            Debug.LogWarning("[WatermelonObjectPool] null 과일을 반환하려고 했습니다.");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "NullReference",
+                "[WatermelonObjectPool] null 과일을 반환하려고 했습니다.", useUnityDebug: true);
             return;
         }
 
@@ -418,7 +447,9 @@ public class WatermelonObjectPool : MonoBehaviour
         FruitMergeData fruitData = fruitObj.GetComponent<FruitMergeData>();
         if (fruitData == null)
         {
-            Debug.LogWarning($"[WatermelonObjectPool] {fruitObj.name}에 FruitMergeData 컴포넌트가 없습니다!");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "MissingComponent",
+                $"[WatermelonObjectPool] {fruitObj.name}에 FruitMergeData 컴포넌트가 없습니다!", useUnityDebug: true);
             Destroy(fruitObj);
             return;
         }
@@ -428,33 +459,35 @@ public class WatermelonObjectPool : MonoBehaviour
 
         if (currentType != originalType)
         {
-            if (showDebugLogs)
-            {
-                Debug.LogWarning($"[WatermelonObjectPool] 타입 불일치 감지: {fruitObj.name} " +
-                               $"(현재: {currentType}, 원래: {originalType}) - 원래 타입으로 반환");
-            }
+            // [변경] DEBUG 로그 수정
+            LogSystem.PushLog(LogLevel.DEBUG, "PoolMismatch",
+                $"[WatermelonObjectPool] 타입 불일치 감지: {fruitObj.name} " +
+                $"(현재: {currentType}, 원래: {originalType}) - 원래 타입으로 반환");
         }
 
         // 원래 타입의 활성 풀에서 제거
         if (!activeFruits.ContainsKey(originalType))
         {
-            Debug.LogError($"[WatermelonObjectPool] {originalType} 풀이 존재하지 않습니다!");
+            // [변경] LogLevel.ERROR
+            LogSystem.PushLog(LogLevel.ERROR, "PoolNotReady",
+                $"[WatermelonObjectPool] {originalType} 풀이 존재하지 않습니다!", useUnityDebug: true);
             return;
         }
 
         if (!activeFruits[originalType].Contains(fruitObj))
         {
-            Debug.LogWarning($"[WatermelonObjectPool] {fruitObj.name}은(는) {originalType} 활성 풀에 없습니다. " +
-                            $"(현재 타입: {currentType})");
+            // [변경] LogLevel.WARNING
+            LogSystem.PushLog(LogLevel.WARNING, "PoolMismatch",
+                $"[WatermelonObjectPool] {fruitObj.name}은(는) {originalType} 활성 풀에 없습니다. " +
+                $"(현재 타입: {currentType})", useUnityDebug: true);
 
             // 현재 타입 풀에서도 확인
             if (currentType != originalType && activeFruits.ContainsKey(currentType) &&
                 activeFruits[currentType].Contains(fruitObj))
             {
-                if (showDebugLogs)
-                {
-                    Debug.Log($"[WatermelonObjectPool] {currentType} 풀에서 발견됨. 해당 풀에서 제거합니다.");
-                }
+                // [변경] DEBUG 로그 수정
+                LogSystem.PushLog(LogLevel.DEBUG, "PoolReturn",
+                    $"[WatermelonObjectPool] {currentType} 풀에서 발견됨. 해당 풀에서 제거합니다.");
                 activeFruits[currentType].Remove(fruitObj);
             }
             else
@@ -468,6 +501,9 @@ public class WatermelonObjectPool : MonoBehaviour
             activeFruits[originalType].Remove(fruitObj);
         }
 
+        // [추가] d. 과일 소멸 (풀 반환) 이벤트 로그
+        LogSystem.PushLog(LogLevel.INFO, "FruitReturned", originalType.ToString());
+
         // 과일 비활성화
         fruitData.Deactivate();
         fruitObj.transform.SetParent(poolParent);
@@ -475,11 +511,10 @@ public class WatermelonObjectPool : MonoBehaviour
         // 원래 타입의 대기 풀에 추가
         availableFruits[originalType].Enqueue(fruitObj);
 
-        if (showDebugLogs)
-        {
-            Debug.Log($"[WatermelonObjectPool] {originalType} 반환: {fruitObj.name} | " +
-                     $"활성: {GetActiveFruitCount(originalType)}, 대기: {GetAvailableFruitCount(originalType)}");
-        }
+        // [변경] DEBUG 로그 수정
+        LogSystem.PushLog(LogLevel.DEBUG, "PoolReturn",
+            $"[WatermelonObjectPool] {originalType} 반환: {fruitObj.name} | " +
+            $"활성: {GetActiveFruitCount(originalType)}, 대기: {GetAvailableFruitCount(originalType)}");
     }
 
 #if UNITY_EDITOR

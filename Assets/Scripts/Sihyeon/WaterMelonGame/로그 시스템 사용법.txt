@@ -1,0 +1,339 @@
+﻿다음 '로그 시스템 사용법' 을 분석하고, 앞으로 제공할 코드의 어떤 부분에 넣으면 효과적일 지 계산해볼것.
+
+로그 시스템 사용법
+1. 시스템 개요 (쉬운 설명)
+게임이 무슨 일이 일어났는지 자동으로 기록하는 시스템 - 플레이어 행동, 게임 데이터, 에러를 파일에 저장하고 Unity 콘솔에도 표시합니다.
+
+이 시스템이 하는 일
+게임 중 일어나는 일을 기록 (플레이어 체력, 위치, 에러 등)
+기록을 메모리에 모아두다가 파일로 저장
+Unity 콘솔에 색깔로 구분해서 표시
+나중에 CSV 파일로 분석 가능
+핵심 특징
+간단한 사용법: LogSystem.PushLog(타입, "이름", 값) 한 줄로 기록
+자동 처리: float, Vector3 같은 타입 자동 변환
+메모리 효율: 1000개씩 모아서 파일에 저장
+색상 구분: 클래스마다 다른 색, 에러/경고 빨강/노랑
+2. 시스템 구조 (역할 중심)
+graph TB
+    USER[게임 코드<br/>로그 요청]
+    API[LogSystem<br/>받아서 처리]
+    BUFFER[LogRuntime<br/>메모리에 임시 보관]
+    FILE[LogSave<br/>파일에 저장]
+    CONSOLE[LogConverter<br/>콘솔에 표시]
+
+    USER -->|PushLog 호출| API
+    API -->|기록 추가| BUFFER
+    API -->|색상 변환| CONSOLE
+    BUFFER -->|가득 차면| FILE
+    CONSOLE -->|Debug.Log| Unity콘솔
+
+    style USER fill:#fff4e1
+    style API fill:#e1f5ff
+    style BUFFER fill:#ffe1f5
+    style FILE fill:#e1ffe1
+    style CONSOLE fill:#f5e1ff
+4개 핵심 파트
+LogSystem: 요청 받는 창구 (모든 로그가 여기로)
+LogRuntime: 임시 저장소 (1000개씩 모음)
+LogSave: 파일 기록담당 (CSV로 저장)
+LogConverter: 콘솔 출력담당 (색상 입힘)
+3. 동작 흐름 (간단 버전)
+sequenceDiagram
+    participant 게임
+    participant LogSystem
+    participant 메모리버퍼
+    participant CSV파일
+
+    게임->>LogSystem: 체력 85로 기록해줘
+    LogSystem->>LogSystem: "85.000"으로 변환
+    LogSystem->>메모리버퍼: 버퍼에 추가
+
+    Note over 메모리버퍼: 버퍼 쌓임 (BUFFER_SIZE 80%)
+    메모리버퍼->>CSV파일: 자동 저장
+    메모리버퍼->>메모리버퍼: 버퍼 비우기
+
+    Note over 메모리버퍼: 또는 FLUSH_INTERVAL_SECONDS 경과
+    메모리버퍼->>CSV파일: 시간 되면 저장
+저장 시점 (2가지)
+버퍼 80% 찰 때 (800개)
+30초 경과할 때
+이렇게 하면 너무 자주 저장하지 않아 빠르고, 게임 꺼져도 데이터 안 잃어버림.
+4. 주요 클래스 역할 (중간 깊이)
+4.1 LogSystem (정적 클래스)
+역할: 전체 시스템의 입구 - 모든 로그 요청을 받아서 처리
+주요 기능:
+
+게임 코드에서 PushLog() 호출받음
+값을 문자열로 변환 (float → "85.567", Vector3 → "(10.12,5.68,-3.46)")
+LogRuntime에 전달
+필요하면 Unity 콘솔에도 출력
+사용 예시:
+
+// 기본 타입
+LogSystem.PushLog(LogLevel.INFO, "Health", 85.5f);
+
+// Unity 타입 자동 변환
+LogSystem.PushLog(LogLevel.DEBUG, "Position", transform.position);
+
+// 콘솔에도 표시
+LogSystem.PushLog(LogLevel.ERROR, "Error", "문제 발생", useUnityDebug: true);
+핵심 데이터:
+
+_sessionStartTime: 게임 시작 시간 (타임스탬프 계산용)
+_runtimeInstance: LogRuntime 참조
+4.2 LogRuntime (MonoBehaviour)
+역할: 메모리 버퍼 관리자 - 로그를 모았다가 적절한 시점에 저장
+주요 기능:
+
+1000개 크기의 순환 버퍼 관리
+Update마다 저장 시점 체크
+조건 만족 시 자동 저장
+게임 종료/일시정지 시 강제 저장
+플러시 조건:
+
+// 1. 버퍼 80% (BUFFER_SIZE * 0.8개)
+if (_writeIndex >= BUFFER_SIZE * 0.8f) FlushBuffer();
+
+// 2. FLUSH_INTERVAL_SECONDS초 경과
+if (Time.realtimeSinceStartup - _lastFlushTime >= FLUSH_INTERVAL_SECONDS) FlushBuffer();
+순환 버퍼 동작:
+
+[0][1][2]...[799][800]...[999]
+              ↑ 80% 도달 → 저장
+                          ↑ 999 채우면 0으로 순환
+4.3 LogSave (CSV 저장)
+역할: 실제 파일 쓰기 담당 - 비동기로 CSV 파일에 저장
+저장 형식:
+
+LogType,Timestamp,Key,Value
+INFO,2025-10-24T14:30:45.123,PlayerHealth,85.567
+DEBUG,2025-10-24T14:30:46.500,Position,"(10.12,5.68,-3.46)"
+ERROR,2025-10-24T14:30:47.800,NetworkError,"Connection timeout"
+파일 경로:
+
+에디터: ProjectRoot/Logs/GameLog_20251024_143045.csv
+빌드: Application.persistentDataPath/Logs/...
+특수 처리:
+
+쉼표/따옴표 포함 시 이스케이프: "Error, ""quoted"", text"
+시간 변환: Time.realtimeSinceStartup → ISO 8601 형식
+4.4 LogConverter (콘솔 출력)
+역할: Unity Console 색상 입히기 - 보기 좋게 표시
+출력 형식:
+
+<color=클래스색>[ClassName]</color> <color=타입색>[INFO] Key=Value
+  at FilePath:MethodName(123)</color>
+색상 규칙:
+LogLevel색상Unity 메서드DEBUG회색 (#888888)Debug.LogINFO흰색 (#FFFFFF)Debug.LogWARNING노랑 (#FFFF00)Debug.LogWarningERROR빨강 (#FF0000)Debug.LogErrorCRITICAL빨강 + ⚠Debug.LogError클래스 색상:
+
+클래스명 해시 → HSL 색상 생성
+같은 클래스 = 같은 색 (일관성)
+5. 데이터 흐름 상세
+5.1 로그 기록 프로세스
+1단계: 게임 코드 호출
+   ↓
+   LogSystem.PushLog(LogLevel.INFO, "Health", 85.567f)
+
+2단계: 타입 변환
+   ↓
+   float 85.567f → "85.567" (F3 포맷)
+
+3단계: LogEntry 생성
+   ↓
+   LogEntry {
+       Type = INFO,
+       RealtimeSeconds = 123.456f,
+       Key = "Health",
+       Value = "85.567",
+       FilePath = "Assets/Scripts/Player.cs",  // 자동
+       MemberName = "TakeDamage",              // 자동
+       LineNumber = 42                          // 자동
+   }
+
+4단계: 버퍼 추가
+   ↓
+   LogRuntime._ringBuffer[_writeIndex++] = entry
+
+5단계 (선택): Unity 콘솔
+   ↓
+   LogConverter.ToUnityLog(entry)
+   Debug.Log("<color=#ABC123>[Player]</color> <color=#FFF>[INFO] Health=85.567...")
+5.2 타입 변환 우선순위
+value switch
+{
+    // 1순위: 사용자 커스텀
+    ILoggable loggable => loggable.ToLogString(),
+
+    // 2순위: 기본 타입
+    float f => f.ToString("F3"),      // "85.567"
+    int i => i.ToString(),            // "1000"
+    bool b => b.ToString(),           // "True"
+    string s => s,                    // 원본
+
+    // 3순위: Unity 타입
+    Vector3 v => "(10.12,5.68,-3.46)",
+    Color c => "RGBA(1.00,0.50,0.25,1.00)",
+
+    // 4순위: 폴백
+    null => "null",
+    _ => value.ToString()
+}
+6. 기술적 세부사항 (전문가용)
+6.1 성능 특성
+지표목표구현 방식PushLog 호출<0.1ms버퍼 추가만 (I/O 없음)메모리<1MB고정 BUFFER_SIZE 배열파일 쓰기비동기AppendAllTextAsyncGC0버퍼 재사용, struct 사용6.2 순환 버퍼 구조
+private LogEntry[] _ringBuffer = new LogEntry[BUFFER_SIZE];
+private int _writeIndex = 0;
+
+public void AddEntry(LogEntry entry)
+{
+    _ringBuffer[_writeIndex] = entry;
+    _writeIndex++;
+
+    if (_writeIndex >= 1000)
+        _writeIndex = 0;  // 순환
+}
+장점:
+
+고정 메모리 할당 (GC 프리)
+빠른 추가 (O(1))
+오래된 로그 자동 덮어쓰기
+6.3 하이브리드 플러시 전략
+private bool ShouldFlush()
+{
+    // 조건 1: 80% 임계값 (버퍼 오버플로우 방지)
+    if (_writeIndex >= 800)
+        return true;
+
+    // 조건 2: 30초 경과 (주기적 저장)
+    if (Time.realtimeSinceStartup - _lastFlushTime >= 30f)
+        return true;
+
+    return false;
+}
+설계 이유:
+
+80% 임계값: 급격한 로그 증가 대응
+30초 타이머: 크래시 시 데이터 손실 최소화
+OnApplicationQuit: 정상 종료 시 완전 저장
+6.4 CallerAttributes 자동 추적
+public static void PushLog<T>(
+    LogLevel type,
+    string key,
+    T value,
+    bool useUnityDebug = false,
+    [CallerFilePath] string filePath = "",      // 자동
+    [CallerMemberName] string memberName = "",  // 자동
+    [CallerLineNumber] int lineNumber = 0)      // 자동
+컴파일러 자동 주입:
+
+// 호출 코드
+LogSystem.PushLog(LogLevel.INFO, "Test", 123);
+
+// 실제 전달값
+filePath = "Assets/Scripts/GameManager.cs"
+memberName = "Start"
+lineNumber = 42
+7. 확장 지점
+7.1 ILogSaver - 저장 전략 교체
+// 클라우드 저장 예시
+public class CloudLogSaver : ILogSaver
+{
+    public async Task SaveAsync(LogEntry[] entries, int count)
+    {
+        var json = JsonConvert.SerializeObject(entries.Take(count));
+        await httpClient.PostAsync("<https://api.log-server.com>", json);
+    }
+}
+
+// LogRuntime에서 교체
+_logSaver = new CloudLogSaver();
+7.2 ILoggable - 커스텀 타입 로깅
+public struct InventoryData : ILoggable
+{
+    public int[] itemIds;
+    public int[] counts;
+
+    public string ToLogString()
+    {
+        return string.Join(",",
+            itemIds.Zip(counts, (id, cnt) => $"{id}x{cnt}"));
+    }
+}
+
+// 사용
+var inv = new InventoryData { itemIds = {1,2,3}, counts = {5,10,2} };
+LogSystem.PushLog(LogLevel.INFO, "Inventory", inv);
+// 결과: "1x5,2x10,3x2"
+7.3 Unity 타입 확장
+// LogUnityTypeConverter.cs에 추가
+public static string Convert(object value)
+{
+    return value switch
+    {
+        // 기존 타입...
+        Matrix4x4 m => $"Matrix({m.m00},{m.m01},...)",  // 새로 추가
+        _ => value?.ToString() ?? "null"
+    };
+}
+8. 테스트 구조
+8.1 테스트 레이어
+테스트 클래스검증 대상LogSystemBasicTypeTests기본 타입 변환, CallerAttributesLogSystemUnityTypeTestsUnity 타입 변환 (Vector3, Color 등)LogSystemLoggableTestsILoggable 커스텀 타입LogSystemCsvTestsCSV 파일 생성, 포맷, 이스케이프LogSystemFlushTests플러시 조건, 순환 버퍼LogSystemUnityConsoleTests콘솔 출력, 색상8.2 테스트 패턴
+[SetUp]
+public void Setup()
+{
+    _runtimeObject = new GameObject("TestLogRuntime");
+    _runtime = _runtimeObject.AddComponent<LogRuntime>();
+    _runtime.Initialize();
+}
+
+[Test]
+public void Test_BasicType_Conversion()
+{
+    // Given
+    _runtime.ClearBufferForTest();
+
+    // When
+    LogSystem.PushLog(LogLevel.INFO, "Health", 85.567f);
+
+    // Then
+    LogEntry entry = _runtime.GetEntryAt(0);
+    Assert.AreEqual("85.567", entry.Value);
+}
+9. 시스템 제약사항 및 주의점
+제약사항
+버퍼 크기: BUFFER_SIZE 고정 (초과 시 순환)
+파일 형식: CSV만 지원 (JSON 등 불가)
+Unity 타입: UnityEngine 네임스페이스만 자동 감지
+쓰레드 안전성: 메인 쓰레드 전용
+주의점
+로그 폭발: 매 프레임 로그 시 버퍼 빠르게 소진
+CSV 이스케이프: Value에 쉼표 포함 시 따옴표 래핑
+파일 크기: 장시간 실행 시 CSV 파일 비대화
+세션 파일: 재시작마다 새 파일 생성 (덮어쓰기 없음)
+10. 사용 권장 패턴
+적절한 사용
+// ✅ 중요 이벤트
+LogSystem.PushLog(LogLevel.INFO, "LevelComplete", levelId);
+
+// ✅ 에러 추적
+LogSystem.PushLog(LogLevel.ERROR, "NetworkError", ex.Message, true);
+
+// ✅ 디버깅 (개발 빌드만)
+LogSystem.PushLog(LogLevel.DEBUG, "AIState", currentState);
+피해야 할 패턴
+// ❌ 매 프레임 로그
+void Update()
+{
+    LogSystem.PushLog(LogLevel.DEBUG, "Position", transform.position);  // 과도
+}
+
+// ❌ 민감 정보
+LogSystem.PushLog(LogLevel.INFO, "Password", password);  // 보안 위험
+
+// ❌ 대량 데이터
+LogSystem.PushLog(LogLevel.INFO, "AllEnemies", enemies);  // 1000개 배열 등
+요약
+Unity 로그 시스템은 게임 내 모든 로그를 자동으로 수집하고, 메모리 버퍼에 모았다가 적절한 시점에 CSV 파일로 저장하며, 동시에 Unity 콘솔에 색상으로 표시하는 경량 로깅 인프라입니다.
+핵심 흐름: LogSystem.PushLog() → 타입 변환 → 버퍼 추가 → (80% or 30초) → CSV 저장
+주요 장점: 간단한 API, 자동 타입 변환, 메모리 효율, 확장 가능
