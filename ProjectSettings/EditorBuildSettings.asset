@@ -38,6 +38,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/JCH/JCH_ChainRing.unity
     guid: 5274fc9cf48fb0e43a2ceec54e3e2d57
+  - enabled: 1
+    path: Assets/Scenes/LBC/Monkey.unity
+    guid: 047a527ab8611d24e810e88ec0d7728f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
