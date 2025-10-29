@@ -82,7 +82,7 @@ public class LogSave : ILogSaver
 #if UNITY_EDITOR
         return Path.Combine(Application.dataPath, "..", "Logs");
 #else
-    return Path.Combine(Application.persistentDataPath, "Logs");
+    return Path.Combine(Application.dataPath, "..", "Logs");
 #endif
     }
 
