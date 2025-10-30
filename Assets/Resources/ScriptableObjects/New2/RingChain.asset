@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fc10894df3b3c742a44a1a61aacb4bd, type: 3}
-  m_Name: Rings
+  m_Name: RingChain
   m_EditorClassIdentifier: 
-  _stageImage: {fileID: 21300000, guid: 8b94e735ca20ea448af2657b39ed02d2, type: 3}
-  _stageName: "\uB9C1 1"
-  _sceneName: JCH_Rings
+  _stageImage: {fileID: 21300000, guid: ba1dc17b32eb1b0478d3c793aa1d07fb, type: 3}
+  _stageName: "\uCCB4\uC778\uB9C1"
+  _sceneName: JCH_RingChain
   _clearStar: 0
   _isTried: 0
   _stageImagePath: 
-  _scenePath: Assets/Scenes/JCH/JCH_Rings.unity
+  _scenePath: Assets/Scenes/JCH/JCH_RingChain.unity

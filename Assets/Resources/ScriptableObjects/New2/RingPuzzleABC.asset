@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fc10894df3b3c742a44a1a61aacb4bd, type: 3}
-  m_Name: Tutorial
+  m_Name: RingPuzzleABC
   m_EditorClassIdentifier: 
-  _stageImage: {fileID: 21300000, guid: 7f69e380aad344c449bc53fa35e56b6f, type: 3}
-  _stageName: "\uD29C\uD1A0\uB9AC\uC5BC"
-  _sceneName: TutorialPlus
+  _stageImage: {fileID: 21300000, guid: bb2635aaab4a12b43a0d609fa029bf26, type: 3}
+  _stageName: ABC
+  _sceneName: JCH_RingPuzzleABC
   _clearStar: 0
   _isTried: 0
-  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/TutorialPlus.png
-  _scenePath: Assets/Resources/Scenes/JCH/TutorialPlus.unity
+  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/JCH_RingPuzzleABC.png
+  _scenePath: Assets/Scenes/JCH/JCH_RingPuzzleABC.unity
