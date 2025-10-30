@@ -403,7 +403,7 @@ PrefabInstance:
     - target: {fileID: 5564051036679696138, guid: e3b815a1c38ec1c4e9646c4987b13013, type: 3}
       propertyPath: jengaBlocksContainer
       value: 
-      objectReference: {fileID: 7246789334458307488}
+      objectReference: {fileID: 0}
     - target: {fileID: 5564051036679696138, guid: e3b815a1c38ec1c4e9646c4987b13013, type: 3}
       propertyPath: bombObjects.Array.size
       value: 9
@@ -5872,22 +5872,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &415343012336717199
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7246789334458307488}
-  m_Layer: 0
-  m_Name: Keyboard
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!4 &433065566123740724
 Transform:
   m_ObjectHideFlags: 0
@@ -26043,7 +26027,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 813432486034597227}
-  m_Material: {fileID: 13400000, guid: 267a32e06b568ef4ea2fdc15ec0cb83d, type: 2}
+  m_Material: {fileID: 13400000, guid: 027ee322500085b47a16571e5e74d195, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -43270,21 +43254,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &7246789334458307488
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 415343012336717199}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &7254022413096066435
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -54159,7 +54128,6 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 9094144071010681064}
   - {fileID: 1366596745}
-  - {fileID: 7246789334458307488}
   - {fileID: 3824695761030023619}
   - {fileID: 335308829983326899}
   - {fileID: 73718139117600775}
