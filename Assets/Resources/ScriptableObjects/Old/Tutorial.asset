@@ -17,5 +17,5 @@ MonoBehaviour:
   _sceneName: TutorialPlus
   _clearStar: 0
   _isTried: 0
-  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week06/StageImages/Tutorial.png
+  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/TutorialPlus.png
   _scenePath: Assets/Resources/Scenes/JCH/TutorialPlus.unity
