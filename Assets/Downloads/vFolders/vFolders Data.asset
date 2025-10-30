@@ -20,12 +20,11 @@ MonoBehaviour:
     - 1146ce6ff67cb9247900b7537906e74b
     - 492fca072ca7d1e4b9aca27071903cbc
     - 58097e2f65b51874e8341aa6a3c8f731
-    - e270e1661b89b1e4eb6e19542bc2746d
+    - a369a412a71f984479b483905bc1ebac
     - bedc9029777f5aa48af43aea7a8df3a7
-    - f9370232dc5054b41b9b8fa9852adb6e
-    - 2a90a670d5c502f43a2ba8e59a12538b
-    - 36effbe35a7cca440a6de3dbe6794ba8
-    - 564bd93e8288dd14e890a6e611c9656a
+    - 6a4a65d166ca16d4ebfa4a4511844270
+    - 5f1a22f3e084ea24aa7d6faa62da309e
+    - b8a30641ee1910f48bf435675079174b
     - 68d92702cd2798245a3787bf9ae5c7c2
     values:
     - iconNameOrGuid: SceneAsset Icon
@@ -53,7 +52,7 @@ MonoBehaviour:
       isIconRecursive: 0
       isColorRecursive: 0
     - iconNameOrGuid: 
-      colorIndex: 7
+      colorIndex: 6
       isIconRecursive: 0
       isColorRecursive: 0
     - iconNameOrGuid: 
@@ -61,11 +60,11 @@ MonoBehaviour:
       isIconRecursive: 0
       isColorRecursive: 0
     - iconNameOrGuid: 
-      colorIndex: 7
+      colorIndex: 9
       isIconRecursive: 0
       isColorRecursive: 0
     - iconNameOrGuid: 
-      colorIndex: 3
+      colorIndex: 7
       isIconRecursive: 0
       isColorRecursive: 0
     - iconNameOrGuid: 
@@ -73,23 +72,10 @@ MonoBehaviour:
       isIconRecursive: 0
       isColorRecursive: 0
     - iconNameOrGuid: 
-      colorIndex: 6
+      colorIndex: 2
       isIconRecursive: 0
       isColorRecursive: 0
-    - iconNameOrGuid: 
-      colorIndex: 8
-      isIconRecursive: 0
-      isColorRecursive: 1
   bookmarks:
-  - guid: e270e1661b89b1e4eb6e19542bc2746d
-  - guid: bedc9029777f5aa48af43aea7a8df3a7
-  - guid: 36effbe35a7cca440a6de3dbe6794ba8
-  - guid: 564bd93e8288dd14e890a6e611c9656a
-  - guid: f9370232dc5054b41b9b8fa9852adb6e
-  - guid: 2a90a670d5c502f43a2ba8e59a12538b
-  - guid: 3f7a79e0c61ee094492f4346eddaf44b
-  - guid: c924e614d5f70984483073b7aa58f325
-  - guid: cd39525dd7134a94b874dccdcea4f145
-  - guid: 8519a25a0bff40747817c28ae958fe63
-  - guid: 4835d5939c96a3641b34eabcd05da9ab
-  - guid: f21efb82ce7d41a44bb4d2e3ebe6b3e1
+  - guid: f7087568b0b37c84aa3926af62310d6b
+  - guid: f7087568b0b37c84aa3926af62310d6b
+  - guid: 15d63328bafbf244b8e4a5b2f2c372d4
