@@ -17,5 +17,5 @@ MonoBehaviour:
   _sceneName: JCH_RingPuzzleABC
   _clearStar: 0
   _isTried: 0
-  _stageImagePath: 
+  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/JCH_RingPuzzleABC.png
   _scenePath: Assets/Scenes/JCH/JCH_RingPuzzleABC.unity

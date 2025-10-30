@@ -17,5 +17,6 @@ MonoBehaviour:
   _sceneName: Soma Cube
   _clearStar: 0
   _isTried: 0
-  _stageImagePath: 
+  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/Soma
+    Cube.png
   _scenePath: Assets/Scenes/LBC/Soma Cube.unity
