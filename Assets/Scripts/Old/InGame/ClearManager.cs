@@ -238,18 +238,6 @@ public class ClearManager : MonoBehaviour
     /// </summary>
     void ClearChecker()
     {
-        // [추가] e. 게임 클리어 시 Draggable 객체 로깅
-        if (WatermelonGameManager.Instance != null)
-        {
-            WatermelonGameManager.Instance.LogDraggableObjects("GameClear");
-        }
-        else
-        {
-            // [추가] e. 오류 로그
-            LogSystem.PushLog(LogLevel.WARNING, "MissingManager",
-                "[ClearManager] GameManager가 없어 GameClear 로깅 실패", useUnityDebug: true);
-        }
-
         if (_countDownCoroutine != null)
         {
             // [변경] DEBUG 로그 수정
