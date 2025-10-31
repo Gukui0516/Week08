@@ -1,0 +1,17 @@
+{
+    "name": "JCHSpawner",
+    "rootNamespace": "",
+    "references": [
+        "GUID:aa6bdabc886cb0e4baa66554bc124034",
+        "GUID:eace29447f40d9e4fa54d5b231803aa8"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

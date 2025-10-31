@@ -41,6 +41,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/JCH/JCH_RingPuzzleABC.unity
     guid: dcce7ad2d79b62941a2554ad35b9fc61
+  - enabled: 1
+    path: Assets/Scenes/OSH/TowerCrane.unity
+    guid: d9737d543a2073b4e9cdc14b87fb0e5f
+  - enabled: 1
+    path: Assets/Scenes/Sihyeon/NewW08/BlackOut.unity
+    guid: 99dc8b14fd5f6004eb36e62b160f7cf0
+  - enabled: 1
+    path: Assets/Scenes/LBC/Number.unity
+    guid: 4926dd9c9ce28c6478fef21195768f59
+  - enabled: 1
+    path: Assets/Scenes/JCH/JCH_CardWallet.unity
+    guid: f64836a3d6928f6459ca1ec139242335
+  - enabled: 1
+    path: Assets/Scenes/JCH/JCH_Find_box.unity
+    guid: be65cf7cc87c94242b63f4435dbbc099
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
