@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fc10894df3b3c742a44a1a61aacb4bd, type: 3}
+  m_Name: Number
+  m_EditorClassIdentifier: 
+  _stageImage: {fileID: 21300000, guid: 70f600d6630556048a0840c2cf9b2810, type: 3}
+  _stageName: "\uC22B\uC790"
+  _sceneName: Number
+  _clearStar: 0
+  _isTried: 0
+  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/Soma
+    Cube.png
+  _scenePath: Assets/Scenes/LBC/Number.unity
