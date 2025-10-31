@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
@@ -31,53 +31,21 @@ public class SequentialBombConverter : MonoBehaviour
 
     // 이전 프레임의 활성 폭탄 개수 (감소 감지용)
     private int previousActiveBombs = 0;
-
-    // 게임 종료 체크 관련
-    [Header("Game End Settings")]
-    [Tooltip("모든 블록이 사라졌는지 체크하는 간격(초)입니다.")]
-    [SerializeField] private float gameEndCheckInterval = 0.5f;
-
-    private float gameEndCheckTimer = 0f;
-    private bool isGameEnded = false;
-
     private void Start()
     {
-        // 빌드 환경에서 초기화 지연 (다른 매니저들이 먼저 초기화되도록)
-        StartCoroutine(DelayedInitialize());
-    }
-
-    /// <summary>
-    /// 빌드 환경을 위한 지연 초기화
-    /// </summary>
-    private System.Collections.IEnumerator DelayedInitialize()
-    {
-        // 한 프레임 대기 (모든 매니저가 Awake/Start 완료되도록)
-        yield return null;
-
         Initialize();
     }
 
-    private void Update()
-    {
-        // 게임 종료 체크
-        if (!isGameEnded && isInitialized)
-        {
-            gameEndCheckTimer += Time.deltaTime;
-            if (gameEndCheckTimer >= gameEndCheckInterval)
-            {
-                gameEndCheckTimer = 0f;
-                CheckGameEnd();
-            }
-        }
-    }
 
     private void OnEnable()
     {
         // BombManager의 폭탄 개수 변경 이벤트 구독
         if (BombManager.Instance != null)
         {
+            BombManager.Instance.OnBombCountChanged -= OnBombCountChanged;
             BombManager.Instance.OnBombCountChanged += OnBombCountChanged;
         }
+
     }
 
     private void OnDisable()
@@ -95,6 +63,13 @@ public class SequentialBombConverter : MonoBehaviour
     /// </summary>
     private void Initialize()
     {
+        // BombManager의 폭탄 개수 변경 이벤트 구독
+        if (BombManager.Instance != null)
+        {
+            BombManager.Instance.OnBombCountChanged -= OnBombCountChanged;
+            BombManager.Instance.OnBombCountChanged += OnBombCountChanged;
+        }
+
         // 유효성 검사
         if (!ValidateSettings())
         {
@@ -210,7 +185,16 @@ public class SequentialBombConverter : MonoBehaviour
     {
         if (!isInitialized)
         {
+            LogSystem.PushLog(LogLevel.WARNING, "BombCountChangeIgnored",
+                "초기화되지 않아 폭탄 개수 변경이 무시되었습니다.", useUnityDebug: true);
             return;
+        }
+
+
+        if(numberBlocks.Count == 0)
+        {
+            //폭탄이 터졌는데 블록이 없다 . 남은 폭탄 0개로 만들기
+            BombManager.Instance.ForcelySetActiveBombCount(0);
         }
 
         // 폭탄이 감소했는지 확인 (폭발이 발생했는지)
@@ -231,9 +215,15 @@ public class SequentialBombConverter : MonoBehaviour
             StartCoroutine(UpdatePreviousBombCountNextFrame());
             return;
         }
+        else
+        {
+            // 폭탄 개수가 감소하지 않음, 무시
+            LogSystem.PushLog(LogLevel.WARNING, "BombCountUnchanged",
+                "폭탄 개수가 감소하지 않아 변환이 무시되었습니다.", useUnityDebug: true);
+        }
 
-        // 현재 개수를 저장 (중요!)
-        previousActiveBombs = currentActiveBombs;
+            // 현재 개수를 저장 (중요!)
+            previousActiveBombs = currentActiveBombs;
     }
 
     /// <summary>
@@ -412,53 +402,6 @@ public class SequentialBombConverter : MonoBehaviour
     public string GetConversionProgress()
     {
         return $"{currentBlockIndex} / {numberBlocks.Count}";
-    }
-
-    /// <summary>
-    /// 모든 블록이 사라졌는지(비활성화 또는 파괴) 체크하여 게임 종료 여부를 판단합니다.
-    /// </summary>
-    private void CheckGameEnd()
-    {
-        int activeBlockCount = 0;
-
-        // 모든 블록의 활성화 상태 확인
-        foreach (GameObject block in numberBlocks)
-        {
-            if (block != null && block.activeInHierarchy)
-            {
-                activeBlockCount++;
-            }
-        }
-
-        // 모든 블록이 비활성화되거나 파괴됨
-        if (activeBlockCount == 0)
-        {
-            isGameEnded = true;
-            OnGameEnd();
-        }
-    }
-
-    /// <summary>
-    /// 게임이 종료되었을 때 호출되는 메서드입니다.
-    /// ClearManager의 클리어 로직을 실행합니다.
-    /// </summary>
-    private void OnGameEnd()
-    {
-        LogSystem.PushLog(LogLevel.INFO, "GameEnd", "SequentialBombGame", useUnityDebug: true);
-
-        // ClearManager의 클리어 로직 실행
-        ClearManager clearManager = FindFirstObjectByType<ClearManager>();
-        if (clearManager != null)
-        {
-            // ClearManager의 private ClearChecker 메서드를 리플렉션으로 호출
-            var method = clearManager.GetType().GetMethod("ClearChecker",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-            if (method != null)
-            {
-                method.Invoke(clearManager, null);
-            }
-        }
     }
 
 #if UNITY_EDITOR

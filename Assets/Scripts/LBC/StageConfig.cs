@@ -191,6 +191,7 @@ public class StageConfig : MonoBehaviour
     {
         if (BombManager.Instance == null)
         {
+            LogSystem.PushLog(LogLevel.WARNING,"BombManager를 찾을 수 없습니다.",true);
             return 0;
         }
 
