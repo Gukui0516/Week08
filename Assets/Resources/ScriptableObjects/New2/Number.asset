@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc10894df3b3c742a44a1a61aacb4bd, type: 3}
   m_Name: Number
   m_EditorClassIdentifier: 
-  _stageImage: {fileID: 0}
+  _stageImage: {fileID: 21300000, guid: 70f600d6630556048a0840c2cf9b2810, type: 3}
   _stageName: "\uC22B\uC790"
   _sceneName: Number
   _clearStar: 0
