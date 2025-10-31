@@ -3134,7 +3134,7 @@ GameObject:
   - component: {fileID: 4620915802769725301}
   m_Layer: 0
   m_Name: Nail_loe2
-  m_TagString: Draggable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3808,7 +3808,7 @@ GameObject:
   - component: {fileID: 5555919125960451296}
   m_Layer: 0
   m_Name: Nail_leg1
-  m_TagString: Draggable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5488,7 +5488,7 @@ GameObject:
   - component: {fileID: 2620270981091968822}
   m_Layer: 0
   m_Name: Nail_head
-  m_TagString: Draggable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7935,7 +7935,7 @@ GameObject:
   - component: {fileID: 9059358159676214217}
   m_Layer: 0
   m_Name: Nail_leg0
-  m_TagString: Draggable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

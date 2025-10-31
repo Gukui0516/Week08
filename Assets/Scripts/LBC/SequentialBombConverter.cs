@@ -32,9 +32,43 @@ public class SequentialBombConverter : MonoBehaviour
     // 이전 프레임의 활성 폭탄 개수 (감소 감지용)
     private int previousActiveBombs = 0;
 
+    // 게임 종료 체크 관련
+    [Header("Game End Settings")]
+    [Tooltip("모든 블록이 사라졌는지 체크하는 간격(초)입니다.")]
+    [SerializeField] private float gameEndCheckInterval = 0.5f;
+
+    private float gameEndCheckTimer = 0f;
+    private bool isGameEnded = false;
+
     private void Start()
     {
+        // 빌드 환경에서 초기화 지연 (다른 매니저들이 먼저 초기화되도록)
+        StartCoroutine(DelayedInitialize());
+    }
+
+    /// <summary>
+    /// 빌드 환경을 위한 지연 초기화
+    /// </summary>
+    private System.Collections.IEnumerator DelayedInitialize()
+    {
+        // 한 프레임 대기 (모든 매니저가 Awake/Start 완료되도록)
+        yield return null;
+
         Initialize();
+    }
+
+    private void Update()
+    {
+        // 게임 종료 체크
+        if (!isGameEnded && isInitialized)
+        {
+            gameEndCheckTimer += Time.deltaTime;
+            if (gameEndCheckTimer >= gameEndCheckInterval)
+            {
+                gameEndCheckTimer = 0f;
+                CheckGameEnd();
+            }
+        }
     }
 
     private void OnEnable()
@@ -74,14 +108,17 @@ public class SequentialBombConverter : MonoBehaviour
         ConvertNextBlockToBomb();
 
         // 초기 활성 폭탄 개수 저장
-        previousActiveBombs = BombManager.Instance.GetActiveBombCount();
+        if (BombManager.Instance != null)
+        {
+            previousActiveBombs = BombManager.Instance.GetActiveBombCount();
+        }
 
         isInitialized = true;
 
         if (enableDebugLog)
         {
             LogSystem.PushLog(LogLevel.INFO, "SequentialBombInit",
-                $"초기화 완료 | 총 블록 개수: {numberBlocks.Count}개");
+                $"초기화 완료 | 총 블록 개수: {numberBlocks.Count}개", useUnityDebug: true);
         }
     }
 
@@ -171,65 +208,28 @@ public class SequentialBombConverter : MonoBehaviour
     /// <param name="currentActiveBombs">현재 활성화된 폭탄 개수</param>
     private void OnBombCountChanged(int currentActiveBombs)
     {
-        if (enableDebugLog)
-        {
-            Debug.Log($"<color=cyan>[SequentialBomb]</color> OnBombCountChanged 호출 | " +
-                      $"초기화: {isInitialized} | 이전: {previousActiveBombs} → 현재: {currentActiveBombs} | " +
-                      $"현재 인덱스: {currentBlockIndex}/{numberBlocks.Count}");
-        }
-
         if (!isInitialized)
         {
-            if (enableDebugLog)
-            {
-                Debug.Log("<color=yellow>[SequentialBomb]</color> 아직 초기화 안 됨 - 무시");
-            }
             return;
         }
 
         // 폭탄이 감소했는지 확인 (폭발이 발생했는지)
         if (currentActiveBombs < previousActiveBombs)
         {
-            if (enableDebugLog)
-            {
-                Debug.Log($"<color=green>[SequentialBomb]</color> 폭탄 폭발 감지! " +
-                          $"이전: {previousActiveBombs} → 현재: {currentActiveBombs}");
-            }
-
             // 다음 블록이 있는지 확인
             if (currentBlockIndex >= numberBlocks.Count)
             {
                 // 모든 블록이 변환됨
-                if (enableDebugLog)
-                {
-                    Debug.Log("<color=magenta>[SequentialBomb]</color> 모든 블록이 변환 완료!");
-                }
                 previousActiveBombs = currentActiveBombs;
                 return;
             }
 
             // 다음 블록을 폭탄으로 변환
-            Debug.Log($"<color=orange>[SequentialBomb]</color> 다음 블록 변환 시도 - Index: {currentBlockIndex}");
             ConvertNextBlockToBomb();
 
             // previousActiveBombs 업데이트를 다음 프레임으로 지연
             StartCoroutine(UpdatePreviousBombCountNextFrame());
             return;
-        }
-        else if (currentActiveBombs > previousActiveBombs)
-        {
-            if (enableDebugLog)
-            {
-                Debug.Log($"<color=yellow>[SequentialBomb]</color> 폭탄 증가 (생성) 감지 - 무시 | " +
-                          $"이전: {previousActiveBombs} → 현재: {currentActiveBombs}");
-            }
-        }
-        else
-        {
-            if (enableDebugLog)
-            {
-                Debug.Log($"<color=gray>[SequentialBomb]</color> 폭탄 개수 변화 없음 - 무시");
-            }
         }
 
         // 현재 개수를 저장 (중요!)
@@ -243,11 +243,11 @@ public class SequentialBombConverter : MonoBehaviour
     private System.Collections.IEnumerator UpdatePreviousBombCountNextFrame()
     {
         yield return null; // 다음 프레임까지 대기
-        previousActiveBombs = BombManager.Instance.GetActiveBombCount();
 
-        if (enableDebugLog)
+        // 빌드 환경에서 BombManager가 null이 될 수 있으므로 체크
+        if (BombManager.Instance != null)
         {
-            Debug.Log($"<color=blue>[SequentialBomb]</color> previousActiveBombs 업데이트 → {previousActiveBombs}");
+            previousActiveBombs = BombManager.Instance.GetActiveBombCount();
         }
     }
 
@@ -257,70 +257,97 @@ public class SequentialBombConverter : MonoBehaviour
     /// </summary>
     private void ConvertNextBlockToBomb()
     {
-        Debug.Log($"<color=orange>[SequentialBomb]</color> === ConvertNextBlockToBomb 시작 === Index: {currentBlockIndex}");
-
-        // 인덱스 범위 체크
-        if (currentBlockIndex >= numberBlocks.Count)
+        // 활성화된 블록을 찾을 때까지 반복
+        while (currentBlockIndex < numberBlocks.Count)
         {
-            Debug.Log($"<color=red>[SequentialBomb]</color> 인덱스 범위 초과! {currentBlockIndex} >= {numberBlocks.Count}");
-            return;
-        }
+            GameObject targetBlock = numberBlocks[currentBlockIndex];
 
-        GameObject targetBlock = numberBlocks[currentBlockIndex];
+            // null 체크
+            if (targetBlock == null)
+            {
+                currentBlockIndex++;
+                continue; // 다음 블록 확인
+            }
 
-        if (targetBlock == null)
-        {
-            Debug.LogError($"<color=red>[SequentialBomb]</color> Block[{currentBlockIndex}]이(가) null입니다!");
+            // 비활성화 체크
+            if (!targetBlock.activeInHierarchy)
+            {
+                currentBlockIndex++;
+                continue; // 다음 블록 확인
+            }
+
+            // 활성화된 블록을 찾음!
+            // 1. 루트 오브젝트의 Tag만 변경
+            targetBlock.tag = bombTag;
+
+            // 2. 자식 오브젝트들의 Material만 교체 (루트는 제외)
+            ChangeChildrenMaterialRecursively(targetBlock.transform);
+
+            // 3. BombController가 있다면 활성화 (선택사항)
+            BombController bombController = targetBlock.GetComponent<BombController>();
+            if (bombController != null)
+            {
+                bombController.enabled = true;
+            }
+
+            // 4. BombManager에 폭탄 생성 알림
+            if (BombManager.Instance != null)
+            {
+                BombManager.Instance.NotifyBombSpawned(targetBlock);
+                BombManager.Instance.RegisterGoalBomb(targetBlock);
+            }
+
+            // 로그 기록 (중요한 이벤트만)
+            if (enableDebugLog)
+            {
+                LogSystem.PushLog(LogLevel.INFO, "BlockToBomb",
+                    $"{targetBlock.name} (Index: {currentBlockIndex})", useUnityDebug: true);
+            }
+
+            // 6. 다음 블록 인덱스로 이동
             currentBlockIndex++;
-            return;
+
+            return; // 폭탄 변환 성공, 메서드 종료
         }
 
-        Debug.Log($"<color=cyan>[SequentialBomb]</color> 대상 블록: '{targetBlock.name}' (Index: {currentBlockIndex})");
-
-        // 1. Tag 변경
-        string oldTag = targetBlock.tag;
-        targetBlock.tag = bombTag;
-        Debug.Log($"<color=green>[SequentialBomb]</color> 1. Tag 변경: '{oldTag}' → '{bombTag}'");
-
-        // 2. Material 교체 (본인 + 모든 자식 오브젝트)
-        ChangeMaterialRecursively(targetBlock.transform);
-        Debug.Log($"<color=green>[SequentialBomb]</color> 2. Material 교체 완료");
-
-        // 3. BombController가 있다면 활성화 (선택사항)
-        BombController bombController = targetBlock.GetComponent<BombController>();
-        if (bombController != null)
+        // 모든 블록을 확인했지만 활성화된 블록이 없음
+        if (enableDebugLog)
         {
-            bombController.enabled = true;
-            Debug.Log($"<color=green>[SequentialBomb]</color> 3. BombController 활성화");
+            LogSystem.PushLog(LogLevel.INFO, "AllBlocksConverted",
+                "모든 블록 변환 완료", useUnityDebug: true);
         }
-        else
+    }
+
+    /// <summary>
+    /// 지정된 Transform의 자식 오브젝트들만 Renderer Material을 변경합니다.
+    /// 루트 오브젝트 자체는 제외합니다.
+    /// </summary>
+    /// <param name="root">Material을 변경할 최상위 Transform</param>
+    /// <returns>처리된 Renderer 개수</returns>
+    private int ChangeChildrenMaterialRecursively(Transform root)
+    {
+        int changedCount = 0;
+
+        // 자식 오브젝트들만 재귀 처리 (루트는 제외)
+        foreach (Transform child in root)
         {
-            Debug.Log($"<color=yellow>[SequentialBomb]</color> 3. BombController 없음 (스킵)");
+            changedCount += ChangeMaterialRecursively(child);
         }
 
-        // 4. BombManager에 폭탄 생성 알림
-        int beforeCount = BombManager.Instance.GetActiveBombCount();
-        BombManager.Instance.NotifyBombSpawned(targetBlock);
-        int afterCount = BombManager.Instance.GetActiveBombCount();
-        Debug.Log($"<color=green>[SequentialBomb]</color> 4. BombManager 알림 완료 | 폭탄 개수: {beforeCount} → {afterCount}");
-
-        // 5. BombManager에 목표 폭탄으로 등록 (RegisterOnly 모드 대비)
-        BombManager.Instance.RegisterGoalBomb(targetBlock);
-        Debug.Log($"<color=green>[SequentialBomb]</color> 5. 목표 폭탄 등록 완료");
-
-        // 6. 다음 블록 인덱스로 이동
-        currentBlockIndex++;
-        Debug.Log($"<color=magenta>[SequentialBomb]</color> === ConvertNextBlockToBomb 완료 === 다음 Index: {currentBlockIndex}");
+        return changedCount;
     }
 
     /// <summary>
     /// 지정된 Transform과 모든 자식 오브젝트의 Renderer Material을 변경합니다.
     /// </summary>
-    /// <param name="root">Material을 변경할 최상위 Transform</param>
-    private void ChangeMaterialRecursively(Transform root)
+    /// <param name="target">Material을 변경할 Transform</param>
+    /// <returns>처리된 Renderer 개수</returns>
+    private int ChangeMaterialRecursively(Transform target)
     {
+        int changedCount = 0;
+
         // 현재 오브젝트의 Renderer 처리
-        Renderer renderer = root.GetComponent<Renderer>();
+        Renderer renderer = target.GetComponent<Renderer>();
         if (renderer != null)
         {
             // Material 배열 생성 (모든 Material을 bombMaterial로 교체)
@@ -330,13 +357,16 @@ public class SequentialBombConverter : MonoBehaviour
                 materials[i] = bombMaterial;
             }
             renderer.materials = materials;
+            changedCount++;
         }
 
         // 모든 자식 오브젝트 재귀 처리
-        foreach (Transform child in root)
+        foreach (Transform child in target)
         {
-            ChangeMaterialRecursively(child);
+            changedCount += ChangeMaterialRecursively(child);
         }
+
+        return changedCount;
     }
 
     /// <summary>
@@ -384,6 +414,53 @@ public class SequentialBombConverter : MonoBehaviour
         return $"{currentBlockIndex} / {numberBlocks.Count}";
     }
 
+    /// <summary>
+    /// 모든 블록이 사라졌는지(비활성화 또는 파괴) 체크하여 게임 종료 여부를 판단합니다.
+    /// </summary>
+    private void CheckGameEnd()
+    {
+        int activeBlockCount = 0;
+
+        // 모든 블록의 활성화 상태 확인
+        foreach (GameObject block in numberBlocks)
+        {
+            if (block != null && block.activeInHierarchy)
+            {
+                activeBlockCount++;
+            }
+        }
+
+        // 모든 블록이 비활성화되거나 파괴됨
+        if (activeBlockCount == 0)
+        {
+            isGameEnded = true;
+            OnGameEnd();
+        }
+    }
+
+    /// <summary>
+    /// 게임이 종료되었을 때 호출되는 메서드입니다.
+    /// ClearManager의 클리어 로직을 실행합니다.
+    /// </summary>
+    private void OnGameEnd()
+    {
+        LogSystem.PushLog(LogLevel.INFO, "GameEnd", "SequentialBombGame", useUnityDebug: true);
+
+        // ClearManager의 클리어 로직 실행
+        ClearManager clearManager = FindFirstObjectByType<ClearManager>();
+        if (clearManager != null)
+        {
+            // ClearManager의 private ClearChecker 메서드를 리플렉션으로 호출
+            var method = clearManager.GetType().GetMethod("ClearChecker",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            if (method != null)
+            {
+                method.Invoke(clearManager, null);
+            }
+        }
+    }
+
 #if UNITY_EDITOR
     [ContextMenu("다음 블록을 폭탄으로 변환 (테스트)")]
     private void TestConvertNextBlock()
@@ -426,25 +503,7 @@ public class SequentialBombConverter : MonoBehaviour
             }
             catch (UnityException)
             {
-                Debug.LogWarning($"[SequentialBombConverter] '{bombTag}' 태그가 Tag Manager에 등록되어 있지 않습니다.");
-            }
-        }
-
-        // Material 검사
-        if (bombMaterial == null)
-        {
-            Debug.LogWarning("[SequentialBombConverter] bombMaterial이 할당되지 않았습니다.");
-        }
-
-        // 블록 리스트 검사
-        if (numberBlocks != null && numberBlocks.Count > 0)
-        {
-            for (int i = 0; i < numberBlocks.Count; i++)
-            {
-                if (numberBlocks[i] == null)
-                {
-                    Debug.LogWarning($"[SequentialBombConverter] numberBlocks[{i}]이(가) null입니다.");
-                }
+                // Tag가 없음
             }
         }
     }
