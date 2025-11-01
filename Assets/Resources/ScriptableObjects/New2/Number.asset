@@ -17,6 +17,5 @@ MonoBehaviour:
   _sceneName: Number
   _clearStar: 0
   _isTried: 0
-  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/Soma
-    Cube.png
+  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/Number.png
   _scenePath: Assets/Scenes/LBC/Number.unity
