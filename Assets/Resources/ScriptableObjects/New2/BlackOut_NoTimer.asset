@@ -17,5 +17,5 @@ MonoBehaviour:
   _sceneName: BlackOut_Sp_NoTimer
   _clearStar: 0
   _isTried: 0
-  _stageImagePath: 
+  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/BlackOut_Sp_Notimer.png
   _scenePath: Assets/Scenes/Sihyeon/NewW08/BlackOut_Sp_NoTimer.unity
