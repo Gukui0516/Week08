@@ -1075,7 +1075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcdf87484200c542b24bc6d3f8c41ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageData: {fileID: 11400000, guid: 305406abf5fd91545a8671f08bd45953, type: 2}
+  _stageData: {fileID: 11400000, guid: 60488c5b1b6d5fd41bee7c0b2996ddf0, type: 2}
   _stageUI: {fileID: 126356288}
 --- !u!23 &107284523
 MeshRenderer:
@@ -1728,19 +1728,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1121212977707181850, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1121212977707181850, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1121212977707181850, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 110
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1121212977707181850, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1293152134782361033, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_Pivot.x
@@ -1824,35 +1824,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1843311245225094612, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1843311245225094612, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1843311245225094612, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1843311245225094612, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5993259999840841477, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5993259999840841477, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5993259999840841477, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5993259999840841477, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6184227153334379887, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_Name
@@ -3302,7 +3302,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &474114761
 Transform:
   m_ObjectHideFlags: 0
@@ -3906,7 +3906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcdf87484200c542b24bc6d3f8c41ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageData: {fileID: 11400000, guid: 60488c5b1b6d5fd41bee7c0b2996ddf0, type: 2}
+  _stageData: {fileID: 11400000, guid: 305406abf5fd91545a8671f08bd45953, type: 2}
   _stageUI: {fileID: 887088178}
 --- !u!23 &558326696
 MeshRenderer:
@@ -6262,7 +6262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcdf87484200c542b24bc6d3f8c41ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageData: {fileID: 11400000, guid: 64ab0a1cda43ac74e9a6ef2eaa370995, type: 2}
+  _stageData: {fileID: 11400000, guid: 275ef35997a9937448b95e70d53d0d06, type: 2}
   _stageUI: {fileID: 2034251213}
 --- !u!23 &987937474
 MeshRenderer:
@@ -6823,19 +6823,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1121212977707181850, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1121212977707181850, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1121212977707181850, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 110
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1121212977707181850, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1293152134782361033, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_Pivot.x
@@ -6919,35 +6919,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1843311245225094612, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1843311245225094612, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1843311245225094612, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1843311245225094612, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5993259999840841477, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5993259999840841477, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5993259999840841477, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5993259999840841477, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6184227153334379887, guid: 3a51918fb5e8c8945bc5862c55dcdc19, type: 3}
       propertyPath: m_Name
@@ -9986,7 +9986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcdf87484200c542b24bc6d3f8c41ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageData: {fileID: 11400000, guid: 591e18f5972da5e4495821a84c698f47, type: 2}
+  _stageData: {fileID: 11400000, guid: 009943395d9da0348838399f8bda3f76, type: 2}
   _stageUI: {fileID: 407495635}
 --- !u!23 &1742321334
 MeshRenderer:
@@ -11622,7 +11622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcdf87484200c542b24bc6d3f8c41ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageData: {fileID: 11400000, guid: 9ac0ba50ff070ab4fbac129c98a41302, type: 2}
+  _stageData: {fileID: 11400000, guid: 3fbd6f51b773de045ae1039a6445befe, type: 2}
   _stageUI: {fileID: 1234485733}
 --- !u!23 &1901743454
 MeshRenderer:

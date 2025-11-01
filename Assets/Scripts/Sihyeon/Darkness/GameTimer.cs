@@ -5,6 +5,7 @@ using System.Collections;
 
 /// <summary>
 /// 스테이지의 총 시간을 카운트다운하고, 남은 시간에 따라 TMP 텍스트의 색상을 변경하여 긴박감을 연출합니다.
+/// BombCollisionDetector의 이벤트를 구독하여 폭탄 폭발 시 시간을 추가합니다.
 /// </summary>
 public class GameTimer : MonoBehaviour
 {
@@ -35,6 +36,11 @@ public class GameTimer : MonoBehaviour
     [Tooltip("경고/위험 상태에서 색상이 깜빡이는 속도 (높을수록 빠름)")]
     public float pulseSpeed = 5.0f;
 
+    // === 3. 추가 시간 설정 (추가됨) ===
+    [Header("Bonus Time")]
+    [Tooltip("폭탄 폭발 시 타이머에 추가할 시간 (초)")]
+    public float bonusTimeOnExplosion = 5.0f;
+
     private Coroutine pulseCoroutine;
     private Color currentBaseColor = Color.black; // 현재 깜빡임의 기준 색상을 추적
 
@@ -52,12 +58,21 @@ public class GameTimer : MonoBehaviour
             return;
         }
 
+        // BombCollisionDetector 이벤트 구독 (수정된 로직)
+        BombCollisionDetector.OnBombCollisionDetected += OnBombCollisionDetectedHandler;
+
         currentTime = totalTime;
         UpdateTimerDisplay(currentTime);
         timerText.color = initialColor;
         currentBaseColor = initialColor; // 초기 색상 설정
 
         isRunning = true;
+    }
+
+    private void OnDestroy()
+    {
+        // BombCollisionDetector 이벤트 구독 해제 (수정된 로직)
+        BombCollisionDetector.OnBombCollisionDetected -= OnBombCollisionDetectedHandler;
     }
 
     void Update()
@@ -102,7 +117,6 @@ public class GameTimer : MonoBehaviour
     /// </summary>
     private void ChangeState(Color targetColor, bool shouldPulse)
     {
-        // 색상이 바뀌어야 하는지 확인 (노란색 -> 빨간색 전환 시)
         bool colorNeedsRestart = (targetColor != currentBaseColor) && shouldPulse;
 
         // 1. 펄스 상태에서 이탈하는 경우 (일반 상태로 복귀)
@@ -120,13 +134,11 @@ public class GameTimer : MonoBehaviour
         {
             if (pulseCoroutine == null || colorNeedsRestart)
             {
-                // 실행 중이던 코루틴이 있다면 멈추고 새 색상으로 시작
                 if (pulseCoroutine != null)
                 {
                     StopCoroutine(pulseCoroutine);
                 }
 
-                // 새로운 베이스 색상 설정 및 코루틴 시작
                 currentBaseColor = targetColor;
                 pulseCoroutine = StartCoroutine(PulseColorCoroutine(targetColor));
             }
@@ -157,6 +169,44 @@ public class GameTimer : MonoBehaviour
         }
     }
 
+    // ==========================================================
+    // 폭탄 충돌 이벤트 처리 및 시간 추가 로직 (추가/수정됨)
+    // ==========================================================
+
+    /// <summary>
+    /// BombCollisionDetector 이벤트 핸들러: 폭탄 충돌 감지 시 시간을 추가합니다.
+    /// 이 시점은 폭탄이 '폭발 라인'에 닿았을 때입니다.
+    /// </summary>
+    /// <param name="bomb">충돌한 폭탄 GameObject (인수 사용 안 함)</param>
+    private void OnBombCollisionDetectedHandler(GameObject bomb)
+    {
+        // BombCollisionDetector는 충돌 감지 후 NotifyBombExploded를 호출할 책임이 있으므로, 
+        // 여기서 시간을 추가하는 것이 논리적으로 맞습니다.
+        AddTime(bonusTimeOnExplosion);
+        Debug.Log($"[GameTimer] 폭탄 충돌 감지! 타이머에 +{bonusTimeOnExplosion}초 추가. (현재 시간: {currentTime:F2})");
+    }
+
+    /// <summary>
+    /// 현재 타이머에 지정된 시간만큼 추가합니다.
+    /// </summary>
+    /// <param name="amount">추가할 시간 (초)</param>
+    public void AddTime(float amount)
+    {
+        if (amount <= 0 || !isRunning) return;
+
+        currentTime += amount;
+
+        // 시간이 추가되어 경고 상태에서 벗어날 경우 시각 효과 즉시 갱신
+        if (currentTime > warningThreshold && pulseCoroutine != null)
+        {
+            ChangeState(initialColor, false);
+        }
+
+        UpdateTimerDisplay(currentTime);
+    }
+
+    // ==========================================================
+
     /// <summary>
     /// 게임 클리어 시 외부에서 호출되어 타이머를 멈춥니다.
     /// </summary>
@@ -168,6 +218,9 @@ public class GameTimer : MonoBehaviour
             StopCoroutine(pulseCoroutine);
             pulseCoroutine = null;
         }
+
+        // 이벤트 구독 해제
+        BombCollisionDetector.OnBombCollisionDetected -= OnBombCollisionDetectedHandler;
 
         if (success)
         {

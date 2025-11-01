@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.IO;
 using TMPro;
 using UnityEngine;
@@ -182,6 +182,11 @@ public class ClearManager : MonoBehaviour
                 ClearChecker();
             }
         }
+    }
+
+    public void ForcelyClearStage()
+    {
+        ClearChecker();
     }
 
     /// <summary>

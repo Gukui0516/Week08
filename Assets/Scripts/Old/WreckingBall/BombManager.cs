@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System;
 using Sirenix.OdinInspector;
@@ -112,6 +112,18 @@ public class BombManager : MonoBehaviour
         }
     }
 
+    #region Forcely Management
+    public void ForcelySetActiveBombCount(int count)
+    {
+        currentActiveBombs = count;
+        if (enableAutoDebugLog)
+        {
+            Debug.Log($"<color=yellow>[BombManager]</color> 강제 설정된 활성 폭탄 개수: {currentActiveBombs}");
+        }
+        OnBombCountChanged?.Invoke(currentActiveBombs);
+    }
+    #endregion
+
     #region Draggable Management
 
     /// <summary>
@@ -201,6 +213,7 @@ public class BombManager : MonoBehaviour
                       $"총 생성: {totalSpawnedBombs} | 현재 활성: {currentActiveBombs}");
         }
 
+        LogSystem.PushLog(LogLevel.INFO,$"[BombManager] 폭탄 {bomb.name}이(가) 생성되었습니다.",1);
         // 이벤트 발생
         OnBombCountChanged?.Invoke(currentActiveBombs);
     }
@@ -227,6 +240,7 @@ public class BombManager : MonoBehaviour
                       $"총 폭발: {totalExplodedBombs} | 현재 활성: {currentActiveBombs}");
         }
 
+        LogSystem.PushLog(LogLevel.INFO,"[BombManager] 폭탄이 폭발했습니다.",1);
         // 이벤트 발생
         OnBombCountChanged?.Invoke(currentActiveBombs);
     }
@@ -240,6 +254,7 @@ public class BombManager : MonoBehaviour
         if (bomb == null)
         {
             Debug.LogWarning("[BombManager] 폭발 알림을 받았지만 폭탄이 null입니다.");
+            LogSystem.PushLog(LogLevel.WARNING,"폭발 알림을 받았지만 폭탄이 null입니다.",1);
             return;
         }
 
@@ -249,7 +264,7 @@ public class BombManager : MonoBehaviour
         // 음수 방지
         if (currentActiveBombs < 0)
         {
-            Debug.LogWarning("[BombManager] 활성 폭탄 개수가 음수가 되었습니다. 0으로 보정합니다.");
+            LogSystem.PushLog(LogLevel.WARNING,"[BombManager] 활성 폭탄 개수가 음수가 되었습니다. 0으로 보정합니다.",1);
             currentActiveBombs = 0;
         }
 
@@ -259,6 +274,7 @@ public class BombManager : MonoBehaviour
                       $"총 폭발: {totalExplodedBombs} | 현재 활성: {currentActiveBombs}");
         }
 
+        LogSystem.PushLog(LogLevel.INFO,$"[BombManager] 폭탄 {bomb.name}이(가) 폭발했습니다.",1);
         // 이벤트 발생
         OnBombCountChanged?.Invoke(currentActiveBombs);
     }

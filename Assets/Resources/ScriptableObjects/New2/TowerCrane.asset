@@ -17,5 +17,5 @@ MonoBehaviour:
   _sceneName: TowerCrane
   _clearStar: 0
   _isTried: 0
-  _stageImagePath: 
+  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/TowerCrane.png
   _scenePath: Assets/Scenes/OSH/TowerCrane.unity
