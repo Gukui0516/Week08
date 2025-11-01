@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// 스테이지별 설정을 관리하는 스크립트입니다.
@@ -52,6 +52,8 @@ public class StageConfig : MonoBehaviour
     [Header("//Debug Settings")]
     [Tooltip("스테이지 설정 관련 로그를 출력합니다.")]
     [SerializeField] private bool enableDebugLog = true;
+
+    public bool useBombCount = true;
 
     /// <summary>
     /// 목표 폭탄 개수 설정 모드
