@@ -2,31 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 /// <summary>
 /// 스폰 영역 모드
 /// </summary>
 public enum SpawnAreaMode
 {
-    Surface,  // Collider 표면
-    Volume    // Collider 내부 볼륨
+    Surface,
+    Volume
 }
 
-
-
-
 /// <summary>
-/// TypedObjectPool 기반 랜덤 프리팹 스포너
+/// TypedObjectPool 기반 랜덤 프리팹 스포너 (통합 혼합 타입 지원)
 /// </summary>
 public class RandomSpawner : MonoBehaviour
 {
     /// <summary>
-    /// 스폰 명령 데이터
+    /// 스폰 명령 데이터 (단일/혼합 타입 통합)
     /// </summary>
     public struct SpawnCommand
     {
         public bool IsImmediate;
-        public int Count;
+        public SpawnObjectType[] Types;  // Length 1 = 단일, 2+ = 혼합
+        public int[] Counts;
         public float DurationSeconds;
     }
 
@@ -34,9 +31,6 @@ public class RandomSpawner : MonoBehaviour
     [TabGroup("Pool Settings")]
     [Required, InfoBox("스폰에 사용할 오브젝트 풀")]
     [SerializeField] private TypedObjectPool<SpawnObjectType> _objectPool;
-
-    [TabGroup("Pool Settings")]
-    [SerializeField] private SpawnObjectType _spawnType = SpawnObjectType.None;
 
     [TabGroup("Spawn Settings")]
     [SerializeField] private bool _randomizePosition = true;
@@ -63,10 +57,6 @@ public class RandomSpawner : MonoBehaviour
     [TabGroup("Area Settings")]
     [SerializeField] private SpawnAreaMode _areaMode = SpawnAreaMode.Volume;
 
-    [TabGroup("Timing Settings")]
-    [Min(0.1f), InfoBox("순차 생성 시 전체 소요 시간(초)")]
-    [SerializeField] private float _sequentialSpawnDurationSeconds = 2.0f;
-
     [TabGroup("Debug")]
     [SerializeField] private bool _isDebugLogging = false;
     #endregion
@@ -75,25 +65,25 @@ public class RandomSpawner : MonoBehaviour
     [Button("즉시 1개 생성", ButtonSizes.Medium)]
     private void DebugSpawnOne()
     {
-        SpawnImmediate(1);
+        SpawnImmediate(SpawnObjectType.Default, 1);
     }
 
     [Button("즉시 30개 생성", ButtonSizes.Medium)]
     private void DebugSpawnThirty()
     {
-        SpawnImmediate(30);
+        SpawnImmediate(SpawnObjectType.Default, 30);
     }
 
     [Button("30개 순차 생성 (2초)", ButtonSizes.Medium)]
     private void DebugSpawnThirtySequential()
     {
-        SpawnSequential(30, 2.0f);
+        SpawnSequential(SpawnObjectType.Default, 30, 2.0f);
     }
 
     [Button("100개 순차 생성 (2초)", ButtonSizes.Medium)]
     private void DebugSpawnHundredSequential()
     {
-        SpawnSequential(100, 2.0f);
+        SpawnSequential(SpawnObjectType.Default, 100, 2.0f);
     }
 
     [Button("일괄 회수", ButtonSizes.Medium)]
@@ -122,14 +112,17 @@ public class RandomSpawner : MonoBehaviour
 
     #region Private Fields
     private List<GameObject> _spawnedObjects;
-    private bool _isSequentialSpawning;
-    private int _sequentialTargetCount;
-    private float _sequentialElapsedTime;
-    private float _sequentialSpawnInterval;
-    private int _sequentialSpawnedCount;
     private Queue<SpawnCommand> _spawnCommandQueue;
     private bool _isExecutingCommand;
 
+    // 순차 스폰 상태
+    private bool _isSequentialSpawning;
+    private SpawnObjectType[] _sequentialTypes;
+    private int[] _sequentialCounts;
+    private List<(SpawnObjectType type, int index)> _sequentialShuffledOrder;
+    private int _sequentialCurrentIndex;
+    private float _sequentialElapsedTime;
+    private float _sequentialSpawnInterval;
     #endregion
 
     #region Unity Lifecycle
@@ -190,44 +183,83 @@ public class RandomSpawner : MonoBehaviour
 
     #region Public Methods - Spawn Control
     /// <summary>
-    /// 즉시 지정 개수만큼 스폰
+    /// 단일 타입 즉시 스폰
     /// </summary>
+    /// <param name="type">스폰할 타입</param>
     /// <param name="count">스폰할 개수</param>
-    public void SpawnImmediate(int count)
+    public void SpawnImmediate(SpawnObjectType type, int count)
     {
-        if (!ValidateSpawnRequest(count))
+        SpawnObjectType[] types = new SpawnObjectType[] { type };
+        int[] counts = new int[] { count };
+        SpawnMixedImmediate(types, counts);
+    }
+
+    /// <summary>
+    /// 단일 타입 순차 스폰
+    /// </summary>
+    /// <param name="type">스폰할 타입</param>
+    /// <param name="count">스폰할 총 개수</param>
+    /// <param name="durationSeconds">전체 스폰 소요 시간(초)</param>
+    public void SpawnSequential(SpawnObjectType type, int count, float durationSeconds)
+    {
+        SpawnObjectType[] types = new SpawnObjectType[] { type };
+        int[] counts = new int[] { count };
+        SpawnMixedSequential(types, counts, durationSeconds);
+    }
+
+    /// <summary>
+    /// 혼합 타입 즉시 스폰
+    /// </summary>
+    /// <param name="types">스폰할 타입 배열</param>
+    /// <param name="counts">각 타입의 개수 배열</param>
+    public void SpawnMixedImmediate(SpawnObjectType[] types, int[] counts)
+    {
+        if (!ValidateSpawnRequest(types, counts))
             return;
 
         SpawnCommand command = new SpawnCommand
         {
             IsImmediate = true,
-            Count = count,
+            Types = types,
+            Counts = counts,
             DurationSeconds = 0f
         };
 
         _spawnCommandQueue.Enqueue(command);
-        Log($"Queued immediate spawn: {count} objects (Queue size: {_spawnCommandQueue.Count})");
+
+        int totalCount = 0;
+        for (int i = 0; i < counts.Length; i++)
+            totalCount += counts[i];
+
+        Log($"Queued immediate spawn: {totalCount} objects ({types.Length} types)");
     }
 
     /// <summary>
-    /// 지정 시간 동안 균등하게 순차 스폰
+    /// 혼합 타입 순차 스폰
     /// </summary>
-    /// <param name="count">스폰할 총 개수</param>
+    /// <param name="types">스폰할 타입 배열</param>
+    /// <param name="counts">각 타입의 개수 배열</param>
     /// <param name="durationSeconds">전체 스폰 소요 시간(초)</param>
-    public void SpawnSequential(int count, float durationSeconds)
+    public void SpawnMixedSequential(SpawnObjectType[] types, int[] counts, float durationSeconds)
     {
-        if (!ValidateSpawnRequest(count))
+        if (!ValidateSpawnRequest(types, counts))
             return;
 
         SpawnCommand command = new SpawnCommand
         {
             IsImmediate = false,
-            Count = count,
+            Types = types,
+            Counts = counts,
             DurationSeconds = durationSeconds
         };
 
         _spawnCommandQueue.Enqueue(command);
-        Log($"Queued sequential spawn: {count} objects over {durationSeconds:F2}s (Queue size: {_spawnCommandQueue.Count})");
+
+        int totalCount = 0;
+        for (int i = 0; i < counts.Length; i++)
+            totalCount += counts[i];
+
+        Log($"Queued sequential spawn: {totalCount} objects ({types.Length} types) over {durationSeconds:F2}s");
     }
 
     /// <summary>
@@ -238,13 +270,19 @@ public class RandomSpawner : MonoBehaviour
         if (!_isSequentialSpawning)
             return;
 
-        Log($"Sequential spawn stopped. Spawned {_sequentialSpawnedCount}/{_sequentialTargetCount}", forcely: true);
+        int totalTarget = 0;
+        for (int i = 0; i < _sequentialCounts.Length; i++)
+            totalTarget += _sequentialCounts[i];
+
+        Log($"Sequential spawn stopped. Spawned {_sequentialCurrentIndex}/{totalTarget}", forcely: true);
 
         _isSequentialSpawning = false;
-        _sequentialTargetCount = 0;
+        _sequentialTypes = null;
+        _sequentialCounts = null;
+        _sequentialShuffledOrder = null;
+        _sequentialCurrentIndex = 0;
         _sequentialElapsedTime = 0f;
-        _sequentialSpawnedCount = 0;
-        _isExecutingCommand = false; // 큐 재개
+        _isExecutingCommand = false;
     }
     #endregion
 
@@ -263,7 +301,6 @@ public class RandomSpawner : MonoBehaviour
 
         int recalledCount = 0;
 
-        // 역순 순회로 안전하게 제거
         for (int i = _spawnedObjects.Count - 1; i >= 0; i--)
         {
             GameObject obj = _spawnedObjects[i];
@@ -303,7 +340,6 @@ public class RandomSpawner : MonoBehaviour
         int recallCount = Mathf.Min(count, _spawnedObjects.Count);
         int recalledCount = 0;
 
-        // 리스트 끝에서부터 회수
         for (int i = 0; i < recallCount; i++)
         {
             int lastIndex = _spawnedObjects.Count - 1;
@@ -323,59 +359,7 @@ public class RandomSpawner : MonoBehaviour
     }
     #endregion
 
-    #region Private Methods - Spawn Logic
-    /// <summary>
-    /// 단일 오브젝트 스폰
-    /// </summary>
-    /// <returns>스폰된 GameObject</returns>
-    private GameObject SpawnSingle()
-    {
-        Vector3 spawnPosition = _randomizePosition ? GetRandomPosition() : transform.position;
-        Quaternion spawnRotation = _randomizeRotation ? GetRandomRotation() : Quaternion.identity;
-
-        GameObject spawnedObject = _objectPool.SpawnObject(_spawnType, spawnPosition, spawnRotation, isForcely: false);
-
-        if (spawnedObject != null)
-        {
-            _spawnedObjects.Add(spawnedObject);
-            Log($"Spawned object at {spawnPosition}");
-        }
-        else
-        {
-            LogError("Failed to spawn object from pool");
-        }
-
-        return spawnedObject;
-    }
-
-    /// <summary>
-    /// 순차 스폰 업데이트 (Update에서 호출)
-    /// </summary>
-    private void UpdateSequentialSpawn()
-    {
-        _sequentialElapsedTime += Time.deltaTime;
-
-        // 현재 시간까지 스폰해야 할 개수 계산
-        int targetSpawnCount = Mathf.FloorToInt(_sequentialElapsedTime / _sequentialSpawnInterval);
-        targetSpawnCount = Mathf.Min(targetSpawnCount, _sequentialTargetCount);
-
-        // 목표 개수만큼 스폰
-        int spawnThisFrame = targetSpawnCount - _sequentialSpawnedCount;
-        for (int i = 0; i < spawnThisFrame; i++)
-        {
-            SpawnSingle();
-            _sequentialSpawnedCount++;
-        }
-
-        // 완료 체크
-        if (_sequentialSpawnedCount >= _sequentialTargetCount)
-        {
-            Log($"Sequential spawn completed: {_sequentialSpawnedCount} objects", forcely: true);
-            StopSequentialSpawn();
-            _isExecutingCommand = false;
-        }
-    }
-
+    #region Private Methods - Command Queue
     /// <summary>
     /// 큐에서 다음 명령 실행
     /// </summary>
@@ -389,25 +373,30 @@ public class RandomSpawner : MonoBehaviour
 
         if (command.IsImmediate)
         {
-            ExecuteImmediateCommand(command.Count);
+            ExecuteImmediateCommand(command.Types, command.Counts);
         }
         else
         {
-            ExecuteSequentialCommand(command.Count, command.DurationSeconds);
+            ExecuteSequentialCommand(command.Types, command.Counts, command.DurationSeconds);
         }
     }
 
     /// <summary>
     /// 즉시 스폰 명령 실행
     /// </summary>
-    /// <param name="count">스폰할 개수</param>
-    private void ExecuteImmediateCommand(int count)
+    private void ExecuteImmediateCommand(SpawnObjectType[] types, int[] counts)
     {
-        Log($"Executing immediate spawn: {count} objects", forcely: true);
+        int totalCount = 0;
+        for (int i = 0; i < counts.Length; i++)
+            totalCount += counts[i];
 
-        for (int i = 0; i < count; i++)
+        Log($"Executing immediate spawn: {totalCount} objects ({types.Length} types)", forcely: true);
+
+        List<(SpawnObjectType type, int index)> shuffledOrder = CreateShuffledSpawnOrder(types, counts);
+
+        foreach (var pair in shuffledOrder)
         {
-            SpawnSingle();
+            SpawnSingle(pair.type);
         }
 
         Log($"Immediate spawn completed. Total spawned: {_spawnedObjects.Count}", forcely: true);
@@ -417,17 +406,100 @@ public class RandomSpawner : MonoBehaviour
     /// <summary>
     /// 순차 스폰 명령 실행
     /// </summary>
-    /// <param name="count">스폰할 총 개수</param>
-    /// <param name="durationSeconds">전체 스폰 소요 시간(초)</param>
-    private void ExecuteSequentialCommand(int count, float durationSeconds)
+    private void ExecuteSequentialCommand(SpawnObjectType[] types, int[] counts, float durationSeconds)
     {
-        _isSequentialSpawning = true;
-        _sequentialTargetCount = count;
-        _sequentialElapsedTime = 0f;
-        _sequentialSpawnedCount = 0;
-        _sequentialSpawnInterval = durationSeconds / count;
+        int totalCount = 0;
+        for (int i = 0; i < counts.Length; i++)
+            totalCount += counts[i];
 
-        Log($"Executing sequential spawn: {count} objects over {durationSeconds:F2} seconds (interval: {_sequentialSpawnInterval:F3}s)", forcely: true);
+        _isSequentialSpawning = true;
+        _sequentialTypes = types;
+        _sequentialCounts = counts;
+        _sequentialShuffledOrder = CreateShuffledSpawnOrder(types, counts);
+        _sequentialCurrentIndex = 0;
+        _sequentialElapsedTime = 0f;
+        _sequentialSpawnInterval = durationSeconds / totalCount;
+
+        Log($"Executing sequential spawn: {totalCount} objects ({types.Length} types) over {durationSeconds:F2}s (interval: {_sequentialSpawnInterval:F3}s)", forcely: true);
+    }
+    #endregion
+
+    #region Private Methods - Spawn Logic
+    /// <summary>
+    /// 단일 오브젝트 스폰
+    /// </summary>
+    /// <param name="type">스폰할 타입</param>
+    /// <returns>스폰된 GameObject</returns>
+    private GameObject SpawnSingle(SpawnObjectType type)
+    {
+        Vector3 spawnPosition = _randomizePosition ? GetRandomPosition() : transform.position;
+        Quaternion spawnRotation = _randomizeRotation ? GetRandomRotation() : Quaternion.identity;
+
+        GameObject spawnedObject = _objectPool.SpawnObject(type, spawnPosition, spawnRotation, isForcely: false);
+
+        if (spawnedObject != null)
+        {
+            _spawnedObjects.Add(spawnedObject);
+            Log($"Spawned {type} at {spawnPosition}");
+        }
+        else
+        {
+            LogError($"Failed to spawn {type} from pool");
+        }
+
+        return spawnedObject;
+    }
+
+    /// <summary>
+    /// 순차 스폰 업데이트 (Update에서 호출)
+    /// </summary>
+    private void UpdateSequentialSpawn()
+    {
+        _sequentialElapsedTime += Time.deltaTime;
+
+        int targetSpawnIndex = Mathf.FloorToInt(_sequentialElapsedTime / _sequentialSpawnInterval);
+        targetSpawnIndex = Mathf.Min(targetSpawnIndex, _sequentialShuffledOrder.Count);
+
+        while (_sequentialCurrentIndex < targetSpawnIndex)
+        {
+            var pair = _sequentialShuffledOrder[_sequentialCurrentIndex];
+            SpawnSingle(pair.type);
+            _sequentialCurrentIndex++;
+        }
+
+        if (_sequentialCurrentIndex >= _sequentialShuffledOrder.Count)
+        {
+            Log($"Sequential spawn completed: {_sequentialCurrentIndex} objects", forcely: true);
+            StopSequentialSpawn();
+            _isExecutingCommand = false;
+        }
+    }
+
+    /// <summary>
+    /// 타입-인덱스 쌍을 셔플된 순서로 생성
+    /// </summary>
+    private List<(SpawnObjectType type, int index)> CreateShuffledSpawnOrder(SpawnObjectType[] types, int[] counts)
+    {
+        List<(SpawnObjectType type, int index)> order = new List<(SpawnObjectType, int)>();
+
+        for (int i = 0; i < types.Length; i++)
+        {
+            for (int j = 0; j < counts[i]; j++)
+            {
+                order.Add((types[i], j));
+            }
+        }
+
+        // Fisher-Yates Shuffle
+        for (int i = order.Count - 1; i > 0; i--)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, i + 1);
+            var temp = order[i];
+            order[i] = order[randomIndex];
+            order[randomIndex] = temp;
+        }
+
+        return order;
     }
     #endregion
 
@@ -458,9 +530,9 @@ public class RandomSpawner : MonoBehaviour
     /// <returns>회전 값</returns>
     private Quaternion GetRandomRotation()
     {
-        float x = _lockXAxis ? 0f : Random.Range(0f, 360f);
-        float y = _lockYAxis ? 0f : Random.Range(0f, 360f);
-        float z = _lockZAxis ? 0f : Random.Range(0f, 360f);
+        float x = _lockXAxis ? 0f : UnityEngine.Random.Range(0f, 360f);
+        float y = _lockYAxis ? 0f : UnityEngine.Random.Range(0f, 360f);
+        float z = _lockZAxis ? 0f : UnityEngine.Random.Range(0f, 360f);
 
         return Quaternion.Euler(x, y, z);
     }
@@ -473,14 +545,12 @@ public class RandomSpawner : MonoBehaviour
     {
         Bounds bounds = _spawnAreaCollider.bounds;
 
-        // 볼륨 내 랜덤 위치 생성 후 표면으로 투영
         Vector3 randomPoint = new Vector3(
-            Random.Range(bounds.min.x, bounds.max.x),
-            Random.Range(bounds.min.y, bounds.max.y),
-            Random.Range(bounds.min.z, bounds.max.z)
+            UnityEngine.Random.Range(bounds.min.x, bounds.max.x),
+            UnityEngine.Random.Range(bounds.min.y, bounds.max.y),
+            UnityEngine.Random.Range(bounds.min.z, bounds.max.z)
         );
 
-        // ClosestPoint로 표면에 투영
         Vector3 surfacePoint = _spawnAreaCollider.ClosestPoint(randomPoint);
 
         return surfacePoint;
@@ -495,9 +565,9 @@ public class RandomSpawner : MonoBehaviour
         Bounds bounds = _spawnAreaCollider.bounds;
 
         Vector3 randomPoint = new Vector3(
-            Random.Range(bounds.min.x, bounds.max.x),
-            Random.Range(bounds.min.y, bounds.max.y),
-            Random.Range(bounds.min.z, bounds.max.z)
+            UnityEngine.Random.Range(bounds.min.x, bounds.max.x),
+            UnityEngine.Random.Range(bounds.min.y, bounds.max.y),
+            UnityEngine.Random.Range(bounds.min.z, bounds.max.z)
         );
 
         return randomPoint;
@@ -537,24 +607,41 @@ public class RandomSpawner : MonoBehaviour
         {
             LogError("Spawn area collider is not assigned!");
         }
-
-        if (_spawnType == SpawnObjectType.None)
-        {
-            LogWarning("Spawn type is set to None");
-        }
     }
 
     /// <summary>
     /// 스폰 요청 유효성 검증
     /// </summary>
-    /// <param name="count">스폰 개수</param>
+    /// <param name="types">타입 배열</param>
+    /// <param name="counts">개수 배열</param>
     /// <returns>유효 여부</returns>
-    private bool ValidateSpawnRequest(int count)
+    private bool ValidateSpawnRequest(SpawnObjectType[] types, int[] counts)
     {
-        if (count <= 0)
+        if (types == null || counts == null)
         {
-            LogWarning("Spawn count must be positive");
+            LogError("Types or counts array is null");
             return false;
+        }
+
+        if (types.Length == 0 || counts.Length == 0)
+        {
+            LogError("Types or counts array is empty");
+            return false;
+        }
+
+        if (types.Length != counts.Length)
+        {
+            LogError($"Array length mismatch: types={types.Length}, counts={counts.Length}");
+            return false;
+        }
+
+        for (int i = 0; i < counts.Length; i++)
+        {
+            if (counts[i] <= 0)
+            {
+                LogError($"Invalid count at index {i}: {counts[i]}");
+                return false;
+            }
         }
 
         if (_objectPool == null)
@@ -590,7 +677,7 @@ public class RandomSpawner : MonoBehaviour
             LogSystem.PushLog(LogLevel.WARNING, GetType().Name, message, true);
     }
 
-    /// <summary>에러 로그 출력 - 항상 강제 출력</summary>
+    /// <summary>에러 로그 출력</summary>
     /// <param name="message">에러 메시지</param>
     private void LogError(string message)
     {
