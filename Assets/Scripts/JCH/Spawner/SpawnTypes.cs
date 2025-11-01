@@ -4,6 +4,10 @@
 /// </summary>
 public enum SpawnObjectType
 {
-    None = 0
+    None= 0,
+    Default,
+    RingNail,
+    RingNails,
+    Claws,
 }
 
