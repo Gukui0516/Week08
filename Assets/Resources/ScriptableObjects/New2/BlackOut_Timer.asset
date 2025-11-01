@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stageImage: {fileID: 21300000, guid: d1368310b07edcc45b1acb4c03539ad4, type: 3}
   _stageName: "\uC815\uC804"
-  _sceneName: BlackOut_Timer
+  _sceneName: BlackOut_Sp_Timer
   _clearStar: 0
   _isTried: 0
-  _stageImagePath: 
+  _stageImagePath: C:/Users/jungle/AppData/LocalLow/DefaultCompany/Week08/StageImages/BlackOut_Sp_Timer.png
   _scenePath: Assets/Scenes/Sihyeon/NewW08/BlackOut_Sp_Timer.unity
