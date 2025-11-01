@@ -1,4 +1,4 @@
-using Unity.Cinemachine;
+﻿using Unity.Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -110,25 +110,25 @@ public class ClimaxController_Advanced : MonoBehaviour
     {
         if (bomb == null)
         {
-            Debug.LogWarning("[ClimaxController] 폭발 요청된 폭탄이 null입니다.");
+            LogSystem.PushLog(LogLevel.WARNING,"폭발 요청된 폭탄이 null입니다.",true);
             return;
         }
 
         // 이미 폭발한 폭탄인지 확인
         if (explodedBombs.Contains(bomb))
         {
-            Debug.Log($"[ClimaxController] {bomb.name}은(는) 이미 폭발했습니다. 무시합니다.");
+            LogSystem.PushLog(LogLevel.WARNING, $"{bomb.name}은(는) 이미 폭발했습니다. 무시합니다.",true);
             return;
         }
 
         // 활성화 상태 확인
         if (!bomb.activeInHierarchy)
         {
-            Debug.LogWarning($"[클라이맥스컨트롤러] {bomb.name}이(가) 비활성화 상태입니다.");
+            LogSystem.PushLog(LogLevel.WARNING, $"[클라이맥스컨트롤러] {bomb.name}이(가) 비활성화 상태입니다.", true);
             return;
         }
 
-        Debug.Log($"[ClimaxController] 충돌 감지: {bomb.name} 즉시 폭발 처리 (CollisionExplosion 모드)");
+        LogSystem.PushLog(LogLevel.INFO, $"충돌 감지: {bomb.name} 즉시 폭발 처리 (CollisionExplosion 모드)", true);
         ExplosionIndividualBomb(bomb, ExplosionMode.CollisionExplosion);
     }
 
@@ -141,12 +141,15 @@ public class ClimaxController_Advanced : MonoBehaviour
     {
         if (bomb == null || explodedBombs.Contains(bomb))
         {
+            LogSystem.PushLog(LogLevel.WARNING, "[climax]폭발 요청된 폭탄이 null이거나 이미 폭발했습니다.", true);
             return;
         }
 
         // 폭발 처리
         explodedBombs.Add(bomb);
         TriggerExplosion(bomb, mode);
+        LogSystem.PushLog(LogLevel.INFO, "[climax]폭발 요청 폭발 진행", true);
+
     }
 
     /// <summary>
@@ -288,7 +291,11 @@ public class ClimaxController_Advanced : MonoBehaviour
     /// <param name="mode">폭발 모드</param>
     private void TriggerExplosion(GameObject bombObject, ExplosionMode mode)
     {
-        if (bombObject == null) return;
+        if (bombObject == null)
+        {
+            LogSystem.PushLog(LogLevel.ERROR,"[ClimaxController] 폭발할 폭탄 오브젝트가 null입니다.",1);
+            return;
+        }
 
         // 폭발 위치는 폭탄 오브젝트의 위치
         Vector3 explosionPos = bombObject.transform.position;
@@ -377,6 +384,7 @@ public class ClimaxController_Advanced : MonoBehaviour
                 break;
         }
 
+        LogSystem.PushLog(LogLevel.INFO,$"[ClimaxController] 폭발 처리 모드: {mode} for {bombObject.name}",1);
         // 폭탄 비활성화 전에 알림!
         BombManager.Instance.NotifyBombExploded(bombObject);
 
@@ -392,7 +400,7 @@ public class ClimaxController_Advanced : MonoBehaviour
             bombObject.SetActive(false);
         }
 
-        Debug.Log($"[ClimaxController] 폭탄 폭발: {bombObject.name} at {explosionPos}");
+        LogSystem.PushLog(LogLevel.INFO,$"[ClimaxController] 폭탄 폭발: {bombObject.name} at {explosionPos}",1);
     }
 
     private IEnumerator HitStopCoroutine()

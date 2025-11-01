@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using System;
 using System.Collections.Generic;
@@ -79,6 +79,7 @@ public class BombCollisionDetector : MonoBehaviour
         if (rootObject.CompareTag(bombTag))
         {
             // Debug.LogWarning($"[DEBUG] 'Bomb' 루트 태그 감지됨: {rootObject.name}");
+            LogSystem.PushLog(LogLevel.INFO, $"폭탄 {rootObject.name}을(를) 감지했습니다.",true);
             HandleBombTrigger(rootObject, other.ClosestPoint(transform.position));
         }
         else if (rootObject.CompareTag(draggableTag))
@@ -155,6 +156,8 @@ public class BombCollisionDetector : MonoBehaviour
 
         // C# Event 호출 (코드 구독용)
         OnBombCollisionDetected?.Invoke(bomb);
+
+        //BombManager.Instance.NotifyBombExploded(bomb);
     }
 
     private void HandleDraggableTrigger(GameObject draggableRootObject, Vector3 contactPoint)
@@ -186,7 +189,8 @@ public class BombCollisionDetector : MonoBehaviour
         // Debug.LogError($"[DEBUG] {draggableRootObject.name}을(를) {draggableDestroyDelay}초 후 'Destroy' 하도록 예약합니다.");
 
         // 지연 후 파괴 (루트 오브젝트 기준)
-        Destroy(draggableRootObject, draggableDestroyDelay);
+        draggableRootObject.SetActive(false); // 즉시 비활성화
+        //Destroy(draggableRootObject, draggableDestroyDelay);
     }
 
     /// <summary>
