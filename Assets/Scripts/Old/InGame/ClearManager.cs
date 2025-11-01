@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.IO;
 using TMPro;
 using UnityEngine;
@@ -119,7 +119,11 @@ public class ClearManager : MonoBehaviour
         if (StageConfig.Instance != null)
         {
             int explodedCount = StageConfig.Instance.GetExplodedBombCount();
-            _remainBombText.text = $"{_goalBombCount - explodedCount}";
+
+            if (StageConfig.Instance.useBombCount)
+                _remainBombText.text = $"{_goalBombCount - explodedCount}";
+            else
+                _remainBombText.text = $"?";
         }
         else
         {
